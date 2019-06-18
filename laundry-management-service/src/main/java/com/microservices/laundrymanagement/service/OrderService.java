@@ -12,4 +12,6 @@ public interface OrderService {
     void completeOrder(int orderId);
 
     void deliverOrder(int orderId);
+
+    void processOrder(int orderId);
 }

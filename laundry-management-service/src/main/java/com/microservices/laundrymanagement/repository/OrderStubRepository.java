@@ -4,8 +4,10 @@ import com.microservices.laundrymanagement.model.Order;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrderStubRepository implements OrderRepository {
@@ -25,5 +27,10 @@ public class OrderStubRepository implements OrderRepository {
     public <S extends Order> S save(S order) {
         storage.put(order.getOrderId(), order);
         return order;
+    }
+
+    @Override
+    public List<Order> findByQueueId(Integer queueId) {
+        return storage.values().stream().filter(el -> el.getLaundryId() == queueId).collect(Collectors.toList());
     }
 }

@@ -45,6 +45,11 @@ public class OrderServiceImpl implements OrderService {
         changeStatus(orderId, OrderStatus.QUEUED);
     }
 
+    @Override
+    public void processOrder(int orderId) {
+        changeStatus(orderId, OrderStatus.IN_PROCESS);
+    }
+
     private void changeStatus(int orderId, OrderStatus status) {
         Optional<Order> order = orderRepository.findById(orderId);
         if (!order.isPresent()) {

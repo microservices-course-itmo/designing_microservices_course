@@ -30,4 +30,16 @@ public class Order {
     public int getOrderId() {
         return orderId;
     }
+
+    public int getLaundryId() {
+        return laundryId;
+    }
+
+    public int getBucketId() {
+        return bucketId;
+    }
+
+    public long getEstimatedTime() {
+        return estimatedTime;
+    }
 }

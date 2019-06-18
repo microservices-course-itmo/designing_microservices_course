@@ -7,8 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Сервис управления прачечными. Контролирует выполнение заказов несколькими прачечными
  */
 @SpringBootApplication
-public class LaundryService {
+public class LaundryServiceManagement {
     public static void main(String[] args) {
-        SpringApplication.run(LaundryService.class, args);
+        SpringApplication.run(LaundryServiceManagement.class, args);
     }
 }
