@@ -1,7 +1,6 @@
 package com.microservices.laundrymanagement.service.impl;
 
 import com.microservices.laundrymanagement.model.Laundry;
-import com.microservices.laundrymanagement.model.LaundryStatus;
 import com.microservices.laundrymanagement.model.Order;
 import com.microservices.laundrymanagement.repository.LaundryRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
@@ -27,13 +26,6 @@ public class LaundryServiceImpl implements LaundryService {
     public Optional<Order> selectNextOrder(int queueId) {
         return orderRepository.findByQueueId(queueId)
                 .stream().min(Comparator.comparingInt(Order::getBucketId));
-    }
-
-    @Override
-    public List<Laundry> getAllFreeLaundries() {
-        List<Laundry> laundries = new ArrayList<>();
-        laundryRepository.findByStatus(LaundryStatus.FREE.name()).forEach(laundries::add);
-        return laundries;
     }
 
     @Override

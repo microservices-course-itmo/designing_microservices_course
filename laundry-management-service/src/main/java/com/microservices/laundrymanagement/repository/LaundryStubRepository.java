@@ -7,7 +7,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class LaundryStubRepository implements LaundryRepository {
@@ -27,12 +26,5 @@ public class LaundryStubRepository implements LaundryRepository {
     @Override
     public <S extends Laundry> S save(S entity) {
         throw new NotImplementedException();
-    }
-
-    @Override
-    public Iterable<Laundry> findByStatus(String status) {
-        return storage.values().stream()
-                .filter(el -> el.getStatus().name().equalsIgnoreCase(status))
-                .collect(Collectors.toList());
     }
 }

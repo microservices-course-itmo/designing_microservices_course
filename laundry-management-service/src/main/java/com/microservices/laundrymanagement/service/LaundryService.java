@@ -15,8 +15,6 @@ public interface LaundryService {
      */
     Optional<Order> selectNextOrder(int queueId);
 
-    List<Laundry> getAllFreeLaundries();
-
     List<Laundry> getAllLaundries();
 
     Optional<Laundry> getById(int id);

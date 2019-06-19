@@ -21,33 +21,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(OrderRequest orderRequest) {
-        Order order = new Order(orderRequest, OrderStatus.RESERVED);
+        Order order = new Order(orderRequest, OrderStatus.QUEUED);
         return orderRepository.save(order);
-    }
-
-    @Override
-    public OrderStatus getStatus(int id) {
-        Optional<Order> order = orderRepository.findById(id);
-        if (order.isPresent()) {
-            return order.get().getStatus();
-        } else {
-            return OrderStatus.NOT_EXISTS;
-        }
     }
 
     @Override
     public void completeOrder(int id) {
         changeStatus(id, OrderStatus.COMPLETE);
-    }
-
-    @Override
-    public void deliverOrder(int orderId) {
-        changeStatus(orderId, OrderStatus.QUEUED);
-    }
-
-    @Override
-    public void processOrder(int orderId) {
-        changeStatus(orderId, OrderStatus.IN_PROCESS);
     }
 
     private void changeStatus(int orderId, OrderStatus status) {
