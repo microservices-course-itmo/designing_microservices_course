@@ -8,4 +8,6 @@ public class LaundryServiceManagement {
     public static void main(String[] args) {
         SpringApplication.run(LaundryServiceManagement.class, args);
     }
+
+
 }

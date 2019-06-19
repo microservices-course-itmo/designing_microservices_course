@@ -1,4 +1,4 @@
-package com.microservices.laundrymanagement.model;
+package com.microservices.laundrymanagement.entity;
 
 public enum OrderStatus {
     QUEUED,

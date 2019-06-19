@@ -1,7 +1,6 @@
 package com.microservices.laundrymanagement.controllers;
 
-import com.microservices.laundrymanagement.dto.OrderRequest;
-import com.microservices.laundrymanagement.model.Order;
+import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
 import com.microservices.laundrymanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,8 @@ public class LaundryController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderRequest order) {
-        return orderService.createOrder(order);
+    public void submitOrder(@RequestBody OrderSubmissionDto order) {
+        orderService.submitOrder(order);
     }
 
     @PutMapping
