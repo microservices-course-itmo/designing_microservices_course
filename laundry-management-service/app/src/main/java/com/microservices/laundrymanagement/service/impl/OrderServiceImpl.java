@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
@@ -29,12 +27,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
         orderRepository.save(orderEntity);
 
-        int queueId = orderSubmissionDto.getLaundryId();
-        LaundryStateEntity laundryState = laundryStateRepository.findById(queueId)
-                .orElseThrow(IllegalArgumentException::new);// TODO shine2
-        laundryState.setQueueWaitingTime(laundryState.getQueueWaitingTime() + orderEntity.getEstimatedTime());
-        laundryState.setVersion(laundryState.getVersion() + 1);
-        LaundryStateEntity updatedLaundryState = laundryStateRepository.save(laundryState);
+        LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
 
         // TODO shine2 construct and publish ORDER_SUBMITTED message
     }
@@ -42,20 +35,31 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void completeOrder(int id) {
-        Optional<OrderEntity> orderOptional = orderRepository.findById(id); //todo: fix, logs, check
-        if (!orderOptional.isPresent()) {
-            throw new IllegalArgumentException();
-        }
-        OrderEntity order = orderOptional.get();
+        OrderEntity order = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order with id" + id + "is not found")); //todo: fix, logs, check
         order.setStatus(OrderStatus.COMPLETE);
         orderRepository.save(order);
 
+        LaundryStateEntity laundryStateEntity = updateQueueInfo(order, RequestType.COMPLETE);
+
+
+    }
+
+    private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {
         int queueId = order.getLaundryId();
-        Optional<LaundryStateEntity> currentLaundryState = laundryStateRepository.findById(queueId);
-        if (!currentLaundryState.isPresent())
-            throw new IllegalArgumentException(); //что-то
-        LaundryStateEntity laundryState = currentLaundryState.get();
-        laundryState.setQueueWaitingTime(laundryState.getQueueWaitingTime() - order.getEstimatedTime());
-        laundryStateRepository.save(laundryState);
+        LaundryStateEntity laundryState = laundryStateRepository.findById(queueId)
+                .orElseThrow(() -> new IllegalArgumentException("Queue with id" + queueId + "is not found"));
+
+        switch (requestType) {
+            case SUBMIT:
+                laundryState.setQueueWaitingTime(laundryState.getQueueWaitingTime() + order.getEstimatedTime());
+                break;
+            case COMPLETE:
+                laundryState.setQueueWaitingTime(laundryState.getQueueWaitingTime() - order.getEstimatedTime());
+                break;
+        }
+
+        laundryState.setVersion(laundryState.getVersion() + 1);
+        return laundryStateRepository.save(laundryState);
     }
 }
