@@ -4,8 +4,10 @@ import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
 import com.microservices.laundrymanagement.entity.LaundryStateEntity;
 import com.microservices.laundrymanagement.entity.OrderEntity;
 import com.microservices.laundrymanagement.entity.OrderStatus;
+import com.microservices.laundrymanagement.entity.QueueMessageEntity;
 import com.microservices.laundrymanagement.repository.LaundryStateRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
+import com.microservices.laundrymanagement.repository.QueueMessageRepository;
 import com.microservices.laundrymanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private LaundryStateRepository laundryStateRepository;
+    private QueueMessageRepository queueMessageRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            LaundryStateRepository laundryStateRepository,
+                            QueueMessageRepository queueMessageRepository) {
         this.orderRepository = orderRepository;
+        this.laundryStateRepository = laundryStateRepository;
+        this.queueMessageRepository = queueMessageRepository;
     }
 
     @Transactional
@@ -29,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
 
+        QueueMessageEntity queueMessageEntity = new QueueMessageEntity(orderEntity.getOrderId(), laundryStateEntity);
+        queueMessageRepository.save(queueMessageEntity);
         // TODO shine2 construct and publish ORDER_SUBMITTED message
     }
 
@@ -40,9 +49,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.COMPLETE);
         orderRepository.save(order);
 
-        LaundryStateEntity laundryStateEntity = updateQueueInfo(order, RequestType.COMPLETE);
-
-
+        updateQueueInfo(order, RequestType.COMPLETE);
     }
 
     private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {
