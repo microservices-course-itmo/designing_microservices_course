@@ -34,10 +34,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
         OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
+        // TODO shine2 check if It already exists
         orderRepository.save(orderEntity);
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
 
+        // TODO shine1 come up with the graceful way how not to save duplicates (actually It is not a big deal but..)
         OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
                 orderEntity.getId(), laundryStateEntity);
         queueMessageRepository.save(orderSubmittedMessageEntity);
@@ -48,10 +50,11 @@ public class OrderServiceImpl implements OrderService {
     public void completeOrder(int id) {
         OrderEntity order = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " is not found")); //todo: fix, logs, check
+        // TODO shine2 handle case of repeatedly completing orders
         order.setStatus(OrderStatus.COMPLETE);
         orderRepository.save(order);
 
-        updateQueueInfo(order, RequestType.COMPLETE);
+        updateQueueInfo(order, RequestType.COMPLETE); // TODO shine2 handle duplicates
 
         // TODO shine2 construct and publish OrderCompleteMessage(orEvent)
     }
