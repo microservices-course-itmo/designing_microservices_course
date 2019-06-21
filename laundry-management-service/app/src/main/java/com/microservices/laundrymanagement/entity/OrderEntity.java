@@ -9,10 +9,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Getter
@@ -23,15 +20,16 @@ import javax.persistence.Table;
 public class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_generator")
-    @SequenceGenerator(name="orders_generator", sequenceName = "orders_id_seq")
     private int id;
 
     private long estimatedTime;
 
     @Enumerated(value = EnumType.STRING)
+
     private OrderStatus status;
+
     private int laundryId;
+
     private int bucket;
 
     public OrderEntity(OrderSubmissionDto orderSubmissionDto) {
