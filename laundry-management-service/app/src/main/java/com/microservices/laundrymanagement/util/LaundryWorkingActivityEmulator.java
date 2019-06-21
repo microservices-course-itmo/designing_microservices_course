@@ -2,7 +2,6 @@ package com.microservices.laundrymanagement.util;
 
 import com.microservices.laundrymanagement.entity.LaundryStateEntity;
 import com.microservices.laundrymanagement.repository.LaundryStateRepository;
-import com.microservices.laundrymanagement.repository.OrderRepository;
 import com.microservices.laundrymanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,10 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
-public class LaundryActivityEmulator {
-
-    @Autowired
-    private OrderRepository orderRepository;
+public class LaundryWorkingActivityEmulator {
 
     @Autowired
     private LaundryStateRepository laundryStateRepository;
@@ -26,6 +22,7 @@ public class LaundryActivityEmulator {
     private OrderService orderService;
 
     public void run() throws ExecutionException, InterruptedException {
+        // TODO make following more graceful
         List<Integer> ids = StreamSupport.stream(laundryStateRepository.findAll().spliterator(), false)
                 .map(LaundryStateEntity::getId)
                 .distinct()
@@ -47,7 +44,9 @@ public class LaundryActivityEmulator {
 
         @Override
         public void run() {
-
+            while (true) {
+                orderService.completeNextOrderInQueue(laundryId);
+            }
         }
     }
 

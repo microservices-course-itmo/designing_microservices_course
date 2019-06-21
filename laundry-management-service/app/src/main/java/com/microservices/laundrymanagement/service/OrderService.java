@@ -6,4 +6,6 @@ public interface OrderService {
     void submitOrder(OrderSubmissionDto orderSubmissionDto);
 
     void completeOrder(int orderId);
+
+    void completeNextOrderInQueue(int laundryId);
 }

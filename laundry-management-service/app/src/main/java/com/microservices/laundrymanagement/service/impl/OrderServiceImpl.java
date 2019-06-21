@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -79,11 +80,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public void completeNextOrderInQueue(int laundryId) {
-        Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextOrderInQueue(laundryId);
+        Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextIncompleteOrderInQueue(laundryId);
         if (!nextOrderInQueue.isPresent()) {
             // TODO shine2 log this fact and get rid of warning
+            return;
         }
-        this.completeOrder(nextOrderInQueue.get().getId()); // TODO get rid of warning
+        OrderEntity orderEntity = nextOrderInQueue.get();
+        while (true) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(orderEntity.getEstimatedTime());
+                break;
+            } catch (InterruptedException ignore) {
+            }
+        }
+        this.completeOrder(orderEntity.getId()); // TODO get rid of warning
     }
 
 }

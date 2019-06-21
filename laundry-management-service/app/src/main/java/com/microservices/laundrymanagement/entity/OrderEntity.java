@@ -25,7 +25,6 @@ public class OrderEntity {
     private long estimatedTime;
 
     @Enumerated(value = EnumType.STRING)
-
     private OrderStatus status;
 
     private int laundryId;

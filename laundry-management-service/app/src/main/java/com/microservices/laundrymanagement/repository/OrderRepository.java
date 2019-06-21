@@ -16,6 +16,8 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
      * Helps to emulate laundry workers activity. Takes some order from the
      * oldest (having smallest number) bucket they had
      */
-    @Query(value = "select * from orders where laundryId = :laundryId order by bucket limit 1", nativeQuery = true)
-    Optional<OrderEntity> findNextOrderInQueue(@Param("laundryId") int laundryId);
+    @Query(value = "select * from orders " +
+            "where laundry_id=:laundryId and status='QUEUED' " +
+            "order by bucket limit 1", nativeQuery = true)
+    Optional<OrderEntity> findNextIncompleteOrderInQueue(@Param("laundryId") int laundryId);
 }
