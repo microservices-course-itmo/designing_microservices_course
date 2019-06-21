@@ -6,7 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -16,17 +20,21 @@ import javax.persistence.*;
 public class OrderEntity {
     @Id
     private int orderId;
+
     private long estimatedTime;
+
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
+
     private int laundryId;
+
     private int bucket;
 
     public OrderEntity(OrderSubmissionDto orderSubmissionDto) {
         this.orderId = orderSubmissionDto.getOrderId();
         this.estimatedTime = orderSubmissionDto.getDetails().stream()
                 .map(DetailSubmissionDto::getTime)
-                .reduce(0L, (a, b) -> a + b);
+                .reduce(0L, Long::sum);
         this.status = OrderStatus.QUEUED;
         this.laundryId = orderSubmissionDto.getLaundryId();
         this.bucket = orderSubmissionDto.getBucketId();

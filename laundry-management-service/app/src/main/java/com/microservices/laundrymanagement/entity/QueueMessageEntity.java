@@ -3,7 +3,13 @@ package com.microservices.laundrymanagement.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -11,18 +17,25 @@ import javax.persistence.*;
 @Table(name = "queue_messages")
 public class QueueMessageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private int orderId;
-    @ManyToOne
-    @JoinColumn(name = "landry_state_id")
-    private LaundryStateEntity laundryState;
+
     @Enumerated(value = EnumType.STRING)
     private MessageStatus messageStatus;
 
+    private int laundryId;
+
+    private int laundryStateVersion;
+
+    private long queueWaitingTime;
+
     public QueueMessageEntity(int orderId, LaundryStateEntity laundryState) {
-        this.laundryState = laundryState;
         this.orderId = orderId;
         this.messageStatus = MessageStatus.PENDING;
+        this.laundryId = laundryState.getId();
+        this.laundryStateVersion = laundryState.getVersion();
+        this.queueWaitingTime = laundryState.getQueueWaitingTime();
     }
 }

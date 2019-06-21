@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
@@ -69,4 +71,14 @@ public class OrderServiceImpl implements OrderService {
         laundryState.setVersion(laundryState.getVersion() + 1);
         return laundryStateRepository.save(laundryState);
     }
+
+    @Transactional
+    public void completeNextOrderInQueue(int laundryId) {
+        Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextOrderInQueue(laundryId);
+        if (!nextOrderInQueue.isPresent()) {
+            // TODO shine2 log this fact
+        }
+        this.completeOrder(nextOrderInQueue.get().getOrderId());
+    }
+
 }
