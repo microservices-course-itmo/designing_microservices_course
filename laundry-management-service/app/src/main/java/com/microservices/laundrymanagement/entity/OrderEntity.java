@@ -18,12 +18,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "orders")
 public class OrderEntity {
+
     @Id
-    private int orderId;
+    private int id;
 
     private long estimatedTime;
 
     @Enumerated(value = EnumType.STRING)
+
     private OrderStatus status;
 
     private int laundryId;
@@ -31,7 +33,7 @@ public class OrderEntity {
     private int bucket;
 
     public OrderEntity(OrderSubmissionDto orderSubmissionDto) {
-        this.orderId = orderSubmissionDto.getOrderId();
+        this.id = orderSubmissionDto.getOrderId();
         this.estimatedTime = orderSubmissionDto.getDetails().stream()
                 .map(DetailSubmissionDto::getTime)
                 .reduce(0L, Long::sum);

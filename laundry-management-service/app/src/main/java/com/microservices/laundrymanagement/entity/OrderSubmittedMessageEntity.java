@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "queue_messages")
-public class QueueMessageEntity {
+@Table(name = "order_submitted_messages")
+public class OrderSubmittedMessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,7 +31,7 @@ public class QueueMessageEntity {
 
     private long queueWaitingTime;
 
-    public QueueMessageEntity(int orderId, LaundryStateEntity laundryState) {
+    public OrderSubmittedMessageEntity(int orderId, LaundryStateEntity laundryState) {
         this.orderId = orderId;
         this.messageStatus = MessageStatus.PENDING;
         this.laundryId = laundryState.getId();

@@ -4,7 +4,7 @@ import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
 import com.microservices.laundrymanagement.entity.LaundryStateEntity;
 import com.microservices.laundrymanagement.entity.OrderEntity;
 import com.microservices.laundrymanagement.entity.OrderStatus;
-import com.microservices.laundrymanagement.entity.QueueMessageEntity;
+import com.microservices.laundrymanagement.entity.OrderSubmittedMessageEntity;
 import com.microservices.laundrymanagement.repository.LaundryStateRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
 import com.microservices.laundrymanagement.repository.QueueMessageRepository;
@@ -34,24 +34,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
         OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
+        // TODO shine2 check if It already exists
         orderRepository.save(orderEntity);
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
 
-        QueueMessageEntity queueMessageEntity = new QueueMessageEntity(orderEntity.getOrderId(), laundryStateEntity);
-        queueMessageRepository.save(queueMessageEntity);
-        // TODO shine2 construct and publish ORDER_SUBMITTED message
+        // TODO shine1 come up with the graceful way how not to save duplicates (actually It is not a big deal but..)
+        OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
+                orderEntity.getId(), laundryStateEntity);
+        queueMessageRepository.save(orderSubmittedMessageEntity);
     }
 
     @Transactional
     @Override
     public void completeOrder(int id) {
         OrderEntity order = orderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id" + id + "is not found")); //todo: fix, logs, check
+                .orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " is not found")); //todo: fix, logs, check
+        // TODO shine2 handle case of repeatedly completing orders
         order.setStatus(OrderStatus.COMPLETE);
         orderRepository.save(order);
 
-        updateQueueInfo(order, RequestType.COMPLETE);
+        updateQueueInfo(order, RequestType.COMPLETE); // TODO shine2 handle duplicates
+
+        // TODO shine2 construct and publish OrderCompleteMessage(orEvent)
     }
 
     private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {
@@ -68,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
                 break;
         }
 
-        laundryState.setVersion(laundryState.getVersion() + 1);
+//        laundryState.setVersion(laundryState.getVersion() + 1);
         return laundryStateRepository.save(laundryState);
     }
 
@@ -76,9 +81,9 @@ public class OrderServiceImpl implements OrderService {
     public void completeNextOrderInQueue(int laundryId) {
         Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextOrderInQueue(laundryId);
         if (!nextOrderInQueue.isPresent()) {
-            // TODO shine2 log this fact
+            // TODO shine2 log this fact and get rid of warning
         }
-        this.completeOrder(nextOrderInQueue.get().getOrderId());
+        this.completeOrder(nextOrderInQueue.get().getId()); // TODO get rid of warning
     }
 
 }
