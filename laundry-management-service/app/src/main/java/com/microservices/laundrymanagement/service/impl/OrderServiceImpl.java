@@ -1,13 +1,11 @@
 package com.microservices.laundrymanagement.service.impl;
 
 import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
-import com.microservices.laundrymanagement.entity.LaundryStateEntity;
-import com.microservices.laundrymanagement.entity.OrderEntity;
-import com.microservices.laundrymanagement.entity.OrderStatus;
-import com.microservices.laundrymanagement.entity.OrderSubmittedMessageEntity;
+import com.microservices.laundrymanagement.entity.*;
 import com.microservices.laundrymanagement.repository.LaundryStateRepository;
+import com.microservices.laundrymanagement.repository.OrderCompletedMessageRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
-import com.microservices.laundrymanagement.repository.QueueMessageRepository;
+import com.microservices.laundrymanagement.repository.OrderSubmittedMessageRepository;
 import com.microservices.laundrymanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +18,18 @@ import java.util.concurrent.TimeUnit;
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private LaundryStateRepository laundryStateRepository;
-    private QueueMessageRepository queueMessageRepository;
+    private OrderSubmittedMessageRepository orderSubmittedMessageRepository;
+    private OrderCompletedMessageRepository orderCompletedMessageRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             LaundryStateRepository laundryStateRepository,
-                            QueueMessageRepository queueMessageRepository) {
+                            OrderSubmittedMessageRepository orderSubmittedMessageRepository,
+                            OrderCompletedMessageRepository orderCompletedMessageRepository) {
         this.orderRepository = orderRepository;
         this.laundryStateRepository = laundryStateRepository;
-        this.queueMessageRepository = queueMessageRepository;
+        this.orderSubmittedMessageRepository = orderSubmittedMessageRepository;
+        this.orderCompletedMessageRepository = orderCompletedMessageRepository;
     }
 
     @Transactional
@@ -44,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
         OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
                 orderEntity.getId(), laundryStateEntity);
-        queueMessageRepository.save(orderSubmittedMessageEntity);
+        orderSubmittedMessageRepository.save(orderSubmittedMessageEntity);
     }
 
     @Transactional
@@ -59,9 +60,11 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.COMPLETE);
         orderRepository.save(order);
 
-        updateQueueInfo(order, RequestType.COMPLETE);
+        LaundryStateEntity laundryStateEntity = updateQueueInfo(order, RequestType.COMPLETE);
 
-        // TODO shine2 construct and publish OrderCompleteMessage(orEvent)
+        OrderCompletedMessageEntity orderCompletedMessage = new OrderCompletedMessageEntity(
+                order, laundryStateEntity);
+        orderCompletedMessageRepository.save(orderCompletedMessage);
     }
 
     private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {

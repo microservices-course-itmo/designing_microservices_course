@@ -6,11 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -21,6 +17,8 @@ public class OrderEntity {
 
     @Id
     private int id;
+
+    private long submittedTime;
 
     private long estimatedTime;
 
@@ -33,6 +31,7 @@ public class OrderEntity {
 
     public OrderEntity(OrderSubmissionDto orderSubmissionDto) {
         this.id = orderSubmissionDto.getOrderId();
+        this.submittedTime = System.currentTimeMillis();
         this.estimatedTime = orderSubmissionDto.getDetails().stream()
                 .map(DetailSubmissionDto::getTime)
                 .reduce(0L, Long::sum);
