@@ -15,14 +15,17 @@ import java.util.stream.StreamSupport;
 @Component
 public class LaundryWorkingActivityEmulator {
 
-    @Autowired
-    private LaundryStateRepository laundryStateRepository;
+    private final LaundryStateRepository laundryStateRepository;
+
+    private final OrderService orderService;
 
     @Autowired
-    private OrderService orderService;
+    public LaundryWorkingActivityEmulator(LaundryStateRepository laundryStateRepository, OrderService orderService) {
+        this.laundryStateRepository = laundryStateRepository;
+        this.orderService = orderService;
+    }
 
     public void run() throws ExecutionException, InterruptedException {
-        // TODO make following more graceful
         List<Integer> ids = StreamSupport.stream(laundryStateRepository.findAll().spliterator(), false)
                 .map(LaundryStateEntity::getId)
                 .distinct()

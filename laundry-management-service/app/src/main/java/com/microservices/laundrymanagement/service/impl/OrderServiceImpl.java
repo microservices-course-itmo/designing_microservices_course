@@ -35,12 +35,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
         OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
-        // TODO shine2 check if It already exists
+        if (orderRepository.existsById(orderSubmissionDto.getOrderId()))
+            throw new IllegalArgumentException("Order with id " + orderSubmissionDto.getOrderId() +
+                    "already exists");
         orderRepository.save(orderEntity);
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
 
-        // TODO shine1 come up with the graceful way how not to save duplicates (actually It is not a big deal but..)
         OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
                 orderEntity.getId(), laundryStateEntity);
         queueMessageRepository.save(orderSubmittedMessageEntity);
@@ -50,12 +51,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void completeOrder(int id) {
         OrderEntity order = orderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " is not found")); //todo: fix, logs, check
-        // TODO shine2 handle case of repeatedly completing orders
+                .orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " is not found")); //todo: logs
+        if (order.getStatus() == OrderStatus.COMPLETE) {
+            return;
+        }
+
         order.setStatus(OrderStatus.COMPLETE);
         orderRepository.save(order);
 
-        updateQueueInfo(order, RequestType.COMPLETE); // TODO shine2 handle duplicates
+        updateQueueInfo(order, RequestType.COMPLETE);
 
         // TODO shine2 construct and publish OrderCompleteMessage(orEvent)
     }
@@ -63,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {
         int queueId = order.getLaundryId();
         LaundryStateEntity laundryState = laundryStateRepository.findById(queueId)
-                .orElseThrow(() -> new IllegalArgumentException("Queue with id" + queueId + "is not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Queue with id " + queueId + "is not found"));
 
         switch (requestType) {
             case SUBMIT:
@@ -74,15 +78,15 @@ public class OrderServiceImpl implements OrderService {
                 break;
         }
 
-//        laundryState.setVersion(laundryState.getVersion() + 1);
         return laundryStateRepository.save(laundryState);
+
     }
 
     @Transactional
     public void completeNextOrderInQueue(int laundryId) {
         Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextIncompleteOrderInQueue(laundryId);
         if (!nextOrderInQueue.isPresent()) {
-            // TODO shine2 log this fact and get rid of warning
+            // TODO shine2 log this fact
             return;
         }
         OrderEntity orderEntity = nextOrderInQueue.get();
@@ -93,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
             } catch (InterruptedException ignore) {
             }
         }
-        this.completeOrder(orderEntity.getId()); // TODO get rid of warning
+        this.completeOrder(orderEntity.getId());
     }
 
 }
