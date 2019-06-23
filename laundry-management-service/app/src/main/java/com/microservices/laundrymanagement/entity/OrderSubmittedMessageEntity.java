@@ -16,6 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "order_submitted_messages")
 public class OrderSubmittedMessageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
