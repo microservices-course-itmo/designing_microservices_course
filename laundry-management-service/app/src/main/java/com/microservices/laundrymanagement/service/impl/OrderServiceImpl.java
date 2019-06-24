@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
     public void completeNextOrderInQueue(int laundryId) {
         Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextIncompleteOrderInQueue(laundryId);
         if (!nextOrderInQueue.isPresent()) {
-            logger.info("The queue {} is empty. Cannot find next order to treat", laundryId);
+            logger.debug("The queue {} is empty. Cannot find next order to treat", laundryId);
             return;
         }
         OrderEntity orderEntity = nextOrderInQueue.get();
