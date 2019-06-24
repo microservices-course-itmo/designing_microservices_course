@@ -7,6 +7,8 @@ import com.microservices.laundrymanagement.repository.OrderCompletedMessageRepos
 import com.microservices.laundrymanagement.repository.OrderRepository;
 import com.microservices.laundrymanagement.repository.OrderSubmittedMessageRepository;
 import com.microservices.laundrymanagement.service.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ public class OrderServiceImpl implements OrderService {
     private LaundryStateRepository laundryStateRepository;
     private OrderSubmittedMessageRepository orderSubmittedMessageRepository;
     private OrderCompletedMessageRepository orderCompletedMessageRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -35,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
+        logger.info("Submitting order: {}...", orderSubmissionDto);
         OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
         if (orderRepository.existsById(orderSubmissionDto.getOrderId()))
             throw new IllegalArgumentException("Order with id " + orderSubmissionDto.getOrderId() +
@@ -46,14 +51,17 @@ public class OrderServiceImpl implements OrderService {
         OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
                 orderEntity.getId(), laundryStateEntity);
         orderSubmittedMessageRepository.save(orderSubmittedMessageEntity);
+        logger.info("Order with id {} is submitted", orderSubmissionDto.getOrderId());
     }
 
     @Transactional
     @Override
     public void completeOrder(int id) {
+        logger.info("Completing order {}...", id);
         OrderEntity order = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " is not found")); //todo: logs
         if (order.getStatus() == OrderStatus.COMPLETE) {
+            logger.warn("Order with id {} is already completed");
             return;
         }
 
@@ -65,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
         OrderCompletedMessageEntity orderCompletedMessage = new OrderCompletedMessageEntity(
                 order, laundryStateEntity);
         orderCompletedMessageRepository.save(orderCompletedMessage);
+        logger.info("Order with id {} is completed", id);
     }
 
     private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {
@@ -89,10 +98,13 @@ public class OrderServiceImpl implements OrderService {
     public void completeNextOrderInQueue(int laundryId) {
         Optional<OrderEntity> nextOrderInQueue = orderRepository.findNextIncompleteOrderInQueue(laundryId);
         if (!nextOrderInQueue.isPresent()) {
-            // TODO shine2 log this fact
+            logger.info("The queue {} is empty. Cannot find next order to treat", laundryId);
             return;
         }
         OrderEntity orderEntity = nextOrderInQueue.get();
+        logger.info("Start processing order {} from queue {}", orderEntity.getId(), laundryId);
+        orderEntity.setStatus(OrderStatus.IN_PROCESS);
+        orderRepository.save(orderEntity);
         while (true) {
             try {
                 TimeUnit.MILLISECONDS.sleep(orderEntity.getEstimatedTime());
