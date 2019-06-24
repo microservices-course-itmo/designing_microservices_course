@@ -1,0 +1,3 @@
+rootProject.name = 'laundrymanagement'
+include 'app'
+include 'api'

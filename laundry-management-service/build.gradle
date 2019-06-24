@@ -1,0 +1,6 @@
+// TODO: make this shit work so we won't have to specify repos in every module
+//allprojects {
+//    repositories {
+//        mavenCentral()
+//    }
+//}
