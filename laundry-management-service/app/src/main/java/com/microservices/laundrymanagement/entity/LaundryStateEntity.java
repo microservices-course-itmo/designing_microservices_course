@@ -14,6 +14,8 @@ import javax.persistence.*;
 public class LaundryStateEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "laundries_state_generator")
+    @SequenceGenerator(name = "laundries_state_generator", sequenceName = "laundries_state_id_seq")
     private int id;
 
     @Version
@@ -22,7 +24,9 @@ public class LaundryStateEntity {
     @Column
     private long queueWaitingTime;
 
-    public LaundryStateEntity(int id) {
-        this.id = id;
+    private String name;
+
+    public LaundryStateEntity(String name) {
+        this.name = name;
     }
 }
