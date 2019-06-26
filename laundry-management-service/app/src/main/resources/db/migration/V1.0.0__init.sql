@@ -10,7 +10,7 @@ CREATE TABLE orders
 
 CREATE TABLE laundries_state
 (
-  id                 SERIAL NOT NULL PRIMARY KEY,
+  id                 INT NOT NULL PRIMARY KEY,
   version            INT    DEFAULT 0,
   queue_waiting_time BIGINT DEFAULT 0
 );
@@ -34,5 +34,11 @@ CREATE TABLE order_completed_messages
   laundry_id            INT    NOT NULL,
   laundry_state_version INT    NOT NULL,
   queue_waiting_time    BIGINT NOT NULL
+);
+
+CREATE TABLE laundries
+(
+  id   SERIAL      NOT NULL PRIMARY KEY,
+  name VARCHAR(20) NOT NULL UNIQUE
 )
 

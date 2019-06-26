@@ -38,7 +38,8 @@ public class LaundryController {
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public int addLaundry() {
-        return laundryService.addNewLaundry();
+    public int addLaundry(@RequestParam String laundryName) {
+        logger.info("Got request for creating laundry with name \"{}\"", laundryName);
+        return laundryService.registerLaundry(laundryName);
     }
 }
