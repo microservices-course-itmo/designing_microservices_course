@@ -28,7 +28,7 @@ public class LaundryServiceImpl implements LaundryService {
     @Override
     @Transactional
     public int registerLaundry(String name) {
-        logger.info("Creating queue...");
+        logger.info("Creating queue with name \"{}\"...", name);
         if (laundryRepository.existsByName(name)) {
             logger.error("Laundry with name \"{}\" exists", name);
             throw new IllegalArgumentException("Laundry with name " + name + " exists");
