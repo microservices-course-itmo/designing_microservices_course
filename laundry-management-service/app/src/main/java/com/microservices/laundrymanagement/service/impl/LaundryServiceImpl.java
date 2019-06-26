@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LaundryServiceImpl implements LaundryService {
+    private final Logger logger = LoggerFactory.getLogger(LaundryServiceImpl.class);
+
     private LaundryStateRepository laundryStateRepository;
 
     private final Logger logger = LoggerFactory.getLogger(LaundryServiceImpl.class);

@@ -18,12 +18,12 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     private OrderRepository orderRepository;
     private LaundryStateRepository laundryStateRepository;
     private OrderSubmittedMessageRepository orderSubmittedMessageRepository;
     private OrderCompletedMessageRepository orderCompletedMessageRepository;
-
-    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -41,9 +41,11 @@ public class OrderServiceImpl implements OrderService {
     public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
         logger.info("Submitting order: {}...", orderSubmissionDto);
         OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
-        if (orderRepository.existsById(orderSubmissionDto.getOrderId()))
+        if (orderRepository.existsById(orderSubmissionDto.getOrderId())) {
+            logger.error("Order with id {} already exists", orderSubmissionDto.getOrderId());
             throw new IllegalArgumentException("Order with id " + orderSubmissionDto.getOrderId() +
-                    "already exists");
+                    " already exists");
+        }
         orderRepository.save(orderEntity);
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
@@ -59,7 +61,10 @@ public class OrderServiceImpl implements OrderService {
     public void completeOrder(int id) {
         logger.info("Completing order {}...", id);
         OrderEntity order = orderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " is not found")); //todo: logs
+                .orElseThrow(() -> {
+                    logger.error("Order with id " + id + " is not found");
+                    return new IllegalArgumentException("Order with id " + id + " is not found");
+                });
         if (order.getStatus() == OrderStatus.COMPLETE) {
             logger.warn("Order with id {} is already completed");
             return;

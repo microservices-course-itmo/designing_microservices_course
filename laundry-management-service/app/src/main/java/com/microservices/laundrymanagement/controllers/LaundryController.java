@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("laundry")
 public class LaundryController {
+    private final Logger logger = LoggerFactory.getLogger(LaundryController.class);
+
     private OrderService orderService;
     private LaundryService laundryService;
-    private final Logger logger = LoggerFactory.getLogger(LaundryController.class);
 
     @Autowired
     public LaundryController(OrderService orderService, LaundryService laundryService) {
