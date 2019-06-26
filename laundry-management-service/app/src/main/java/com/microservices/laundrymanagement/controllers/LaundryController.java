@@ -21,7 +21,7 @@ public class LaundryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public int addLaundry(@RequestParam String laundryName) {
+    public int registerLaundry(@RequestParam String laundryName) {
         logger.info("Got request for creating laundry with name \"{}\"", laundryName);
         return laundryService.registerLaundry(laundryName);
     }
