@@ -19,16 +19,13 @@ import javax.persistence.Version;
 public class LaundryStateEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "laundries_state_generator")
-    @SequenceGenerator(name="laundries_state_generator", sequenceName = "laundries_state_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Version
     private int version;
 
-    @Column
     private long queueWaitingTime;
 
-    @Column
     private long reservedTime;
 }

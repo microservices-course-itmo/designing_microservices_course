@@ -1,6 +1,6 @@
 package com.microservices.taskcoordinator.controllers;
 
-import com.microservices.taskcoordinator.dto.OrderSubmissionDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderDTO;
 import com.microservices.taskcoordinator.service.impl.LaundryService;
 import com.microservices.taskcoordinator.service.impl.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class LaundryController {
     }*/
 
     @PostMapping
-    public void submitOrder(@RequestBody OrderSubmissionDto order) {
+    public void submitOrder(@RequestBody OrderDTO order) {
         orderService.submitOrder(order);
     }
 }

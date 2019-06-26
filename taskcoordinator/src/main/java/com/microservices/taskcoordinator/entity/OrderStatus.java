@@ -1,8 +1,9 @@
 package com.microservices.taskcoordinator.entity;
 
 public enum OrderStatus {
-    RESERVED,
     APPROVED,
+    RESERVED,
+    SUBMITTED,
     COMPLETE,
     FAILED
 }

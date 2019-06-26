@@ -1,8 +1,7 @@
 package com.microservices.taskcoordinator.entity;
 
-import com.microservices.taskcoordinator.dto.DetailSubmissionDto;
-import com.microservices.taskcoordinator.dto.OrderSubmissionDto;
-import com.microservices.taskcoordinator.entity.OrderStatus;
+import com.microservices.taskcoordinator.dto.OrderDetailDTO;
+import com.microservices.taskcoordinator.dto.inbound.OrderDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +9,8 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -25,7 +26,6 @@ public class OrderEntity {
 
     private int laundryId;
 
-    //TODO
     private int bucket;
 
     private long duration;
@@ -35,14 +35,13 @@ public class OrderEntity {
 
     private long estimatedTime;
 
-    private long actualTime;
+    private long completionTime;
 
-
-    public OrderEntity(OrderSubmissionDto orderSubmissionDto, int selectedLaundryId, long estimatedTimeToComplete) {
-        this.id = orderSubmissionDto.getOrderId();
+    public OrderEntity(OrderDTO orderDTO, int selectedLaundryId, long estimatedTimeToComplete) {
+        this.id = orderDTO.getOrderId();
         this.laundryId = selectedLaundryId;
-        this.duration = orderSubmissionDto.getDetails().stream()
-                .map(DetailSubmissionDto::getTime)
+        this.duration = orderDTO.getDetails().stream()
+                .map(OrderDetailDTO::getDuration)
                 .reduce(0L, Long::sum);
         this.status = OrderStatus.APPROVED;
         this.estimatedTime = estimatedTimeToComplete;
