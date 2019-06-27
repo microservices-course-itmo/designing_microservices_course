@@ -1,19 +1,25 @@
 package com.microservices.taskcoordinator.service.impl;
 
 import com.microservices.taskcoordinator.dto.inbound.OrderDTO;
-import com.microservices.taskcoordinator.entity.OrderEntity;
+import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDTO;
+import com.microservices.taskcoordinator.repository.OrderRepository;
+import com.microservices.taskcoordinator.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class OrderServiceImpl implements OrderService {
 
+    //TODO
     @Autowired
-    private PredictionService predictionService;
+    private OrderRepository orderRepository;
 
-    @Autowired
-    private LaundryService laundryService;
-
+    //TODO FormattedExceptions
     @Override
-    public OrderEntity submitOrder(OrderDTO orderDTO) {
+    public OrderSubmissionDTO coordinateOrder(OrderDTO orderDto) {
+        if (orderRepository.existsById(orderDto.getOrderId()))
+            throw new IllegalArgumentException("Order with id " + orderDto.getOrderId() + "already exists");
+
         return null;
+
     }
+
 }

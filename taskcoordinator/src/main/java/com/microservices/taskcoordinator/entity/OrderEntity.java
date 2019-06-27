@@ -37,9 +37,10 @@ public class OrderEntity {
 
     private long completionTime;
 
-    public OrderEntity(OrderDTO orderDTO, int selectedLaundryId, long estimatedTimeToComplete) {
+    public OrderEntity(OrderDTO orderDTO, int selectedLaundryId, int bucket, long estimatedTimeToComplete) {
         this.id = orderDTO.getOrderId();
         this.laundryId = selectedLaundryId;
+        this.bucket = 1;
         this.duration = orderDTO.getDetails().stream()
                 .map(OrderDetailDTO::getDuration)
                 .reduce(0L, Long::sum);
