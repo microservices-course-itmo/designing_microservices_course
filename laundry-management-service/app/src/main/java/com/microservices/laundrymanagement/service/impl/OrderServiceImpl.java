@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
                 TimeUnit.MILLISECONDS.sleep(orderEntity.getEstimatedTime());
                 break;
             } catch (InterruptedException ignore) {
+                //TODO shine2
             }
         }
         this.completeOrder(orderEntity.getId());

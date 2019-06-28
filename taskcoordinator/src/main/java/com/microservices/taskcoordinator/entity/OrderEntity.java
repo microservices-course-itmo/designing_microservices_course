@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Getter
@@ -24,7 +26,9 @@ public class OrderEntity {
     @Id
     private int id;
 
-    private int laundryId;
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private LaundryStateEntity laundryState;
 
     private int bucket;
 
@@ -37,9 +41,9 @@ public class OrderEntity {
 
     private long completionTime;
 
-    public OrderEntity(OrderDTO orderDTO, int selectedLaundryId, int bucket, long estimatedTimeToComplete) {
+    public OrderEntity(OrderDTO orderDTO, LaundryStateEntity selectedLaundry, long estimatedTimeToComplete) {
         this.id = orderDTO.getOrderId();
-        this.laundryId = selectedLaundryId;
+        this.laundryState = selectedLaundry;
         this.bucket = 1;
         this.duration = orderDTO.getDetails().stream()
                 .map(OrderDetailDTO::getDuration)

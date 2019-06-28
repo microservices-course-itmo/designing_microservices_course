@@ -11,7 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LaundryStateDTO {
 
-    int laundryId;
-    long queueWaitingTime;
-    int version;
+    private int laundryId;
+    private long queueWaitingTime;
+    private int version;
+
+    /*public LaundryStateDTO()*/
 }
