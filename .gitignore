@@ -6,3 +6,5 @@
 *.iws
 *.iml
 *.ipr
+
+laundry-management-service/api/src/main/java/com/microservices/laundrymanagementapi/messages/

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.laundrymanagementapi.messages";
+option java_outer_classname = "LaundryStateProto";
+
+message LaundryState{
+    int64 queueWaitingTime = 1;
+    int32 version = 2;
+}
