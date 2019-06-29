@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LaundryStateRepository extends CrudRepository<LaundryStateEntity, Integer> {
+    boolean existsByName(String name);
 }
 
 

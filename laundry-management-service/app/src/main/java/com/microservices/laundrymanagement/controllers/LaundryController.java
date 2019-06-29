@@ -1,27 +1,28 @@
 package com.microservices.laundrymanagement.controllers;
 
-import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
-import com.microservices.laundrymanagement.service.OrderService;
+import com.microservices.laundrymanagement.service.LaundryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("laundry")
+@RequestMapping("laundries")
 public class LaundryController {
-    private OrderService orderService;
+    private final Logger logger = LoggerFactory.getLogger(LaundryController.class);
+
+    private LaundryService laundryService;
 
     @Autowired
-    public LaundryController(OrderService orderService) {
-        this.orderService = orderService;
+    public LaundryController(LaundryService laundryService) {
+        this.laundryService = laundryService;
     }
 
     @PostMapping
-    public void submitOrder(@RequestBody OrderSubmissionDto order) {
-        orderService.submitOrder(order);
-    }
-
-    @PutMapping
-    public void completeOrder(@RequestParam int id) {
-        orderService.completeOrder(id);
+    @ResponseStatus(HttpStatus.CREATED)
+    public int registerLaundry(@RequestParam String laundryName) {
+        logger.info("Got request for creating laundry with name \"{}\"", laundryName);
+        return laundryService.registerLaundry(laundryName);
     }
 }
