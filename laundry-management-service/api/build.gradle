@@ -22,7 +22,7 @@ protobuf {
 sourceSets {
     main {
         proto {
-            srcDir "$projectDir/src/main/java/com/microservices/laundrymanagementapi/shema"
+            srcDir "$projectDir/src/main/java/com/microservices/laundrymanagementapi/schema"
             include '**/*.proto'
         }
     }
