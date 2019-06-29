@@ -1,7 +1,11 @@
 package com.microservices.laundrymanagement.service.impl;
 
 import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
-import com.microservices.laundrymanagement.entity.*;
+import com.microservices.laundrymanagement.entity.LaundryStateEntity;
+import com.microservices.laundrymanagement.entity.OrderCompletedMessageEntity;
+import com.microservices.laundrymanagement.entity.OrderEntity;
+import com.microservices.laundrymanagement.entity.OrderStatus;
+import com.microservices.laundrymanagement.entity.OrderSubmittedMessageEntity;
 import com.microservices.laundrymanagement.repository.LaundryStateRepository;
 import com.microservices.laundrymanagement.repository.OrderCompletedMessageRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
@@ -66,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
                     return new IllegalArgumentException("Order with id " + id + " is not found");
                 });
         if (order.getStatus() == OrderStatus.COMPLETE) {
-            logger.warn("Order with id {} is already completed");
+            logger.warn("Order with id {} is already completed", order.getId());
             return;
         }
 
