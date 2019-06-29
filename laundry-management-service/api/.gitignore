@@ -4,4 +4,4 @@
 # Ignore Gradle build output directory
 build
 
-src/main/java/com/microservices/laundrymanagementapi/messages/*.java
+src/main/java/com/microservices/laundrymanagementapi/messages/
