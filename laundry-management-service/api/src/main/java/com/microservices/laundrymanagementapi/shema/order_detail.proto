@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.laundrymanagementapi.messages";
+option java_outer_classname = "OrderDetailProto";
+
+message OrderDetail {
+    int32 detailId = 1;
+    int32 weight = 2;
+    int64 duration = 3;
+}
