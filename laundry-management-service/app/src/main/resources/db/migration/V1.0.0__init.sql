@@ -10,9 +10,10 @@ CREATE TABLE orders
 
 CREATE TABLE laundries_state
 (
-  id                 SERIAL NOT NULL PRIMARY KEY,
-  version            INT    DEFAULT 0,
-  queue_waiting_time BIGINT DEFAULT 0
+  id                 SERIAL      NOT NULL PRIMARY KEY,
+  version            INT         DEFAULT 0,
+  queue_waiting_time BIGINT      DEFAULT 0,
+  name               VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE order_submitted_messages
