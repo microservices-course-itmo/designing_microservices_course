@@ -2,6 +2,7 @@ package com.microservices.ordermanagement.app.impl;
 
 import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.dto.AddDetailDto;
+import com.microservices.ordermanagement.app.dto.AssignTariffDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import com.microservices.ordermanagement.app.entity.PendingDetailEntity;
 import com.microservices.ordermanagement.app.repository.OrderRepository;
@@ -53,5 +54,12 @@ public class OrderServiceImpl implements OrderService {
 
         pendingDetailsRepository.deleteById(addDetailDto.getPendingDetailId());
         return orderRepository.save(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderEntity assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
+        Objects.requireNonNull(assignTariffDto);
+        return null;
     }
 }
