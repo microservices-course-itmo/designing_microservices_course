@@ -5,6 +5,8 @@ import com.microservices.ordermanagement.app.dto.AddDetailDto;
 import com.microservices.ordermanagement.app.dto.AssignTariffDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,11 @@ public class OrderController {
     @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @GetMapping(value = "{orderId}")
+    OrderEntity getOrderById(@PathVariable int orderId) {
+        return orderService.getOrderById(orderId);
     }
 
     @PutMapping(value = "detail")

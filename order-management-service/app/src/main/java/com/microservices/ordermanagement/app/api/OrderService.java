@@ -7,6 +7,13 @@ import com.microservices.ordermanagement.app.entity.OrderEntity;
 public interface OrderService {
 
     /**
+     * Returns order by given id
+     * Throws {@link IllegalArgumentException} if there is no such order
+     * in underlying database
+     */
+    OrderEntity getOrderById(int orderId);
+
+    /**
      * Bind existing pending detail with existing order.
      * in case there is no such detail thrown {@link IllegalArgumentException}
      * in case there is no such order creates new order in underlying database

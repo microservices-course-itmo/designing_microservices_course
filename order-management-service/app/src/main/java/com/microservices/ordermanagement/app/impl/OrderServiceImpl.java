@@ -30,6 +30,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderEntity getOrderById(int orderId) {
+        logger.info("Looking for an order by id {}", orderId);
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("There is no such order in database"));
+    }
+
+    @Override
     @Transactional
     public OrderEntity addDetailToOrder(AddDetailDto addDetailDto) {
         Objects.requireNonNull(addDetailDto);
@@ -43,8 +50,7 @@ public class OrderServiceImpl implements OrderService {
             order = orderRepository.save(new OrderEntity());
             logger.info("Created new order with id: {}", order.getId());
         } else {
-            order = orderRepository.findById(addDetailDto.getOrderId())
-                    .orElseThrow(() -> new IllegalArgumentException("There is no such order in database"));
+            order = this.getOrderById(addDetailDto.getOrderId());
         }
         order.addPendingDetail(pendingDetail);
         logger.info("Binding pending detail with order {}", addDetailDto);
@@ -58,11 +64,10 @@ public class OrderServiceImpl implements OrderService {
     public OrderEntity assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
         Objects.requireNonNull(assignTariffDto);
 
-        OrderEntity order = orderRepository.findById(assignTariffDto.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("There is no such order in database"));
-
+        OrderEntity order = this.getOrderById(assignTariffDto.getOrderId());
         order.assignTariffToOrderDetail(assignTariffDto);
         logger.info("Assigning tariff to order detail {}", assignTariffDto);
+
         return orderRepository.save(order);
     }
 }
