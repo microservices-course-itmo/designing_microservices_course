@@ -16,4 +16,5 @@ public class OrderDetailDTO {
     private int detailId;
     private int weight;
     private long duration;
+
 }

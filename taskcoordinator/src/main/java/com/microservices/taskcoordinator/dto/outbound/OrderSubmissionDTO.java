@@ -1,6 +1,7 @@
 package com.microservices.taskcoordinator.dto.outbound;
 
 import com.microservices.taskcoordinator.dto.LaundryStateDTO;
+import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import com.microservices.taskcoordinator.entity.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,9 +19,11 @@ public class OrderSubmissionDTO {
     int bucket;
     LaundryStateDTO laundryState;
 
-    /*public OrderSubmissionDTO(OrderEntity orderEntity) {
+    public OrderSubmissionDTO(OrderEntity orderEntity, LaundryStateEntity laundryStateEntity) {
         this.orderId = orderEntity.getId();
-        this.laundryState = new LaundryStateDTO(orderEntity.getLaundryId(), orderEntity.get)
+        this.laundryId = orderEntity.getLaundryId();
+        this.bucket = orderEntity.getBucket();
+        this.laundryState = new LaundryStateDTO(laundryStateEntity);
 
-    }*/
+    }
 }

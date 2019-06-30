@@ -26,9 +26,7 @@ public class OrderEntity {
     @Id
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private LaundryStateEntity laundryState;
+    private int laundryId;
 
     private int bucket;
 
@@ -41,9 +39,9 @@ public class OrderEntity {
 
     private long completionTime;
 
-    public OrderEntity(OrderDTO orderDTO, LaundryStateEntity selectedLaundry, long estimatedTimeToComplete) {
+    public OrderEntity(OrderDTO orderDTO, int selectedLaundryId, long estimatedTimeToComplete) {
         this.id = orderDTO.getOrderId();
-        this.laundryState = selectedLaundry;
+        this.laundryId = selectedLaundryId;
         this.bucket = 1;
         this.duration = orderDTO.getDetails().stream()
                 .map(OrderDetailDTO::getDuration)
@@ -51,5 +49,6 @@ public class OrderEntity {
         this.status = OrderStatus.APPROVED;
         this.estimatedTime = estimatedTimeToComplete;
     }
+
 
 }
