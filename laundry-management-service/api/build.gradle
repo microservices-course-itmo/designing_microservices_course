@@ -17,6 +17,9 @@ dependencies {
 
 protobuf {
     generatedFilesBaseDir = "$projectDir/src"
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.8.0'
+    }
 }
 
 sourceSets {
