@@ -22,7 +22,6 @@ public class LaundryStateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Version
     private int version;
 
     private long queueWaitingTime;

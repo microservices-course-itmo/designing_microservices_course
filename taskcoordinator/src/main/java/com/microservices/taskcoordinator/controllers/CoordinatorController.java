@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("coordinator")
 public class CoordinatorController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    private final LaundryStateService laundryStateService;
 
     @Autowired
-    private LaundryStateService laundryStateService;
+    public CoordinatorController(OrderService orderService, LaundryStateService laundryStateService) {
+        this.orderService = orderService;
+        this.laundryStateService = laundryStateService;
+    }
 
     @PostMapping(name = "/orders")
     OrderSubmissionDTO coordinateOrder(@RequestBody OrderDTO orderDTO) {
