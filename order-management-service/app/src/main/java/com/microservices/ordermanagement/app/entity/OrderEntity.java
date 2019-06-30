@@ -1,5 +1,6 @@
 package com.microservices.ordermanagement.app.entity;
 
+import com.microservices.ordermanagement.app.dto.AssignTariffDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -14,11 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -28,8 +29,7 @@ import java.util.List;
 public class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_generator")
-    @SequenceGenerator(name = "orders_generator", sequenceName = "orders_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Enumerated(value = EnumType.STRING)
@@ -54,5 +54,19 @@ public class OrderEntity {
         }
 
         detailEntities.add(new OrderDetailEntity(pendingDetail.getId(), this.getId(), pendingDetail.getWeight()));
+    }
+
+    public void assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
+        OrderDetailEntity orderDetail = detailEntities.stream()
+                .filter(d -> d.getId() == assignTariffDto.getDetailId())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("There is no detail with id: " +
+                        assignTariffDto.getDetailId() + "" + "in order id: " + assignTariffDto.getOrderId() + " in database"));
+
+        orderDetail.addTariffInformation(assignTariffDto.getTariffDto());
+        this.setTotalPrice(detailEntities.stream()
+                .map(OrderDetailEntity::getPrice)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 }

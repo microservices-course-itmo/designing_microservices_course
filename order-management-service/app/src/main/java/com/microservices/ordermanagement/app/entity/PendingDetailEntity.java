@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Getter
@@ -18,8 +17,7 @@ import javax.persistence.Table;
 @Table(name = "pending_details")
 public class PendingDetailEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pending_details_generator")
-    @SequenceGenerator(name = "pending_details_generator", sequenceName = "pending_details_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     private int weight;

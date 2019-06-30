@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("order")
 public class OrderController {
@@ -21,12 +23,12 @@ public class OrderController {
     }
 
     @PutMapping(value = "detail")
-    OrderEntity addDetailToOrder(@RequestBody AddDetailDto addDetailDto) {
+    OrderEntity addDetailToOrder(@Valid @RequestBody AddDetailDto addDetailDto) {
         return orderService.addDetailToOrder(addDetailDto);
     }
 
     @PutMapping(value = "tariff")
-    OrderEntity assignTariffToOrderDetail(@RequestBody AssignTariffDto assignTariffDto) {
+    OrderEntity assignTariffToOrderDetail(@Valid @RequestBody AssignTariffDto assignTariffDto) {
         return orderService.assignTariffToOrderDetail(assignTariffDto);
     }
 }

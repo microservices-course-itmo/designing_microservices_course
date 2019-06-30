@@ -33,9 +33,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderEntity addDetailToOrder(AddDetailDto addDetailDto) {
         Objects.requireNonNull(addDetailDto);
-        if (addDetailDto.getPendingDetailId() == null) {
-            throw new IllegalArgumentException("Passed pending detail id is null");
-        }
 
         PendingDetailEntity pendingDetail = pendingDetailsRepository.findById(addDetailDto.getPendingDetailId())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -47,10 +44,10 @@ public class OrderServiceImpl implements OrderService {
             logger.info("Created new order with id: {}", order.getId());
         } else {
             order = orderRepository.findById(addDetailDto.getOrderId())
-                    .orElseThrow(() -> new IllegalArgumentException("Passed detail id in null"));
+                    .orElseThrow(() -> new IllegalArgumentException("There is no such order in database"));
         }
         order.addPendingDetail(pendingDetail);
-        logger.info("Binding pending detail id {} with order id :{}", pendingDetail.getId(), order.getId());
+        logger.info("Binding pending detail with order {}", addDetailDto);
 
         pendingDetailsRepository.deleteById(addDetailDto.getPendingDetailId());
         return orderRepository.save(order);
@@ -60,6 +57,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderEntity assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
         Objects.requireNonNull(assignTariffDto);
-        return null;
+
+        OrderEntity order = orderRepository.findById(assignTariffDto.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("There is no such order in database"));
+
+        order.assignTariffToOrderDetail(assignTariffDto);
+        logger.info("Assigning tariff to order detail {}", assignTariffDto);
+        return orderRepository.save(order);
     }
 }
