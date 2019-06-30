@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -37,26 +36,22 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Passed pending detail id is null");
         }
 
-        Optional<PendingDetailEntity> pendingDetail = pendingDetailsRepository.findById(
-                Optional.ofNullable(addDetailDto.getPendingDetailId())
-                        .orElseThrow(() -> new IllegalArgumentException("Passed detail id in null")));
-
-        if (!pendingDetail.isPresent()) {
-            throw new IllegalArgumentException(
-                    "There is no detail with passed is found, id: " + addDetailDto.getPendingDetailId());
-        }
+        PendingDetailEntity pendingDetail = pendingDetailsRepository.findById(addDetailDto.getPendingDetailId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "There is no detail with passed is found, id: " + addDetailDto.getPendingDetailId()));
 
         OrderEntity order;
-        if (addDetailDto.getOrderId() == null) {
+        if (addDetailDto.getOrderId() == null) { // in case first detail. when order doesn't exist yet
             order = orderRepository.save(new OrderEntity());
+            logger.info("Created new order with id: {}", order.getId());
         } else {
             order = orderRepository.findById(addDetailDto.getOrderId())
                     .orElseThrow(() -> new IllegalArgumentException("Passed detail id in null"));
         }
-        order.addPendingDetail(pendingDetail.get());
+        order.addPendingDetail(pendingDetail);
+        logger.info("Binding pending detail id {} with order id :{}", pendingDetail.getId(), order.getId());
 
         pendingDetailsRepository.deleteById(addDetailDto.getPendingDetailId());
-
         return orderRepository.save(order);
     }
 }
