@@ -1,6 +1,6 @@
 package com.microservices.taskcoordinator.service.impl;
 
-import com.microservices.taskcoordinator.dto.inbound.OrderDTO;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDTO;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDTO;
 import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import com.microservices.taskcoordinator.entity.OrderEntity;
@@ -26,11 +26,11 @@ public class OrderServiceImpl implements OrderService {
     private PredictionService predictionService;
 
     @Override
-    public OrderEntity updateOrderStatus(Integer orderId, OrderStatus orderStatus) {
-        OrderEntity existingOrder = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id = " + orderId + " was not found"));
+    public OrderEntity updateOrder(OrderEntity orderEntity) {
+        OrderEntity existingOrder = orderRepository.findById(orderEntity.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Order with id = " + orderEntity.getId()+ " was not found"));
 
-        existingOrder.setStatus(orderStatus);
+        existingOrder.setStatus(orderEntity.getStatus());
         return orderRepository.save(existingOrder);
     }
 
@@ -43,20 +43,19 @@ public class OrderServiceImpl implements OrderService {
     //TODO FormattedExceptions
     @Transactional
     @Override
-    public OrderSubmissionDTO coordinateOrder(OrderDTO orderDto) {
-        if (orderRepository.existsById(orderDto.getOrderId()))
-            throw new IllegalArgumentException("Order with id " + orderDto.getOrderId() + "already exists");
+    public OrderSubmissionDTO coordinateOrder(OrderCoordinationDTO orderCoordinationDto) {
+        if (orderRepository.existsById(orderCoordinationDto.getOrderId()))
+            throw new IllegalArgumentException("Order with id " + orderCoordinationDto.getOrderId() + "already exists");
 
         LaundryStateEntity leastLoadedLaundry = laundryStateService.getLeastLoadedLaundry();
         long estimatedCompletionTime = predictionService.getOrderCompletionTimePrediction(leastLoadedLaundry);
 
-        OrderEntity orderEntity = new OrderEntity(orderDto, leastLoadedLaundry.getId(), estimatedCompletionTime);
-        OrderSubmissionDTO orderSubmissionDTO = new OrderSubmissionDTO(orderEntity, leastLoadedLaundry);
+        OrderEntity orderEntity = new OrderEntity(orderCoordinationDto, leastLoadedLaundry.getId(), estimatedCompletionTime);
 
-        laundryStateService.updateLaundryStateByOrderSubmission(orderEntity);
         orderRepository.save(orderEntity);
+        laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getId(), orderEntity.getDuration());
 
-        return orderSubmissionDTO;
+        return new OrderSubmissionDTO(orderEntity, leastLoadedLaundry);
     }
 
 }

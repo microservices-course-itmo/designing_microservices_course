@@ -1,6 +1,6 @@
 package com.microservices.taskcoordinator.controllers;
 
-import com.microservices.taskcoordinator.dto.inbound.OrderDTO;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDTO;
 import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDTO;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDTO;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDTO;
@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("coordinator")
+@RequestMapping("orders")
 public class CoordinatorController {
 
     private final OrderService orderService;
@@ -28,20 +27,19 @@ public class CoordinatorController {
         this.laundryStateService = laundryStateService;
     }
 
-    @PostMapping(name = "/orders")
-    OrderSubmissionDTO coordinateOrder(@RequestBody OrderDTO orderDTO) {
-        return orderService.coordinateOrder(orderDTO);
+    @PostMapping()
+    OrderSubmissionDTO coordinateOrder(@RequestBody OrderCoordinationDTO orderCoordinationDTO) {
+        return orderService.coordinateOrder(orderCoordinationDTO);
     }
 
-    @PutMapping("/orders/{id}/status/submitted")
+    @PutMapping("/{id}/status/submitted")
     void processSubmittedOrder(@RequestBody OrderSubmittedDTO orderSubmittedDTO) {
-        laundryStateService.updateLaundryStateOrderSubmitted(orderSubmittedDTO);
+        laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDTO);
     }
 
-    //TODO: if we don't return dto, then has to be any response-message-class's object to return
-    @PutMapping("/orders/{id}/status/processed")
+    @PutMapping("/{id}/status/processed")
     void processProcessedOrder(@RequestBody OrderProcessedDTO orderProcessedDTO) {
-        laundryStateService.updateLaundryStateOrderProcessed(orderProcessedDTO);
+        laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDTO);
     }
 
 

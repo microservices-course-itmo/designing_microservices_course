@@ -14,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
+public class OrderCoordinationDTO {
 
     private int orderId;
     private List<OrderDetailDTO> details;

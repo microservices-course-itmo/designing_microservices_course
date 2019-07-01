@@ -26,18 +26,18 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     }
 
     @Override
-    public LaundryStateDTO updateLaundryStateByOrderSubmission(OrderEntity orderEntity) {
-        LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderEntity.getLaundryId())
-                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderEntity.getLaundryId() + "doesn't exist"));
+    public LaundryStateDTO updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration) {
+        LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(laundryId)
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + laundryId + "doesn't exist"));
 
-        laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() + orderEntity.getDuration());
+        laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() + orderDuration);
 
         laundryStateRepository.save(laundryStateEntity);
         return new LaundryStateDTO(laundryStateEntity);
     }
 
     @Override
-    public LaundryStateEntity updateLaundryStateOrderSubmitted(OrderSubmittedDTO orderSubmittedDTO) {
+    public LaundryStateEntity updateLaundryStateWithOrderSubmitted(OrderSubmittedDTO orderSubmittedDTO) {
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderSubmittedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getOrderId() + "doesn't exist"));
         OrderEntity orderEntity = orderService.getOrderById(orderSubmittedDTO.getOrderId());
@@ -49,13 +49,13 @@ public class LaundryStateServiceImpl implements LaundryStateService {
             laundryStateEntity.setVersion(orderSubmittedDTO.getLaundryState().getVersion());
         }
 
-        orderService.updateOrderStatus(orderEntity.getId(), OrderStatus.SUBMITTED);
+        orderService.updateOrder(orderEntity.getId(), OrderStatus.SUBMITTED);
 
         return laundryStateRepository.save(laundryStateEntity);
     }
 
     @Override
-    public LaundryStateEntity updateLaundryStateOrderProcessed(OrderProcessedDTO orderProcessedDTO) {
+    public LaundryStateEntity updateLaundryStateWithOrderProcessed(OrderProcessedDTO orderProcessedDTO) {
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderProcessedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderProcessedDTO.getOrderId() + "doesn't exist"));
         OrderEntity orderEntity = orderService.getOrderById(orderProcessedDTO.getOrderId());
@@ -66,7 +66,10 @@ public class LaundryStateServiceImpl implements LaundryStateService {
             laundryStateEntity.setVersion(orderProcessedDTO.getLaundryState().getVersion());
         }
 
-        orderService.updateOrderStatus(orderEntity.getId(), OrderStatus.COMPLETE);
+        orderEntity.setStatus(OrderStatus.COMPLETE);
+        orderEntity.setCompletionTime(System.currentTimeMillis());
+
+        orderService.updateOrder(orderEntity);
 
         return laundryStateRepository.save(laundryStateEntity);
     }
