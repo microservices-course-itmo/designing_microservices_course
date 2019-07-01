@@ -5,10 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableScheduling
 public class LaundryServiceManagement {
 
     /**
@@ -16,9 +18,7 @@ public class LaundryServiceManagement {
      */
     @Bean
     CommandLineRunner start(LaundryWorkingActivityEmulator emulator) {
-        return (args) -> {
-            emulator.run();
-        };
+        return (args) -> emulator.run();
     }
 
     public static void main(String[] args) {
