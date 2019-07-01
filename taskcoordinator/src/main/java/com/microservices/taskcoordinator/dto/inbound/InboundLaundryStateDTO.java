@@ -1,4 +1,4 @@
-package com.microservices.taskcoordinator.dto;
+package com.microservices.taskcoordinator.dto.inbound;
 
 import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import lombok.AllArgsConstructor;
@@ -8,23 +8,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @EqualsAndHashCode
-public class LaundryStateDTO {
+@AllArgsConstructor
+public class InboundLaundryStateDTO {
 
     private int laundryId;
-
     private long queueWaitingTime;
-
-    private long reservedTime;
-
     private int version;
 
-
-    public LaundryStateDTO(LaundryStateEntity laundryStateEntity) {
+    public InboundLaundryStateDTO(LaundryStateEntity laundryStateEntity) {
         this.laundryId = laundryStateEntity.getId();
         this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
-        this.reservedTime = laundryStateEntity.getReservedTime();
         this.version = laundryStateEntity.getVersion();
     }
 }
