@@ -11,6 +11,8 @@ import com.microservices.laundrymanagement.repository.OrderCompletedMessageRepos
 import com.microservices.laundrymanagement.repository.OrderRepository;
 import com.microservices.laundrymanagement.repository.OrderSubmittedMessageRepository;
 import com.microservices.laundrymanagement.service.OrderService;
+import com.microservices.laundrymanagementapi.messages.LaundryState.LaundryStateMessage;
+import com.microservices.laundrymanagementapi.messages.OrderSubmittedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,16 @@ public class OrderServiceImpl implements OrderService {
         }
         orderRepository.save(orderEntity);
 
+
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
+
+        OrderSubmittedEvent.OrderSubmittedMessage orderSubmittedMessage = OrderSubmittedEvent.OrderSubmittedMessage.newBuilder()
+                .setOrderId(orderEntity.getId())
+                .setState(LaundryStateMessage.newBuilder()
+                        .setLaundryId(laundryStateEntity.getId())
+                        .setQueueWaitingTime(laundryStateEntity.getQueueWaitingTime())
+                        .setVersion(laundryStateEntity.getVersion()))
+                .build();
 
         OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
                 orderEntity.getId(), laundryStateEntity);
