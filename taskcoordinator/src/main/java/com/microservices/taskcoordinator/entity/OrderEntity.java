@@ -53,10 +53,11 @@ public class OrderEntity {
                 .reduce(0L, Long::sum);
         this.status = OrderStatus.APPROVED;
         this.estimatedTime = estimatedTimeToComplete;
-        this.details = orderCoordinationDTO.getDetails()
-                .stream()
-                .map(OrderDetailEntity::new)
-                .collect(Collectors.toList());
+        this.details = orderCoordinationDTO.getDetails() == null
+                ? null
+                : orderCoordinationDTO.getDetails().stream()
+                        .map(OrderDetailEntity::new)
+                        .collect(Collectors.toList());
     }
 
 

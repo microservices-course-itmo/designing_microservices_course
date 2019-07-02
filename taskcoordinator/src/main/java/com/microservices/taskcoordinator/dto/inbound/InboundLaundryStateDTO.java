@@ -1,6 +1,5 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
-import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,9 +15,4 @@ public class InboundLaundryStateDTO {
     private long queueWaitingTime;
     private int version;
 
-    public InboundLaundryStateDTO(LaundryStateEntity laundryStateEntity) {
-        this.laundryId = laundryStateEntity.getId();
-        this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
-        this.version = laundryStateEntity.getVersion();
-    }
 }
