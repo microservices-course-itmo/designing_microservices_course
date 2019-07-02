@@ -16,10 +16,4 @@ public class OrderProcessedDTO {
     int orderId;
     InboundLaundryStateDTO laundryState;
     long completionTime;
-
-    public OrderProcessedDTO(OrderEntity orderEntity, LaundryStateEntity laundryStateEntity) {
-        this.orderId = orderEntity.getId();
-        this.laundryState = new InboundLaundryStateDTO(laundryStateEntity);
-        this.completionTime = orderEntity.getCompletionTime();
-    }
 }

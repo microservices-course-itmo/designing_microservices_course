@@ -9,9 +9,9 @@ public interface LaundryStateService {
 
     LaundryStateDTO updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration);
 
-    LaundryStateEntity updateLaundryStateWithOrderSubmitted(OrderSubmittedDTO laundryState);
+    LaundryStateDTO updateLaundryStateWithOrderSubmitted(OrderSubmittedDTO laundryState);
 
-    LaundryStateEntity updateLaundryStateWithOrderProcessed(OrderProcessedDTO laundryState);
+    LaundryStateDTO updateLaundryStateWithOrderProcessed(OrderProcessedDTO laundryState);
 
     LaundryStateEntity getLeastLoadedLaundry();
 }
