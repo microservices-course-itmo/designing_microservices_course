@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,23 +26,23 @@ import java.util.stream.Collectors;
 public class OrderEntity {
 
     @Id
-    private int id;
+    private Integer id;
 
-    private int laundryId;
+    private Integer laundryId;
 
-    private int bucket;
+    private Integer bucket;
 
-    private long duration;
+    private Long duration;
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
 
-    private long estimatedTime;
+    private Long estimatedTime;
 
-    private long completionTime;
+    private Long completionTime;
 
-    @OneToMany
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "orderId")
     private List<OrderDetailEntity> details;
 
     public OrderEntity(OrderCoordinationDTO orderCoordinationDTO, int selectedLaundryId, long estimatedTimeToComplete) {

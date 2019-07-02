@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -19,18 +21,11 @@ public class OrderServiceImpl implements OrderService {
 
     private LaundryStateService laundryStateService;
 
-    private PredictionService predictionService;
-
-    /*@Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, LaundryStateService laundryStateService, PredictionService predictionService) {
-        this.orderRepository = orderRepository;
-        this.laundryStateService = laundryStateService;
-        this.predictionService = predictionService;
-    }*/
-
     @Override
     @Transactional
     public OrderDTO updateOrder(OrderDTO orderDTO) {
+        Objects.requireNonNull(orderDTO);
+
         OrderEntity existingOrder = orderRepository.findById(orderDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Order with id = " + orderDTO.getId()+ " was not found"));
 
@@ -56,11 +51,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderSubmissionDTO coordinateOrder(OrderCoordinationDTO inboundOrder) {
-        if (orderRepository.existsById(inboundOrder.getOrderId()))
+        Objects.requireNonNull(inboundOrder);
+
+        if (orderRepository.existsById(inboundOrder.getOrderId())) {
             throw new IllegalArgumentException("Order with id " + inboundOrder.getOrderId() + "already exists");
+        }
 
         LaundryStateEntity leastLoadedLaundry = laundryStateService.getLeastLoadedLaundry();
-        long estimatedCompletionTime = predictionService.getOrderCompletionTimePrediction(leastLoadedLaundry);
+        long estimatedCompletionTime = leastLoadedLaundry.getCompletionTimePrediction();
 
         OrderEntity orderEntity = new OrderEntity(inboundOrder, leastLoadedLaundry.getId(), estimatedCompletionTime);
 
@@ -78,10 +76,5 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     public void setLaundryStateService(LaundryStateService laundryStateService) {
         this.laundryStateService = laundryStateService;
-    }
-
-    @Autowired
-    public void setPredictionService(PredictionService predictionService) {
-        this.predictionService = predictionService;
     }
 }

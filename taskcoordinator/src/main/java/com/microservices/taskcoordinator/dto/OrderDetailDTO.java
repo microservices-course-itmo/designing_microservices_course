@@ -23,9 +23,12 @@ public class OrderDetailDTO {
 
     private long duration;
 
+    private int orderId;
+
     public OrderDetailDTO(OrderDetailEntity orderDetailEntity) {
         this.detailId = orderDetailEntity.getId();
         this.weight = orderDetailEntity.getWeight();
         this.duration = orderDetailEntity.getDuration();
+        this.orderId = orderDetailEntity.getOrderId();
     }
 }

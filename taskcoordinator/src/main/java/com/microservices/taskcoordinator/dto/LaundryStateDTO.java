@@ -20,7 +20,6 @@ public class LaundryStateDTO {
 
     private int version;
 
-
     public LaundryStateDTO(LaundryStateEntity laundryStateEntity) {
         this.laundryId = laundryStateEntity.getId();
         this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();

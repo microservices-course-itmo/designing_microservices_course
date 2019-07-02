@@ -21,13 +21,7 @@ public class CoordinatorController {
 
     private LaundryStateService laundryStateService;
 
-    /*@Autowired
-    public CoordinatorController(OrderService orderService, LaundryStateService laundryStateService) {
-        this.orderService = orderService;
-        this.laundryStateService = laundryStateService;
-    }*/
-
-    @PostMapping()
+    @PostMapping
     OrderSubmissionDTO coordinateOrder(@RequestBody OrderCoordinationDTO orderCoordinationDTO) {
         return orderService.coordinateOrder(orderCoordinationDTO);
     }

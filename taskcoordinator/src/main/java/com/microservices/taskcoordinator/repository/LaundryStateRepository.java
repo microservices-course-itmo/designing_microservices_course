@@ -8,7 +8,7 @@ public interface LaundryStateRepository extends CrudRepository<LaundryStateEntit
 
     @Query(value = "select ls from LaundryStateEntity ls " +
             "where (ls.queueWaitingTime + ls.reservedTime) = " +
-            "   (select max(ls2.queueWaitingTime + ls2.reservedTime) " +
+            "   (select min(ls2.queueWaitingTime + ls2.reservedTime) " +
             "from LaundryStateEntity ls2)")
     LaundryStateEntity getLeastLoadedLaundry();
 }

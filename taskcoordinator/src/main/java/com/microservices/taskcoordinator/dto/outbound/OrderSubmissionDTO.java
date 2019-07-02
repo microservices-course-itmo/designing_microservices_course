@@ -31,7 +31,4 @@ public class OrderSubmissionDTO {
                     .map(OrderDetailDTO::new)
                     .collect(Collectors.toList());
     }
-
-
-
 }
