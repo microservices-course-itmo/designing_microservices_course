@@ -28,10 +28,4 @@ public class OrderDetailDTO {
         this.weight = orderDetailEntity.getWeight();
         this.duration = orderDetailEntity.getDuration();
     }
-
-    public static List<OrderDetailDTO> castFromListOfEntities(List<OrderDetailEntity> list) {
-        return list.stream()
-                .map(OrderDetailDTO::new)
-                .collect(Collectors.toList());
-    }
 }
