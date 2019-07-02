@@ -9,7 +9,7 @@ repositories {
 }
 
 group = 'com.microservices.api'
-version = '0.0.1'
+version = apiVersion
 
 dependencies {
     compile 'com.google.protobuf:protobuf-java:3.8.0'
