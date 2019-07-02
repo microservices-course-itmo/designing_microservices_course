@@ -1,5 +1,6 @@
 package com.microservices.ordermanagement.app.entity;
 
+import com.microservices.ordermanagement.app.dto.TariffDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,5 +31,10 @@ public class OrderDetailEntity {
         this.id = id;
         this.orderId = orderId;
         this.weight = weight;
+    }
+
+    public void addTariffInformation(TariffDto tariffDto) {
+        this.setTariffId(tariffDto.getId());
+        this.setPrice(tariffDto.getPrice());
     }
 }
