@@ -16,6 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderCoordinationDTO {
 
-    private int orderId;
+    private Integer orderId;
     private List<OrderDetailDTO> details;
 }

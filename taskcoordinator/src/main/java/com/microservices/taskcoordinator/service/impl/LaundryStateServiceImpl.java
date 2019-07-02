@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 public class LaundryStateServiceImpl implements LaundryStateService {
 
@@ -21,15 +23,13 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
     private OrderService orderService;
 
-    /*@Autowired
-    public LaundryStateServiceImpl(LaundryStateRepository laundryStateRepository, OrderService orderService) {
-        this.laundryStateRepository = laundryStateRepository;
-        this.orderService = orderService;
-    }*/
-
     @Override
     @Transactional
     public LaundryStateDTO updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration) {
+        if (laundryId < 0 || orderDuration < 0) {
+            throw new IllegalArgumentException("laundryId or orderDuration can't be < 0");
+        }
+
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(laundryId)
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + laundryId + "doesn't exist"));
 
@@ -42,15 +42,16 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Override
     @Transactional
     public LaundryStateDTO updateLaundryStateWithOrderSubmitted(OrderSubmittedDTO orderSubmittedDTO) {
+        Objects.requireNonNull(orderSubmittedDTO);
+
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderSubmittedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getOrderId() + "doesn't exist"));
         OrderDTO order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
 
-        laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() - order.getDuration());
-        laundryStateEntity.setQueueWaitingTime(orderSubmittedDTO.getLaundryState().getQueueWaitingTime());
-
         if (laundryStateEntity.getVersion() < orderSubmittedDTO.getLaundryState().getVersion()) {
+            laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() - order.getDuration());
             laundryStateEntity.setVersion(orderSubmittedDTO.getLaundryState().getVersion());
+            laundryStateEntity.setQueueWaitingTime(orderSubmittedDTO.getLaundryState().getQueueWaitingTime());
         }
 
         order.setStatus(OrderStatus.SUBMITTED);
@@ -64,14 +65,16 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Override
     @Transactional
     public LaundryStateDTO updateLaundryStateWithOrderProcessed(OrderProcessedDTO orderProcessedDTO) {
+        Objects.requireNonNull(orderProcessedDTO);
+
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderProcessedDTO.getLaundryState().getLaundryId())
-                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderProcessedDTO.getOrderId() + "doesn't exist"));
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderProcessedDTO.getOrderId() + "does not exist"));
         OrderDTO order = orderService.getOrderById(orderProcessedDTO.getOrderId());
 
-        laundryStateEntity.setQueueWaitingTime(orderProcessedDTO.getLaundryState().getQueueWaitingTime());
 
         if (laundryStateEntity.getVersion() < orderProcessedDTO.getLaundryState().getVersion()) {
             laundryStateEntity.setVersion(orderProcessedDTO.getLaundryState().getVersion());
+            laundryStateEntity.setQueueWaitingTime(orderProcessedDTO.getLaundryState().getQueueWaitingTime());
         }
 
         order.setStatus(OrderStatus.COMPLETE);
