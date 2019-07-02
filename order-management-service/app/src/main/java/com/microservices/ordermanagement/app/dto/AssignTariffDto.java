@@ -9,10 +9,12 @@ import javax.validation.constraints.NotNull;
 @Getter
 @ToString
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class AddDetailDto {
+public class AssignTariffDto {
     @NotNull
-    private Integer pendingDetailId;
-    private Integer orderId; // if exists
+    Integer orderId;
     @NotNull
-    private Integer userId;
+    Integer detailId;
+    @NotNull
+    TariffDto tariffDto;
 }
+

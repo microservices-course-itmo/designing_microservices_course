@@ -2,6 +2,7 @@ package com.microservices.ordermanagement.app.impl;
 
 import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.dto.AddDetailDto;
+import com.microservices.ordermanagement.app.dto.AssignTariffDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import com.microservices.ordermanagement.app.entity.PendingDetailEntity;
 import com.microservices.ordermanagement.app.repository.OrderRepository;
@@ -29,12 +30,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderEntity getOrderById(int orderId) {
+        logger.info("Looking for an order by id {}", orderId);
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("There is no such order in database"));
+    }
+
+    @Override
     @Transactional
     public OrderEntity addDetailToOrder(AddDetailDto addDetailDto) {
         Objects.requireNonNull(addDetailDto);
-        if (addDetailDto.getPendingDetailId() == null) {
-            throw new IllegalArgumentException("Passed pending detail id is null");
-        }
 
         PendingDetailEntity pendingDetail = pendingDetailsRepository.findById(addDetailDto.getPendingDetailId())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -45,13 +50,24 @@ public class OrderServiceImpl implements OrderService {
             order = orderRepository.save(new OrderEntity());
             logger.info("Created new order with id: {}", order.getId());
         } else {
-            order = orderRepository.findById(addDetailDto.getOrderId())
-                    .orElseThrow(() -> new IllegalArgumentException("Passed detail id in null"));
+            order = this.getOrderById(addDetailDto.getOrderId());
         }
         order.addPendingDetail(pendingDetail);
-        logger.info("Binding pending detail id {} with order id :{}", pendingDetail.getId(), order.getId());
+        logger.info("Binding pending detail with order {}", addDetailDto);
 
         pendingDetailsRepository.deleteById(addDetailDto.getPendingDetailId());
+        return orderRepository.save(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderEntity assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
+        Objects.requireNonNull(assignTariffDto);
+
+        OrderEntity order = this.getOrderById(assignTariffDto.getOrderId());
+        order.assignTariffToOrderDetail(assignTariffDto);
+        logger.info("Assigning tariff to order detail {}", assignTariffDto);
+
         return orderRepository.save(order);
     }
 }

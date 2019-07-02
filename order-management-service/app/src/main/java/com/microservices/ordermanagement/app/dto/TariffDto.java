@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Getter
 @ToString
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class AddDetailDto {
+public class TariffDto {
     @NotNull
-    private Integer pendingDetailId;
-    private Integer orderId; // if exists
+    Integer id;
+
     @NotNull
-    private Integer userId;
+    BigDecimal price;
 }
