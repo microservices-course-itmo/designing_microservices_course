@@ -17,15 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class LaundryStateServiceImpl implements LaundryStateService {
 
-    private final LaundryStateRepository laundryStateRepository;
+    private LaundryStateRepository laundryStateRepository;
 
-    private final OrderService orderService;
+    private OrderService orderService;
 
-    @Autowired
+    /*@Autowired
     public LaundryStateServiceImpl(LaundryStateRepository laundryStateRepository, OrderService orderService) {
         this.laundryStateRepository = laundryStateRepository;
         this.orderService = orderService;
-    }
+    }*/
 
     @Override
     @Transactional
@@ -87,5 +87,15 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Transactional
     public LaundryStateEntity getLeastLoadedLaundry() {
         return laundryStateRepository.getLeastLoadedLaundry();
+    }
+
+    @Autowired
+    public void setLaundryStateRepository(LaundryStateRepository laundryStateRepository) {
+        this.laundryStateRepository = laundryStateRepository;
+    }
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }

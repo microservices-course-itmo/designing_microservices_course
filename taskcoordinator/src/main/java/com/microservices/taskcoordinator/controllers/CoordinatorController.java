@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("orders")
 public class CoordinatorController {
 
-    private final OrderService orderService;
+    private OrderService orderService;
 
-    private final LaundryStateService laundryStateService;
+    private LaundryStateService laundryStateService;
 
-    @Autowired
+    /*@Autowired
     public CoordinatorController(OrderService orderService, LaundryStateService laundryStateService) {
         this.orderService = orderService;
         this.laundryStateService = laundryStateService;
-    }
+    }*/
 
     @PostMapping()
     OrderSubmissionDTO coordinateOrder(@RequestBody OrderCoordinationDTO orderCoordinationDTO) {
@@ -42,5 +42,13 @@ public class CoordinatorController {
         laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDTO);
     }
 
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
+    @Autowired
+    public void setLaundryStateService(LaundryStateService laundryStateService) {
+        this.laundryStateService = laundryStateService;
+    }
 }

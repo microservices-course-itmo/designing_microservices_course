@@ -15,18 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
-    private final LaundryStateService laundryStateService;
+    private LaundryStateService laundryStateService;
 
-    private final PredictionService predictionService;
+    private PredictionService predictionService;
 
-    @Autowired
+    /*@Autowired
     public OrderServiceImpl(OrderRepository orderRepository, LaundryStateService laundryStateService, PredictionService predictionService) {
         this.orderRepository = orderRepository;
         this.laundryStateService = laundryStateService;
         this.predictionService = predictionService;
-    }
+    }*/
 
     @Override
     @Transactional
@@ -68,5 +68,20 @@ public class OrderServiceImpl implements OrderService {
         laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getId(), orderEntity.getDuration());
 
         return new OrderSubmissionDTO(orderEntity);
+    }
+
+    @Autowired
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    @Autowired
+    public void setLaundryStateService(LaundryStateService laundryStateService) {
+        this.laundryStateService = laundryStateService;
+    }
+
+    @Autowired
+    public void setPredictionService(PredictionService predictionService) {
+        this.predictionService = predictionService;
     }
 }
