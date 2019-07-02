@@ -44,9 +44,10 @@ public class OrderDTO {
         this.estimatedTime = orderEntity.getEstimatedTime();
         this.completionTime = orderEntity.getCompletionTime();
 
-        //TODO NPE case
-        this.details = orderEntity.getDetails().stream()
-                .map(OrderDetailDTO::new)
-                .collect(Collectors.toList());
+        this.details = orderEntity.getDetails() == null
+                ? null
+                : orderEntity.getDetails().stream()
+                    .map(OrderDetailDTO::new)
+                    .collect(Collectors.toList());
     }
 }

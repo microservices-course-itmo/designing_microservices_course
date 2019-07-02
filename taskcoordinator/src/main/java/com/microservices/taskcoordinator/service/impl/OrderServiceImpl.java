@@ -67,6 +67,6 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(orderEntity);
         laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getId(), orderEntity.getDuration());
 
-        return new OrderSubmissionDTO(orderEntity, leastLoadedLaundry);
+        return new OrderSubmissionDTO(orderEntity);
     }
 }
