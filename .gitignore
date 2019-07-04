@@ -7,4 +7,6 @@
 *.iml
 *.ipr
 
-laundry-management-service/api/src/main/java/com/microservices/laundrymanagementapi/messages/
+#pattern for excluding generated proto files from git
+*Event.java
+LaundryState.java
