@@ -1,5 +1,9 @@
 package com.microservices.tariffmanagement.entity;
 
+import com.microservices.tariffmanagement.dto.TariffDto;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tariffs")
+@NoArgsConstructor
+@Getter
 public class TariffEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +25,10 @@ public class TariffEntity {
 
     //in millis
     private long washingTime;
+
+    public TariffEntity(TariffDto tariffDto) {
+        this.name = tariffDto.getName();
+        this.price = tariffDto.getPrice();
+        this.washingTime = tariffDto.getWashingTime();
+    }
 }
