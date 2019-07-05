@@ -49,10 +49,11 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         OrderDTO order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
 
         if (laundryStateEntity.getVersion() < orderSubmittedDTO.getLaundryState().getVersion()) {
-            laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() - order.getDuration());
             laundryStateEntity.setVersion(orderSubmittedDTO.getLaundryState().getVersion());
             laundryStateEntity.setQueueWaitingTime(orderSubmittedDTO.getLaundryState().getQueueWaitingTime());
         }
+
+        laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() - order.getDuration());
 
         order.setStatus(OrderStatus.SUBMITTED);
 
@@ -70,7 +71,6 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderProcessedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderProcessedDTO.getOrderId() + "does not exist"));
         OrderDTO order = orderService.getOrderById(orderProcessedDTO.getOrderId());
-
 
         if (laundryStateEntity.getVersion() < orderProcessedDTO.getLaundryState().getVersion()) {
             laundryStateEntity.setVersion(orderProcessedDTO.getLaundryState().getVersion());

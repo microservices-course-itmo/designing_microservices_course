@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDTO getOrderById(Integer id) throws IllegalArgumentException {
+
         OrderEntity orderEntityFound = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order with such id = " + id + " was not found"));
 

@@ -16,10 +16,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderSubmissionDTO {
 
-    int orderId;
-    int laundryId;
-    int bucket;
-    List<OrderDetailDTO> details;
+    private int orderId;
+
+    private int laundryId;
+
+    private int bucket;
+
+    private List<OrderDetailDTO> details;
 
     public OrderSubmissionDTO(OrderEntity orderEntity) {
         this.orderId = orderEntity.getId();
