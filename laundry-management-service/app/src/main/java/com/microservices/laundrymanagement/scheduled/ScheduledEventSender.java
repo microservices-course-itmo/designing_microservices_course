@@ -3,6 +3,7 @@ package com.microservices.laundrymanagement.scheduled;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.microservices.laundrymanagement.entity.EventStatus;
 import com.microservices.laundrymanagement.entity.LaundryEventLogEntity;
+import com.microservices.laundrymanagement.kafka.producer.MessageSender;
 import com.microservices.laundrymanagement.repository.LaundryEventRepository;
 import com.microservices.laundrymanagementapi.messages.OrderSubmittedEvent;
 import org.slf4j.Logger;
@@ -18,11 +19,14 @@ import java.util.Optional;
 public class ScheduledEventSender {
     private final Logger logger = LoggerFactory.getLogger(ScheduledEventSender.class);
 
+    private MessageSender messageSender;
+
     private final LaundryEventRepository eventRepository;
 
     @Autowired
-    public ScheduledEventSender(LaundryEventRepository eventRepository) {
+    public ScheduledEventSender(LaundryEventRepository eventRepository, MessageSender messageSender) {
         this.eventRepository = eventRepository;
+        this.messageSender = messageSender;
     }
 
     @Scheduled(fixedDelay = 100000)
@@ -33,7 +37,7 @@ public class ScheduledEventSender {
             LaundryEventLogEntity event = eldestNotSentEvent.get();
             OrderSubmittedEvent.OrderSubmittedMessage message = OrderSubmittedEvent.OrderSubmittedMessage.parseFrom(eldestNotSentEvent.get().getMessage());
             logger.info("Sending event {}", message.toString());
-
+            messageSender.sendMessage(message);
             event.setEventStatus(EventStatus.IN_PROCESS);
             eventRepository.save(event);
         }
