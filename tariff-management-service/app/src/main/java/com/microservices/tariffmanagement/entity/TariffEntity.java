@@ -1,6 +1,8 @@
 package com.microservices.tariffmanagement.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -8,11 +10,13 @@ import javax.persistence.Table;
 @Table(name = "tariffs")
 public class TariffEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
 
     private double price;
 
-    private long washingTimeInMillis;
+    //in millis
+    private long washingTime;
 }
