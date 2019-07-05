@@ -12,13 +12,13 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class LaundryStateDTO {
 
-    private int laundryId;
+    private Integer laundryId;
 
-    private long queueWaitingTime;
+    private Long queueWaitingTime;
 
-    private long reservedTime;
+    private Long reservedTime;
 
-    private int version;
+    private Integer version;
 
     public LaundryStateDTO(LaundryStateEntity laundryStateEntity) {
         this.laundryId = laundryStateEntity.getId();

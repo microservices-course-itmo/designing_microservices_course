@@ -24,7 +24,6 @@ public class OrderDetailEntity {
 
     private Long duration;
 
-    /*@Column(name = "order_id")*/
     private Integer orderId;
 
     public OrderDetailEntity(OrderDetailDTO orderDetailDTO) {

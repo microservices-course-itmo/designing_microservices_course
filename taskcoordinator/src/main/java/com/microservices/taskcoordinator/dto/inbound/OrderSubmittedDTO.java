@@ -11,6 +11,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class OrderSubmittedDTO {
 
-    private int orderId;
+    private Integer orderId;
+
     private InboundLaundryStateDTO laundryState;
 }

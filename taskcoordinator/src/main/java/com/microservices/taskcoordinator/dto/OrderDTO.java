@@ -18,20 +18,20 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class OrderDTO {
 
-    private int id;
+    private Integer id;
 
-    private int laundryId;
+    private Integer laundryId;
 
-    private int bucket;
+    private Integer bucket;
 
-    private long duration;
+    private Long duration;
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
 
-    private long estimatedTime;
+    private Long estimatedTime;
 
-    private long completionTime;
+    private Long completionTime;
 
     private List<OrderDetailDTO> details;
 

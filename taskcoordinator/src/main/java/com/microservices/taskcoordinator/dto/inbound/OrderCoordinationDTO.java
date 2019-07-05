@@ -17,5 +17,6 @@ import java.util.List;
 public class OrderCoordinationDTO {
 
     private Integer orderId;
+
     private List<OrderDetailDTO> details;
 }

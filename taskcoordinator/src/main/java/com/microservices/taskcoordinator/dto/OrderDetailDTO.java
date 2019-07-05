@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class OrderDetailDTO {
 
-    private int detailId;
+    private Integer detailId;
 
-    private int weight;
+    private Integer weight;
 
-    private long duration;
+    private Long duration;
 
-    private int orderId;
+    private Integer orderId;
 
     public OrderDetailDTO(OrderDetailEntity orderDetailEntity) {
         this.detailId = orderDetailEntity.getId();

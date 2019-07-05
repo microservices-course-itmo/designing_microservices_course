@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderSubmissionDTO {
 
-    private int orderId;
+    private Integer orderId;
 
-    private int laundryId;
+    private Integer laundryId;
 
-    private int bucket;
+    private Integer bucket;
 
     private List<OrderDetailDTO> details;
 
