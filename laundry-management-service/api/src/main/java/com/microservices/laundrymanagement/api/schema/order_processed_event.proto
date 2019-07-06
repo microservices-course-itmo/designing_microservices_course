@@ -1,12 +1,12 @@
 syntax = "proto3";
 
 option java_package = "com.microservices.laundrymanagement.api.messages";
-option java_outer_classname = "OrderProcessedEvent";
+option java_outer_classname = "OrderProcessedEventWrapper";
 
 import "laundry_state.proto";
 
-message OrderProcessedMessage {
+message OrderProcessedEvent {
     int32 orderId = 1;
     int64 completeTime = 2;
-    LaundryStateMessage state = 3;
+    LaundryState state = 3;
 }
