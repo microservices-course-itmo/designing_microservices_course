@@ -1,6 +1,5 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
-import com.microservices.taskcoordinator.dto.LaundryStateDTO;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,9 +9,12 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class OrderProcessedDTO {
+public class InboundLaundryStateDto {
 
-    int orderId;
-    LaundryStateDTO laundryState;
-    long completionTime;
+    private Integer laundryId;
+
+    private Long queueWaitingTime;
+
+    private Integer version;
+
 }
