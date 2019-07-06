@@ -8,5 +8,4 @@
 *.ipr
 
 #pattern for excluding generated proto files from git
-*Event.java
-LaundryState.java
+**/*api/messages/
