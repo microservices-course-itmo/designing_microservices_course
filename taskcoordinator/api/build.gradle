@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.8.8'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.microservices.api'
+version = apiVersion
+
+dependencies {
+    compile 'com.google.protobuf:protobuf-java:3.8.0'
+}
+
+protobuf {
+    generatedFilesBaseDir = "$projectDir/src"
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.8.0'
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir "$projectDir/src/main/java/com/microservices/taskcoordinator/api/schema"
+            include '**/*.proto'
+        }
+    }
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+//clean build uploadArchives
