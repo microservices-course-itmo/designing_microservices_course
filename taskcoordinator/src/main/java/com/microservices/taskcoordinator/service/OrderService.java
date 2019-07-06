@@ -1,15 +1,15 @@
 package com.microservices.taskcoordinator.service;
 
-import com.microservices.taskcoordinator.dto.OrderDTO;
-import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDTO;
-import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDTO;
+import com.microservices.taskcoordinator.dto.OrderDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
+import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 
 public interface OrderService {
 
-    OrderDTO updateOrder(OrderDTO order);
+    OrderDto updateOrder(OrderDto order);
 
-    OrderDTO getOrderById(Integer id);
+    OrderDto getOrderById(Integer id);
 
-    OrderSubmissionDTO coordinateOrder(OrderCoordinationDTO inboundOrder);
+    OrderSubmissionDto coordinateOrder(OrderCoordinationDto inboundOrder);
 
 }

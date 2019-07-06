@@ -20,13 +20,13 @@ public class LaundryStateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
-    private Integer version;
+    private int version;
 
-    private Long queueWaitingTime;
+    private long queueWaitingTime;
 
-    private Long reservedTime;
+    private long reservedTime;
 
     public long getCompletionTimePrediction() {
         return this.getQueueWaitingTime() + this.getReservedTime();

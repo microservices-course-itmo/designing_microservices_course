@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class OrderDTO {
+public class OrderDto {
 
     private Integer id;
 
@@ -33,9 +33,9 @@ public class OrderDTO {
 
     private Long completionTime;
 
-    private List<OrderDetailDTO> details;
+    private List<OrderDetailDto> details;
 
-    public OrderDTO(OrderEntity orderEntity) {
+    public OrderDto(OrderEntity orderEntity) {
         this.id = orderEntity.getId();
         this.laundryId = orderEntity.getLaundryId();
         this.bucket = orderEntity.getBucket();
@@ -47,7 +47,7 @@ public class OrderDTO {
         this.details = orderEntity.getDetails() == null
                 ? null
                 : orderEntity.getDetails().stream()
-                    .map(OrderDetailDTO::new)
+                    .map(OrderDetailDto::new)
                     .collect(Collectors.toList());
     }
 }

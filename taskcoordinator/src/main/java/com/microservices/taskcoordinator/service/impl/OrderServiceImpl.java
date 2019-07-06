@@ -1,8 +1,8 @@
 package com.microservices.taskcoordinator.service.impl;
 
-import com.microservices.taskcoordinator.dto.OrderDTO;
-import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDTO;
-import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDTO;
+import com.microservices.taskcoordinator.dto.OrderDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
+import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import com.microservices.taskcoordinator.entity.OrderEntity;
 import com.microservices.taskcoordinator.repository.OrderRepository;
@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDTO updateOrder(OrderDTO orderDTO) {
+    public OrderDto updateOrder(OrderDto orderDTO) {
         Objects.requireNonNull(orderDTO);
 
         OrderEntity existingOrder = orderRepository.findById(orderDTO.getId())
@@ -36,22 +36,22 @@ public class OrderServiceImpl implements OrderService {
         existingOrder.setCompletionTime(orderDTO.getCompletionTime());
         OrderEntity orderSaved = orderRepository.save(existingOrder);
 
-        return new OrderDTO(orderSaved);
+        return new OrderDto(orderSaved);
     }
 
     @Override
     @Transactional
-    public OrderDTO getOrderById(Integer id) throws IllegalArgumentException {
+    public OrderDto getOrderById(Integer id) throws IllegalArgumentException {
         Objects.requireNonNull(id);
         OrderEntity orderEntityFound = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order with such id = " + id + " was not found"));
 
-        return new OrderDTO(orderEntityFound);
+        return new OrderDto(orderEntityFound);
     }
 
     @Override
     @Transactional
-    public OrderSubmissionDTO coordinateOrder(OrderCoordinationDTO inboundOrder) {
+    public OrderSubmissionDto coordinateOrder(OrderCoordinationDto inboundOrder) {
         Objects.requireNonNull(inboundOrder);
 
         if (orderRepository.existsById(inboundOrder.getOrderId())) {
@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(orderEntity);
         laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getId(), orderEntity.getDuration());
 
-        return new OrderSubmissionDTO(orderEntity);
+        return new OrderSubmissionDto(orderEntity);
     }
 
     @Autowired

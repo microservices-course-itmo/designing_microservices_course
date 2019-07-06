@@ -1,10 +1,10 @@
 package com.microservices.taskcoordinator.service.impl;
 
-import com.microservices.taskcoordinator.dto.LaundryStateDTO;
-import com.microservices.taskcoordinator.dto.OrderDTO;
-import com.microservices.taskcoordinator.dto.inbound.InboundLaundryStateDTO;
-import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDTO;
-import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDTO;
+import com.microservices.taskcoordinator.dto.LaundryStateDto;
+import com.microservices.taskcoordinator.dto.OrderDto;
+import com.microservices.taskcoordinator.dto.inbound.InboundLaundryStateDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import com.microservices.taskcoordinator.entity.OrderStatus;
 import com.microservices.taskcoordinator.repository.LaundryStateRepository;
@@ -25,7 +25,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
     @Override
     @Transactional
-    public LaundryStateDTO updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration) {
+    public LaundryStateDto updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration) {
         if (laundryId < 0 || orderDuration < 0) {
             throw new IllegalArgumentException("laundryId or orderDuration can't be < 0");
         }
@@ -36,17 +36,17 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() + orderDuration);
 
         laundryStateRepository.save(laundryStateEntity);
-        return new LaundryStateDTO(laundryStateEntity);
+        return new LaundryStateDto(laundryStateEntity);
     }
 
     @Override
     @Transactional
-    public LaundryStateDTO updateLaundryStateWithOrderSubmitted(OrderSubmittedDTO orderSubmittedDTO) {
+    public LaundryStateDto updateLaundryStateWithOrderSubmitted(OrderSubmittedDto orderSubmittedDTO) {
         Objects.requireNonNull(orderSubmittedDTO);
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderSubmittedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getOrderId() + "doesn't exist"));
-        OrderDTO order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
+        OrderDto order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
 
         changeLaundryStateConsistently(orderSubmittedDTO.getLaundryState(), laundryStateEntity);
         laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() - order.getDuration());
@@ -56,17 +56,17 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         orderService.updateOrder(order);
         laundryStateRepository.save(laundryStateEntity);
 
-        return new LaundryStateDTO(laundryStateEntity);
+        return new LaundryStateDto(laundryStateEntity);
     }
 
     @Override
     @Transactional
-    public LaundryStateDTO updateLaundryStateWithOrderProcessed(OrderProcessedDTO orderProcessedDTO) {
+    public LaundryStateDto updateLaundryStateWithOrderProcessed(OrderProcessedDto orderProcessedDTO) {
         Objects.requireNonNull(orderProcessedDTO);
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderProcessedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderProcessedDTO.getOrderId() + "does not exist"));
-        OrderDTO order = orderService.getOrderById(orderProcessedDTO.getOrderId());
+        OrderDto order = orderService.getOrderById(orderProcessedDTO.getOrderId());
 
         changeLaundryStateConsistently(orderProcessedDTO.getLaundryState(), laundryStateEntity);
 
@@ -76,7 +76,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         orderService.updateOrder(order);
         laundryStateRepository.save(laundryStateEntity);
 
-        return new LaundryStateDTO(laundryStateEntity);
+        return new LaundryStateDto(laundryStateEntity);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         return laundryStateRepository.getLeastLoadedLaundry();
     }
 
-    private void changeLaundryStateConsistently(InboundLaundryStateDTO inboundLaundryStateUpdate, LaundryStateEntity currentLaundryState) {
+    private void changeLaundryStateConsistently(InboundLaundryStateDto inboundLaundryStateUpdate, LaundryStateEntity currentLaundryState) {
         if (currentLaundryState.getVersion() < inboundLaundryStateUpdate.getVersion()) {
             currentLaundryState.setVersion(inboundLaundryStateUpdate.getVersion());
             currentLaundryState.setQueueWaitingTime(inboundLaundryStateUpdate.getQueueWaitingTime());

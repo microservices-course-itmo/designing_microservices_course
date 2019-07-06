@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class InboundLaundryStateDTO {
+public class InboundLaundryStateDto {
 
     private Integer laundryId;
 

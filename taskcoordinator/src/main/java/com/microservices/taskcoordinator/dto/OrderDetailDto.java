@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetailDTO {
+public class OrderDetailDto {
 
     private Integer detailId;
 
@@ -25,7 +25,7 @@ public class OrderDetailDTO {
 
     private Integer orderId;
 
-    public OrderDetailDTO(OrderDetailEntity orderDetailEntity) {
+    public OrderDetailDto(OrderDetailEntity orderDetailEntity) {
         this.detailId = orderDetailEntity.getId();
         this.weight = orderDetailEntity.getWeight();
         this.duration = orderDetailEntity.getDuration();

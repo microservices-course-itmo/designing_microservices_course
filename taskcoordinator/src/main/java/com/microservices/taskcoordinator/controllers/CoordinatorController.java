@@ -1,9 +1,9 @@
 package com.microservices.taskcoordinator.controllers;
 
-import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDTO;
-import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDTO;
-import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDTO;
-import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDTO;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
+import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +22,17 @@ public class CoordinatorController {
     private LaundryStateService laundryStateService;
 
     @PostMapping
-    OrderSubmissionDTO coordinateOrder(@RequestBody OrderCoordinationDTO orderCoordinationDTO) {
+    OrderSubmissionDto coordinateOrder(@RequestBody OrderCoordinationDto orderCoordinationDTO) {
         return orderService.coordinateOrder(orderCoordinationDTO);
     }
 
     @PutMapping("/{id}/status/submitted")
-    void processSubmittedOrder(@RequestBody OrderSubmittedDTO orderSubmittedDTO) {
+    void processSubmittedOrder(@RequestBody OrderSubmittedDto orderSubmittedDTO) {
         laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDTO);
     }
 
     @PutMapping("/{id}/status/processed")
-    void processProcessedOrder(@RequestBody OrderProcessedDTO orderProcessedDTO) {
+    void processProcessedOrder(@RequestBody OrderProcessedDto orderProcessedDTO) {
         laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDTO);
     }
 

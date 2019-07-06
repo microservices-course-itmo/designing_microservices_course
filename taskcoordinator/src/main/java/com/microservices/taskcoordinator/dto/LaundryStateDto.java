@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode
-public class LaundryStateDTO {
+public class LaundryStateDto {
 
     private Integer laundryId;
 
@@ -20,7 +20,7 @@ public class LaundryStateDTO {
 
     private Integer version;
 
-    public LaundryStateDTO(LaundryStateEntity laundryStateEntity) {
+    public LaundryStateDto(LaundryStateEntity laundryStateEntity) {
         this.laundryId = laundryStateEntity.getId();
         this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
         this.reservedTime = laundryStateEntity.getReservedTime();

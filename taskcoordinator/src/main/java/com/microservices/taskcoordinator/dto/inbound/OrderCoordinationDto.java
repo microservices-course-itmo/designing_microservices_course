@@ -1,6 +1,6 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
-import com.microservices.taskcoordinator.dto.OrderDetailDTO;
+import com.microservices.taskcoordinator.dto.OrderDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,9 +14,9 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderCoordinationDTO {
+public class OrderCoordinationDto {
 
     private Integer orderId;
 
-    private List<OrderDetailDTO> details;
+    private List<OrderDetailDto> details;
 }

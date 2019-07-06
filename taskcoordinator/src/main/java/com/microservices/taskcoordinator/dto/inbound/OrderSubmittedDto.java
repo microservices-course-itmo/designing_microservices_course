@@ -7,13 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @AllArgsConstructor
-public class OrderProcessedDTO {
+@EqualsAndHashCode
+public class OrderSubmittedDto {
 
-    Integer orderId;
+    private Integer orderId;
 
-    InboundLaundryStateDTO laundryState;
-
-    Long completionTime;
+    private InboundLaundryStateDto laundryState;
 }

@@ -1,11 +1,10 @@
 package com.microservices.taskcoordinator.entity;
 
-import com.microservices.taskcoordinator.dto.OrderDetailDTO;
+import com.microservices.taskcoordinator.dto.OrderDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,15 +17,15 @@ import javax.persistence.Table;
 public class OrderDetailEntity {
 
     @Id
-    private Integer id;
+    private int  id;
 
-    private Integer weight;
+    private int weight;
 
-    private Long duration;
+    private long duration;
 
-    private Integer orderId;
+    private int orderId;
 
-    public OrderDetailEntity(OrderDetailDTO orderDetailDTO) {
+    public OrderDetailEntity(OrderDetailDto orderDetailDTO) {
         this.id = orderDetailDTO.getDetailId();
         this.weight = orderDetailDTO.getWeight();
         this.duration = orderDetailDTO.getDuration();

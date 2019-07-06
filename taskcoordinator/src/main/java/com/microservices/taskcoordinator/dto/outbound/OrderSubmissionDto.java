@@ -1,6 +1,6 @@
 package com.microservices.taskcoordinator.dto.outbound;
 
-import com.microservices.taskcoordinator.dto.OrderDetailDTO;
+import com.microservices.taskcoordinator.dto.OrderDetailDto;
 import com.microservices.taskcoordinator.entity.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class OrderSubmissionDTO {
+public class OrderSubmissionDto {
 
     private Integer orderId;
 
@@ -22,16 +22,16 @@ public class OrderSubmissionDTO {
 
     private Integer bucket;
 
-    private List<OrderDetailDTO> details;
+    private List<OrderDetailDto> details;
 
-    public OrderSubmissionDTO(OrderEntity orderEntity) {
+    public OrderSubmissionDto(OrderEntity orderEntity) {
         this.orderId = orderEntity.getId();
         this.laundryId = orderEntity.getLaundryId();
         this.bucket = orderEntity.getBucket();
         this.details = orderEntity.getDetails() == null
                 ? null
                 : orderEntity.getDetails().stream()
-                    .map(OrderDetailDTO::new)
+                    .map(OrderDetailDto::new)
                     .collect(Collectors.toList());
     }
 }
