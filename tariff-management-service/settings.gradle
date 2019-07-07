@@ -1,0 +1,3 @@
+rootProject.name = 'tariff-management-service'
+include 'app'
+
