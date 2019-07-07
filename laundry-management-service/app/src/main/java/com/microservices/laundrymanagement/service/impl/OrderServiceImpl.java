@@ -2,23 +2,19 @@ package com.microservices.laundrymanagement.service.impl;
 
 import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
 import com.microservices.laundrymanagement.entity.LaundryStateEntity;
-import com.microservices.laundrymanagement.entity.OrderCompletedMessageEntity;
 import com.microservices.laundrymanagement.entity.OrderEntity;
 import com.microservices.laundrymanagement.entity.OrderStatus;
-import com.microservices.laundrymanagement.entity.OrderSubmittedMessageEntity;
 import com.microservices.laundrymanagement.repository.LaundryStateRepository;
-import com.microservices.laundrymanagement.repository.OrderCompletedMessageRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
-import com.microservices.laundrymanagement.repository.OrderSubmittedMessageRepository;
+import com.microservices.laundrymanagement.service.LaundryEventPublishingService;
 import com.microservices.laundrymanagement.service.OrderService;
-import com.microservices.laundrymanagementapi.messages.LaundryState.LaundryStateMessage;
-import com.microservices.laundrymanagementapi.messages.OrderSubmittedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -27,48 +23,40 @@ public class OrderServiceImpl implements OrderService {
     private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private OrderRepository orderRepository;
+
     private LaundryStateRepository laundryStateRepository;
-    private OrderSubmittedMessageRepository orderSubmittedMessageRepository;
-    private OrderCompletedMessageRepository orderCompletedMessageRepository;
+
+    private LaundryEventPublishingService eventPublishingService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             LaundryStateRepository laundryStateRepository,
-                            OrderSubmittedMessageRepository orderSubmittedMessageRepository,
-                            OrderCompletedMessageRepository orderCompletedMessageRepository) {
+                            LaundryEventPublishingService eventPublishingService) {
         this.orderRepository = orderRepository;
         this.laundryStateRepository = laundryStateRepository;
-        this.orderSubmittedMessageRepository = orderSubmittedMessageRepository;
-        this.orderCompletedMessageRepository = orderCompletedMessageRepository;
+        this.eventPublishingService = eventPublishingService;
     }
 
     @Transactional
     @Override
+    // TODO sukhoa : as this method invocation results in publishing message shouldn't we return It (dto) as a returning value here?
     public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
-        logger.info("Submitting order: {}...", orderSubmissionDto);
-        OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
+        Objects.requireNonNull(orderSubmissionDto);
+
         if (orderRepository.existsById(orderSubmissionDto.getOrderId())) {
             logger.error("Order with id {} already exists", orderSubmissionDto.getOrderId());
             throw new IllegalArgumentException("Order with id " + orderSubmissionDto.getOrderId() +
                     " already exists");
         }
+
+        logger.info("Submitting order: {}", orderSubmissionDto);
+        OrderEntity orderEntity = new OrderEntity(orderSubmissionDto);
         orderRepository.save(orderEntity);
 
-
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
-
-        OrderSubmittedEvent.OrderSubmittedMessage orderSubmittedMessage = OrderSubmittedEvent.OrderSubmittedMessage.newBuilder()
-                .setOrderId(orderEntity.getId())
-                .setState(LaundryStateMessage.newBuilder()
-                        .setLaundryId(laundryStateEntity.getId())
-                        .setQueueWaitingTime(laundryStateEntity.getQueueWaitingTime())
-                        .setVersion(laundryStateEntity.getVersion()))
-                .build();
-
-        OrderSubmittedMessageEntity orderSubmittedMessageEntity = new OrderSubmittedMessageEntity(
-                orderEntity.getId(), laundryStateEntity);
-        orderSubmittedMessageRepository.save(orderSubmittedMessageEntity);
         logger.info("Order with id {} is submitted", orderSubmissionDto.getOrderId());
+
+        eventPublishingService.buildAndPublishOrderSubmittedEvent(orderEntity.getId(), laundryStateEntity);
     }
 
     @Transactional
@@ -90,9 +78,9 @@ public class OrderServiceImpl implements OrderService {
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(order, RequestType.COMPLETE);
 
-        OrderCompletedMessageEntity orderCompletedMessage = new OrderCompletedMessageEntity(
-                order, laundryStateEntity);
-        orderCompletedMessageRepository.save(orderCompletedMessage);
+//        OrderCompletedMessageEntity orderCompletedMessage = new OrderCompletedMessageEntity(
+//                order, laundryStateEntity);
+//        orderCompletedMessageRepository.save(orderCompletedMessage);
         logger.info("Order with id {} is completed", id);
     }
 
@@ -130,6 +118,7 @@ public class OrderServiceImpl implements OrderService {
                 TimeUnit.MILLISECONDS.sleep(orderEntity.getEstimatedTime());
                 break;
             } catch (InterruptedException ignore) {
+
             }
         }
         this.completeOrder(orderEntity.getId());

@@ -1,10 +1,9 @@
 buildscript {
-    // these repositories and dependencies are used by Gradle itself
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
     }
 }
 
@@ -14,24 +13,20 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'laundrymanagement-app'
+    baseName = 'taskcoordinator-app'
     version = applicationVersion
     enabled = true
 }
 
 sourceCompatibility = 1.8
 
-// these repositories are used in project
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
-// these dependencies are used in project
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'com.microservices.api:api:0.1-SNAPSHOT'
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'
     compile 'io.springfox:springfox-swagger2:2.8.0'

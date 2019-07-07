@@ -1,4 +1,6 @@
-CREATE TABLE orders
+CREATE SCHEMA IF NOT EXISTS laundry_management;
+
+CREATE TABLE laundry_management.orders
 (
   id             INT NOT NULL PRIMARY KEY,
   submitted_time BIGINT,
@@ -8,7 +10,7 @@ CREATE TABLE orders
   bucket         INT
 );
 
-CREATE TABLE laundries_state
+CREATE TABLE laundry_management.laundries_state
 (
   id                 SERIAL      NOT NULL PRIMARY KEY,
   version            INT         DEFAULT 0,
@@ -16,24 +18,13 @@ CREATE TABLE laundries_state
   name               VARCHAR(20) NOT NULL UNIQUE
 );
 
-CREATE TABLE order_submitted_messages
+CREATE TABLE laundry_management.laundry_events
 (
-  id                    SERIAL NOT NULL PRIMARY KEY,
-  order_id              INT    NOT NULL,
-  message_status        TEXT   NOT NULL,
-  laundry_id            INT    NOT NULL,
-  laundry_state_version INT    NOT NULL,
-  queue_waiting_time    BIGINT NOT NULL
+    id           SERIAL NOT NULL PRIMARY KEY,
+    created_time BIGINT,
+    event_type   TEXT,
+    event_status TEXT,
+    message      BYTEA
 );
 
-CREATE TABLE order_completed_messages
-(
-  id                    SERIAL NOT NULL PRIMARY KEY,
-  order_id              INT    NOT NULL,
-  order_execution_time  BIGINT NOT NULL,
-  message_status        TEXT   NOT NULL,
-  laundry_id            INT    NOT NULL,
-  laundry_state_version INT    NOT NULL,
-  queue_waiting_time    BIGINT NOT NULL
-)
 
