@@ -4,6 +4,6 @@ CREATE TABLE tariff_management.tariffs
 (
     id           SERIAL NOT NULL PRIMARY KEY,
     name         VARCHAR(30) NOT NULL,
-    price        NUMERIC(6, 2),
-    washing_time BIGINT
+    price        NUMERIC(6, 2) NOT NULL ,
+    washing_time BIGINT NOT NULL
 );

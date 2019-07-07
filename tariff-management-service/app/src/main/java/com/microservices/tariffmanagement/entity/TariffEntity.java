@@ -3,6 +3,7 @@ package com.microservices.tariffmanagement.entity;
 import com.microservices.tariffmanagement.dto.TariffDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 @Table(name = "tariffs")
 @NoArgsConstructor
 @Getter
+@ToString
 public class TariffEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +27,7 @@ public class TariffEntity {
 
     public TariffEntity(TariffDto tariffDto) {
         this.name = tariffDto.getName();
-        this.price = BigDecimal.valueOf(tariffDto.getPrice());
+        this.price = tariffDto.getPrice();
         this.washingTime = tariffDto.getWashingTime();
     }
 }

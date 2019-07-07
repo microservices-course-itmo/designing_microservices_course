@@ -4,13 +4,21 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @ToString
 public class TariffDto {
+    @NotNull
     private String name;
 
-    private double price;
+    @NotNull
+    @Digits(integer = 4, fraction = 2)
+    private BigDecimal price;
 
-    private long washingTime;
+    @NotNull
+    private Long washingTime;
 }

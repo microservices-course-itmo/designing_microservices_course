@@ -19,11 +19,11 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public long createTariff(TariffDto tariff) {
+    public TariffEntity createTariff(TariffDto tariff) {
         logger.info("Creating tariff: {}...", tariff);
         TariffEntity tariffEntity = new TariffEntity(tariff);
-        int id = tariffRepository.save(tariffEntity).getId();
-        logger.info("Created new tariff with id {}", id);
-        return id;
+        TariffEntity createdTariff = tariffRepository.save(tariffEntity);
+        logger.info("Created new tariff: {}", createdTariff);
+        return createdTariff;
     }
 }

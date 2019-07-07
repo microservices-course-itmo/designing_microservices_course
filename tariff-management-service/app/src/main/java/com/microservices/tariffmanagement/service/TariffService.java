@@ -1,7 +1,8 @@
 package com.microservices.tariffmanagement.service;
 
 import com.microservices.tariffmanagement.dto.TariffDto;
+import com.microservices.tariffmanagement.entity.TariffEntity;
 
 public interface TariffService {
-    long createTariff(TariffDto tariff);
+    TariffEntity createTariff(TariffDto tariff);
 }
