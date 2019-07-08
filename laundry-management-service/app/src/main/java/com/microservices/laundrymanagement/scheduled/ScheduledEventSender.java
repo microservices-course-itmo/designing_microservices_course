@@ -4,7 +4,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.microservices.laundrymanagement.entity.EventStatus;
 import com.microservices.laundrymanagement.entity.LaundryEventLogEntity;
 import com.microservices.laundrymanagement.repository.LaundryEventRepository;
-import com.microservices.laundrymanagementapi.messages.OrderSubmittedEvent;
+import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ScheduledEventSender {
         Optional<LaundryEventLogEntity> eldestNotSentEvent = eventRepository.findEldestNotSentEvent();
         if (eldestNotSentEvent.isPresent()) {
             LaundryEventLogEntity event = eldestNotSentEvent.get();
-            OrderSubmittedEvent.OrderSubmittedMessage message = OrderSubmittedEvent.OrderSubmittedMessage.parseFrom(eldestNotSentEvent.get().getMessage());
+            OrderSubmittedEventWrapper.OrderSubmittedEvent message = OrderSubmittedEventWrapper.OrderSubmittedEvent.parseFrom(eldestNotSentEvent.get().getMessage());
             logger.info("Sending event {}", message.toString());
 
             event.setEventStatus(EventStatus.IN_PROCESS);
