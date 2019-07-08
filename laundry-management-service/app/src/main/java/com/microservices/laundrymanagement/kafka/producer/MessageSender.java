@@ -14,7 +14,7 @@ public class MessageSender {
 
     private final KafkaTemplate<String, OrderSubmittedEvent.OrderSubmittedMessage> kafkaTemplate;
 
-    @Value(value = "${message.topic.name}")
+    @Value(value = "${laundry.management.topic.name}")
     private String topicName;
 
     @Autowired

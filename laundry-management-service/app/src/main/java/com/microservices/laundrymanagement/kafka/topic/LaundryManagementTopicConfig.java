@@ -15,7 +15,7 @@ public class LaundryManagementTopicConfig {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
-    @Value(value = "${message.topic.name}")
+    @Value(value = "${laundry.management.topic.name}")
     private String topicName;
 
     @Bean
