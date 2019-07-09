@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.laundrymanagement.api.messages";
+option java_outer_classname = "LaundryManagementEventWrapper";
+
+import "order_processed_event.proto";
+import "order_submitted_event.proto";
+
+message LaundryManagementEvent {
+    oneof payload {
+        OrderProcessedEvent orderProcessedEvent = 1;
+        OrderSubmittedEvent orderSubmittedEvent = 2;
+    }
+}

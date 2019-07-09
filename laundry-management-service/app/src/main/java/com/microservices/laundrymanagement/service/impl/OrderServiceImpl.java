@@ -78,9 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(order, RequestType.COMPLETE);
 
-//        OrderCompletedMessageEntity orderCompletedMessage = new OrderCompletedMessageEntity(
-//                order, laundryStateEntity);
-//        orderCompletedMessageRepository.save(orderCompletedMessage);
+        eventPublishingService.buildAndPublishOrderProcessedEvent(order.getId(), laundryStateEntity);
         logger.info("Order with id {} is completed", id);
     }
 
