@@ -27,8 +27,4 @@ public class LaundryStateEntity {
     private long queueWaitingTime;
 
     private long reservedTime;
-
-    public long getCompletionTimePrediction() {
-        return this.getQueueWaitingTime() + this.getReservedTime();
-    }
 }

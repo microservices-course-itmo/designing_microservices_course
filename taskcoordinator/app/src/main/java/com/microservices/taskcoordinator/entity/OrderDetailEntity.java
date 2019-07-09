@@ -26,7 +26,7 @@ public class OrderDetailEntity {
     private int orderId;
 
     public OrderDetailEntity(OrderDetailDto orderDetailDTO) {
-        this.id = orderDetailDTO.getDetailId();
+        this.id = orderDetailDTO.getId();
         this.weight = orderDetailDTO.getWeight();
         this.duration = orderDetailDTO.getDuration();
         this.orderId = orderDetailDTO.getOrderId();

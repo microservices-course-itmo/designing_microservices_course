@@ -52,7 +52,7 @@ public class OrderEntity {
                 .map(OrderDetailDto::getDuration)
                 .reduce(0L, Long::sum);
         this.status = OrderStatus.APPROVED;
-        this.estimatedTime = estimatedTimeToComplete;
+        this.estimatedTime = estimatedTimeToComplete + duration;
         this.details = orderCoordinationDTO.getDetails() == null
                 ? null
                 : orderCoordinationDTO.getDetails().stream()

@@ -12,7 +12,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class LaundryStateDto {
 
-    private Integer laundryId;
+    private Integer id;
 
     private Long queueWaitingTime;
 
@@ -21,9 +21,13 @@ public class LaundryStateDto {
     private Integer version;
 
     public LaundryStateDto(LaundryStateEntity laundryStateEntity) {
-        this.laundryId = laundryStateEntity.getId();
+        this.id = laundryStateEntity.getId();
         this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
         this.reservedTime = laundryStateEntity.getReservedTime();
         this.version = laundryStateEntity.getVersion();
+    }
+
+    public long getCompletionTimePrediction() {
+        return this.getQueueWaitingTime() + this.getReservedTime();
     }
 }
