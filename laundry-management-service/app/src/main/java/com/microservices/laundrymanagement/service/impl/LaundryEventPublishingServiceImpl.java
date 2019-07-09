@@ -6,6 +6,7 @@ import com.microservices.laundrymanagement.entity.LaundryStateEntity;
 import com.microservices.laundrymanagement.repository.LaundryEventRepository;
 import com.microservices.laundrymanagement.service.LaundryEventPublishingService;
 import com.microservices.laundrymanagementapi.messages.LaundryState;
+import com.microservices.laundrymanagementapi.messages.OrderProcessedEvent;
 import com.microservices.laundrymanagementapi.messages.OrderSubmittedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,24 @@ public class LaundryEventPublishingServiceImpl implements LaundryEventPublishing
 
         LaundryEventLogEntity event = new LaundryEventLogEntity(
                 EventType.ORDER_SUBMITTED_EVENT, orderSubmittedMessage.toByteArray());
+
+        eventRepository.save(event);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void buildAndPublishOrderProcessedEvent(int orderId, LaundryStateEntity laundryState) {
+        OrderProcessedEvent.OrderProcessedMessage orderProcessedMessage = OrderProcessedEvent.OrderProcessedMessage.newBuilder()
+                .setOrderId(orderId)
+                .setCompleteTime(System.currentTimeMillis())
+                .setState(LaundryState.LaundryStateMessage.newBuilder()
+                        .setLaundryId(laundryState.getId())
+                        .setQueueWaitingTime(laundryState.getQueueWaitingTime())
+                        .setVersion(laundryState.getVersion()))
+                .build();
+
+        LaundryEventLogEntity event = new LaundryEventLogEntity(
+                EventType.ORDER_COMPLETED_EVENT, orderProcessedMessage.toByteArray());
 
         eventRepository.save(event);
     }
