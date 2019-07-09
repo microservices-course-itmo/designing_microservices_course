@@ -1,6 +1,6 @@
 package com.microservices.taskcoordinator.kafka.consumer;
 
-import com.microservices.laundrymanagementapi.messages.OrderSubmittedEvent;
+import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
 import com.microservices.taskcoordinator.kafka.message.OrderSubmittedMessageDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -21,7 +21,7 @@ public class MessageConsumerConfiguration {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
-    public ConsumerFactory<String, OrderSubmittedEvent.OrderSubmittedMessage> consumerFactory() {
+    private ConsumerFactory<String, OrderSubmittedEvent> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "LaundryManagementServiceEventListener");
@@ -31,8 +31,9 @@ public class MessageConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderSubmittedEvent.OrderSubmittedMessage> laundryManagementListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, OrderSubmittedEvent.OrderSubmittedMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, OrderSubmittedEvent> laundryManagementListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderSubmittedEvent> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }

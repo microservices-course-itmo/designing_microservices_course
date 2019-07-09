@@ -25,15 +25,12 @@ public class MessageSender {
 
     @Retryable
     public void sendMessage(byte[] message) throws Throwable {
-
         ListenableFuture<SendResult<String, byte[]>> future = kafkaTemplate.send(topicName, message);
-
         try {
             future.get();
         } catch (ExecutionException e) {
             // TODO Log exception
             throw e.getCause();
         }
-        throw new Exception();
     }
 }

@@ -37,6 +37,7 @@ public class EventServiceImpl implements EventService {
             try {
                 messageSender.sendMessage(event.getMessage());
             } catch (Throwable t) {
+                // TODO sukhoa : deal with exceptions
                 logger.info("Failed to send message to Kafka", t);
                 return;
             }
