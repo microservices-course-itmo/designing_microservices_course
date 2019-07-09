@@ -1,2 +1,5 @@
 rootProject.name = 'taskcoordinator'
+include 'app'
+include 'api'
+
 

@@ -1,5 +1,5 @@
 plugins {
-    id 'java-library'
+    id 'java'
     id 'com.google.protobuf' version '0.8.8'
     id 'maven-publish'
 }
@@ -25,7 +25,7 @@ protobuf {
 sourceSets {
     main {
         proto {
-            srcDir "$projectDir/src/main/java/com/microservices/laundrymanagement/api/schema"
+            srcDir "$projectDir/src/main/java/com/microservices/taskcoordinator/api/schema"
             include '**/*.proto'
         }
     }
@@ -39,4 +39,4 @@ publishing {
     }
 }
 
-testClasses.finalizedBy publishToMavenLocal
+//clean build uploadArchives
