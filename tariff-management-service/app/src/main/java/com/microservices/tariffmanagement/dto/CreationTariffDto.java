@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class TariffDto {
+public class CreationTariffDto {
     @NotNull
     private String name;
 
