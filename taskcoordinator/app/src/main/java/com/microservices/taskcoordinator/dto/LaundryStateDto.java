@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,13 +23,13 @@ public class LaundryStateDto {
     private Integer version;
 
     public LaundryStateDto(LaundryStateEntity laundryStateEntity) {
+        Objects.requireNonNull(laundryStateEntity);
+
         this.id = laundryStateEntity.getId();
         this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
         this.reservedTime = laundryStateEntity.getReservedTime();
         this.version = laundryStateEntity.getVersion();
     }
 
-    public long getCompletionTimePrediction() {
-        return this.getQueueWaitingTime() + this.getReservedTime();
-    }
+
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -23,6 +25,8 @@ public class OrderDetailDto {
     private Integer orderId;
 
     public OrderDetailDto(OrderDetailEntity orderDetailEntity) {
+        Objects.requireNonNull(orderDetailEntity);
+
         this.id = orderDetailEntity.getId();
         this.weight = orderDetailEntity.getWeight();
         this.duration = orderDetailEntity.getDuration();

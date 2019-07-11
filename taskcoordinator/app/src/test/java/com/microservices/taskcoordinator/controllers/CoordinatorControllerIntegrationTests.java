@@ -7,8 +7,6 @@ import com.microservices.taskcoordinator.dto.OrderDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 import com.microservices.taskcoordinator.entity.OrderStatus;
-import com.microservices.taskcoordinator.repository.LaundryStateRepository;
-import com.microservices.taskcoordinator.repository.OrderRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
 import org.junit.Assert;
@@ -57,7 +55,7 @@ public class CoordinatorControllerIntegrationTests {
     @Test
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
-    public void t() throws Exception {
+    public void testCoordinateOrder_allValid_orderCoordinatedAndLaundryStateChanged() throws Exception {
 
         LaundryStateDto laundryWillBeChosen = laundryStateService.getLeastLoadedLaundry();
 
@@ -67,15 +65,15 @@ public class CoordinatorControllerIntegrationTests {
         ));
         OrderCoordinationDto coordinationDto = new OrderCoordinationDto(INPUT_ORDER_ID, inputOrderDetails);
 
-        String inputRoleDtoJson = objectMapper.writeValueAsString(coordinationDto);
+        String coordinationDtoJson = objectMapper.writeValueAsString(coordinationDto);
         String responseOrderSubmission = mockMvc.perform(MockMvcRequestBuilders.post("/orders")
                 .contentType(APPLICATION_JSON.toString())
-                .content(inputRoleDtoJson))
+                .content(coordinationDtoJson))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         OrderSubmissionDto orderSubmissionDto = objectMapper.readValue(responseOrderSubmission, OrderSubmissionDto.class);
 
-        //checkout order and laundryState form DB to see a difference
+        //checkout order and laundryState from DB to see a difference
         OrderDto orderCreated = orderService.getOrderById(INPUT_ORDER_ID);
         LaundryStateDto laundryStateForCreatedOrder = laundryStateService.getLaundryStateById(orderSubmissionDto.getLaundryId());
 

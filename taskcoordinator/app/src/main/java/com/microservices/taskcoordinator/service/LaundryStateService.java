@@ -15,4 +15,6 @@ public interface LaundryStateService {
     LaundryStateDto updateLaundryStateWithOrderProcessed(OrderProcessedDto laundryState);
 
     LaundryStateDto getLeastLoadedLaundry();
+
+    long getCompletionTimePrediction(LaundryStateDto laundryStateDto);
 }

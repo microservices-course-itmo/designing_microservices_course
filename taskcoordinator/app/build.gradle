@@ -34,6 +34,6 @@ dependencies {
     runtime 'org.postgresql:postgresql:42.2.5'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'junit:junit:4.12'
-    testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.1.RELEASE'
 }

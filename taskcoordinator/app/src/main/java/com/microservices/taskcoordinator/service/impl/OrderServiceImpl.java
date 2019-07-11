@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         LaundryStateDto leastLoadedLaundry = laundryStateService.getLeastLoadedLaundry();
-        long estimatedCompletionTime = leastLoadedLaundry.getCompletionTimePrediction();
+        long estimatedCompletionTime = laundryStateService.getCompletionTimePrediction(leastLoadedLaundry);
 
         OrderEntity orderEntity = new OrderEntity(inboundOrder, leastLoadedLaundry.getId(), estimatedCompletionTime);
         orderEntity.setStatus(OrderStatus.RESERVED);

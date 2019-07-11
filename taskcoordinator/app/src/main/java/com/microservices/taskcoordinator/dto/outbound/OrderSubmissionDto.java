@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -27,6 +28,8 @@ public class OrderSubmissionDto {
     private List<OrderDetailDto> details;
 
     public OrderSubmissionDto(OrderEntity orderEntity) {
+        Objects.requireNonNull(orderEntity);
+
         this.orderId = orderEntity.getId();
         this.laundryId = orderEntity.getLaundryId();
         this.bucket = orderEntity.getBucket();
