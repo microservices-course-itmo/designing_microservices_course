@@ -23,16 +23,8 @@ public class UserController {
         return userService.getUserByLogin(login);
     }
 
-    @PostMapping(value = "userInfo")
-    UserEntity addUserToDataBase(@Valid @RequestBody UserDto userDto) {
-        return userService.addUserToDataBase(userDto);
-    }
-
-    @PostMapping(value = "userInf")
-    UserEntity addUserToDataBase(@RequestParam String login, @RequestParam String status) {
-        UserDto userDto = new UserDto();
-        userDto.setLogin(login);
-        userDto.setStatusOfBankCard(status);
-        return userService.addUserToDataBase(userDto);
+    @PostMapping(value = "info")
+    UserEntity addUserToDatabase(@Valid @RequestBody UserDto userDto) {
+        return userService.addUserToDatabase(userDto);
     }
 }
