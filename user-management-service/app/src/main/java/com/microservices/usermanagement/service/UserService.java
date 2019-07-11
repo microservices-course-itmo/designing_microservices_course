@@ -6,5 +6,5 @@ import com.microservices.usermanagement.entity.UserEntity;
 public interface UserService {
     UserEntity getUserByLogin(String login);
 
-    UserEntity addUserToDataBase(UserDto userDto);
+    UserEntity addUserToDatabase(UserDto userDto);
 }

@@ -7,6 +7,8 @@ import com.microservices.usermanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
@@ -18,16 +20,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserByLogin(String login) {
+        Objects.requireNonNull(login);
         return userRepository.findByLogin(login)
                 .orElseThrow(() -> new IllegalArgumentException("There is no such user in database"));
     }
 
     @Override
-    public UserEntity addUserToDataBase(UserDto userDto) {
+    public UserEntity addUserToDatabase(UserDto userDto) {
         UserEntity user = new UserEntity();
         user.setLogin(userDto.getLogin());
-        user.setStatusOfBankCard(userDto.getStatusOfBankCard());
+        user.setCardInfo(userDto.getCardInfo());
         return userRepository.save(user);
     }
-
 }

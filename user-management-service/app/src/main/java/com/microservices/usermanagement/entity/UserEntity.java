@@ -17,6 +17,6 @@ public class UserEntity {
     private int id;
     @Column
     private String login;
-    @Column(name = "status_card")
-    private String statusOfBankCard;
+    @Column(name = "card_info")
+    private String cardInfo;
 }

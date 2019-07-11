@@ -9,5 +9,5 @@ import lombok.ToString;
 @ToString
 public class UserDto {
     private String login;
-    private String statusOfBankCard;
+    private String cardInfo;
 }
