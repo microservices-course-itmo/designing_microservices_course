@@ -24,10 +24,22 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     private OrderService orderService;
 
     @Override
+    public LaundryStateDto getLaundryStateById(int laundryId) {
+        if (laundryId < 0 ) {
+            throw new IllegalArgumentException("id can't be < 0");
+        }
+
+        LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(laundryId)
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + laundryId + "doesn't exist"));
+
+        return new LaundryStateDto(laundryStateEntity);
+    }
+
+    @Override
     @Transactional
     public LaundryStateDto updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration) {
         if (laundryId < 0 || orderDuration < 0) {
-            throw new IllegalArgumentException("laundryId or orderDuration can't be < 0");
+            throw new IllegalArgumentException("id or orderDuration can't be < 0");
         }
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(laundryId)
@@ -81,8 +93,14 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
     @Override
     @Transactional
-    public LaundryStateEntity getLeastLoadedLaundry() {
-        return laundryStateRepository.getLeastLoadedLaundry();
+    public LaundryStateDto getLeastLoadedLaundry() {
+        return new LaundryStateDto(laundryStateRepository.getLeastLoadedLaundry()
+                .orElseThrow(() -> new IllegalArgumentException("there are no laundries to process the order")));
+    }
+
+    @Override
+    public long getCompletionTimePrediction(LaundryStateDto laundryStateDto) {
+        return laundryStateDto.getQueueWaitingTime() + laundryStateDto.getReservedTime();
     }
 
     private void changeLaundryStateConsistently(InboundLaundryStateDto inboundLaundryStateUpdate, LaundryStateEntity currentLaundryState) {

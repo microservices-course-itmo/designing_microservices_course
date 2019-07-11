@@ -5,15 +5,18 @@ import com.microservices.taskcoordinator.entity.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 public class OrderSubmissionDto {
 
     private Integer orderId;
@@ -25,6 +28,8 @@ public class OrderSubmissionDto {
     private List<OrderDetailDto> details;
 
     public OrderSubmissionDto(OrderEntity orderEntity) {
+        Objects.requireNonNull(orderEntity);
+
         this.orderId = orderEntity.getId();
         this.laundryId = orderEntity.getLaundryId();
         this.bucket = orderEntity.getBucket();

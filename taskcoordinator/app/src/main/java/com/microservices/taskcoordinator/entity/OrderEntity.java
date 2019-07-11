@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -45,6 +46,8 @@ public class OrderEntity {
     private List<OrderDetailEntity> details;
 
     public OrderEntity(OrderCoordinationDto orderCoordinationDTO, int selectedLaundryId, long estimatedTimeToComplete) {
+        Objects.requireNonNull(orderCoordinationDTO);
+
         this.id = orderCoordinationDTO.getOrderId();
         this.laundryId = selectedLaundryId;
         this.bucket = 1;
@@ -52,7 +55,7 @@ public class OrderEntity {
                 .map(OrderDetailDto::getDuration)
                 .reduce(0L, Long::sum);
         this.status = OrderStatus.APPROVED;
-        this.estimatedTime = estimatedTimeToComplete;
+        this.estimatedTime = estimatedTimeToComplete + duration;
         this.details = orderCoordinationDTO.getDetails() == null
                 ? null
                 : orderCoordinationDTO.getDetails().stream()

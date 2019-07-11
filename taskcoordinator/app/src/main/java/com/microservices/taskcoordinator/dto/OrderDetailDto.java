@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class OrderDetailDto {
 
-    private Integer detailId;
+    private Integer id;
 
     private Integer weight;
 
@@ -26,7 +25,9 @@ public class OrderDetailDto {
     private Integer orderId;
 
     public OrderDetailDto(OrderDetailEntity orderDetailEntity) {
-        this.detailId = orderDetailEntity.getId();
+        Objects.requireNonNull(orderDetailEntity);
+
+        this.id = orderDetailEntity.getId();
         this.weight = orderDetailEntity.getWeight();
         this.duration = orderDetailEntity.getDuration();
         this.orderId = orderDetailEntity.getOrderId();

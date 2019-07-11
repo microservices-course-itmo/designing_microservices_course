@@ -1,10 +1,11 @@
 package com.microservices.taskcoordinator.service.impl;
 
+import com.microservices.taskcoordinator.dto.LaundryStateDto;
 import com.microservices.taskcoordinator.dto.OrderDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
-import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import com.microservices.taskcoordinator.entity.OrderEntity;
+import com.microservices.taskcoordinator.entity.OrderStatus;
 import com.microservices.taskcoordinator.repository.OrderRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
@@ -58,13 +59,14 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Order with id " + inboundOrder.getOrderId() + "already exists");
         }
 
-        LaundryStateEntity leastLoadedLaundry = laundryStateService.getLeastLoadedLaundry();
-        long estimatedCompletionTime = leastLoadedLaundry.getCompletionTimePrediction();
+        LaundryStateDto leastLoadedLaundry = laundryStateService.getLeastLoadedLaundry();
+        long estimatedCompletionTime = laundryStateService.getCompletionTimePrediction(leastLoadedLaundry);
 
         OrderEntity orderEntity = new OrderEntity(inboundOrder, leastLoadedLaundry.getId(), estimatedCompletionTime);
+        orderEntity.setStatus(OrderStatus.RESERVED);
 
         orderRepository.save(orderEntity);
-        laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getId(), orderEntity.getDuration());
+        laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getLaundryId(), orderEntity.getDuration());
 
         return new OrderSubmissionDto(orderEntity);
     }

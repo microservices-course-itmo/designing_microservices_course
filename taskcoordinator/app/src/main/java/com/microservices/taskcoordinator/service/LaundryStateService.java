@@ -3,9 +3,10 @@ package com.microservices.taskcoordinator.service;
 import com.microservices.taskcoordinator.dto.LaundryStateDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
-import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 
 public interface LaundryStateService {
+
+    LaundryStateDto getLaundryStateById(int laundryId);
 
     LaundryStateDto updateLaundryStateWithOrderSubmission(int laundryId, long orderDuration);
 
@@ -13,5 +14,7 @@ public interface LaundryStateService {
 
     LaundryStateDto updateLaundryStateWithOrderProcessed(OrderProcessedDto laundryState);
 
-    LaundryStateEntity getLeastLoadedLaundry();
+    LaundryStateDto getLeastLoadedLaundry();
+
+    long getCompletionTimePrediction(LaundryStateDto laundryStateDto);
 }

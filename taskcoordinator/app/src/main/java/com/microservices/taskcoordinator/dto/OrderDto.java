@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Setter
@@ -36,6 +37,8 @@ public class OrderDto {
     private List<OrderDetailDto> details;
 
     public OrderDto(OrderEntity orderEntity) {
+        Objects.requireNonNull(orderEntity);
+
         this.id = orderEntity.getId();
         this.laundryId = orderEntity.getLaundryId();
         this.bucket = orderEntity.getBucket();

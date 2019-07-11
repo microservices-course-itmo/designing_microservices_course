@@ -6,13 +6,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode
 public class LaundryStateDto {
 
-    private Integer laundryId;
+    private Integer id;
 
     private Long queueWaitingTime;
 
@@ -21,9 +23,13 @@ public class LaundryStateDto {
     private Integer version;
 
     public LaundryStateDto(LaundryStateEntity laundryStateEntity) {
-        this.laundryId = laundryStateEntity.getId();
+        Objects.requireNonNull(laundryStateEntity);
+
+        this.id = laundryStateEntity.getId();
         this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
         this.reservedTime = laundryStateEntity.getReservedTime();
         this.version = laundryStateEntity.getVersion();
     }
+
+
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -26,7 +27,9 @@ public class OrderDetailEntity {
     private int orderId;
 
     public OrderDetailEntity(OrderDetailDto orderDetailDTO) {
-        this.id = orderDetailDTO.getDetailId();
+        Objects.requireNonNull(orderDetailDTO);
+
+        this.id = orderDetailDTO.getId();
         this.weight = orderDetailDTO.getWeight();
         this.duration = orderDetailDTO.getDuration();
         this.orderId = orderDetailDTO.getOrderId();
