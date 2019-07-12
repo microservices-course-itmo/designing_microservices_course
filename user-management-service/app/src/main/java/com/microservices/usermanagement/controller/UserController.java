@@ -1,6 +1,6 @@
 package com.microservices.usermanagement.controller;
 
-import com.microservices.usermanagement.dto.UserDto;
+import com.microservices.usermanagement.dto.CreateUserDto;
 import com.microservices.usermanagement.entity.UserEntity;
 import com.microservices.usermanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    UserEntity createUser(@Valid @RequestBody UserDto userDto) {
-        return userService.createUser(userDto);
+    CreateUserDto createUser(@Valid @RequestBody CreateUserDto createUserDto) {
+        return userService.createUser(createUserDto);
     }
 }
