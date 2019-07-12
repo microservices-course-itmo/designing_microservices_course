@@ -11,7 +11,7 @@ import javax.persistence.Enumerated;
 @Getter
 @Setter
 @ToString
-public class UserDto {
+public class CreateUserDto {
     private String login;
 
     @Enumerated(value = EnumType.STRING)
