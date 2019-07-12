@@ -1,1 +1,0 @@
-ALTER TABLE user_management.users RENAME COLUMN status_card TO card_info;
