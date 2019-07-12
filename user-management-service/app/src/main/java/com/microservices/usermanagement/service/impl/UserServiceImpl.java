@@ -22,14 +22,11 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserByLogin(String login) {
         Objects.requireNonNull(login);
         return userRepository.findByLogin(login)
-                .orElseThrow(() -> new IllegalArgumentException("There is no such user in database"));
+                .orElseThrow(() -> new IllegalArgumentException("There is no such user in database for login: " + login));
     }
 
     @Override
-    public UserEntity addUserToDatabase(UserDto userDto) {
-        UserEntity user = new UserEntity();
-        user.setLogin(userDto.getLogin());
-        user.setCardInfo(userDto.getCardInfo());
-        return userRepository.save(user);
+    public UserEntity createUser(UserDto userDto) {
+        return userRepository.save(new UserEntity(userDto));
     }
 }
