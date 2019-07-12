@@ -8,7 +8,7 @@ Project is created to demonstrate main approaches and some of patterns which are
 system. Some of architectural decisions were made especially for complicating system in order for us to have a room
 for applying some of patters, some were made to simplify system to order for us not having to implement real-world 
 business logic. Some of the services or business logic are just a mocks. We also didn't aim to create perfect code
-but tried to make it clear, without duplications, tested and logged. But it still can't be considered as some best
+but tried to make it clear, tested, logged and  without duplications. But it still can't be considered as some best
 practices.
 
 ## Overview
@@ -38,16 +38,16 @@ Outbound channels - queues and topics to where we publish our outcome events and
 
 ![Typical microservice architecture](course-materials/git-images/typical-service-arch.png)
 
-Services don’t have any shared entities, data structures and each service has its own schema in our Postgres instance 
-which enables for us:
+Services _don’t_ have any shared entities, data structures and each service has its own schema in our Postgres instance 
+which enables us:
 
 1. Deploy services and migrate service’s schema and data independently
 1. Switch to another DBMS (Polyglot persistence approach) at any time we decide without any impact to other services.
 
 Services typically consist of two modules:
-1. app module contains the implementation of service - properties,  services, controllers, dao objects, domain and dto 
+1. **app** module contains the implementation of service - properties,  services, controllers, dao objects, domain and dto 
 classes, utility classes. It builds into some jar or war file which might be executed or deployed to some web server.
-1. api module contains all the stuff server would like to show to the outside world (more precisely to other services, 
+1. **api** module contains all the stuff server would like to show to the outside world (more precisely to other services, 
 because the only thing is showed to outside is API Gateway). It may be some data structures (messages, requests, responses), 
 connection info (queue and topic information), and REST Client implementation which allows for others to consume server’s API
 via java client wrapper.
