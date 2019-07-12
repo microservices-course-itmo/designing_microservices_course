@@ -1,11 +1,11 @@
 package com.microservices.usermanagement.entity;
 
-import com.microservices.usermanagement.dto.UserDto;
+import com.microservices.usermanagement.dto.CreateUserDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,12 +18,15 @@ public class UserEntity {
 
     private String login;
 
-    @Column(name = "card_info")
     @Enumerated(value = EnumType.STRING)
     private CardInfo cardInfo;
 
-    public UserEntity(UserDto userDto) {
-        this.login = userDto.getLogin();
-        this.cardInfo = userDto.getCardInfo();
+    public UserEntity() {
+    }
+
+    public UserEntity(CreateUserDto createUserDto) {
+        Objects.requireNonNull(createUserDto);
+        this.login = createUserDto.getLogin();
+        this.cardInfo = createUserDto.getCardInfo();
     }
 }
