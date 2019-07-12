@@ -36,7 +36,7 @@ and some path/request parameters.
 
 Outbound channels - queues and topics to where we publish our outcome events and messages and our local datastore.
 
-here is the picture
+![Typical microservice architecture](course-materials/git-images/typical-service-arch.png)
 
 Services don’t have any shared entities, data structures and each service has its own schema in our Postgres instance 
 which enables for us:
