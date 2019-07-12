@@ -4,12 +4,13 @@ import com.microservices.usermanagement.dto.UserDto;
 import com.microservices.usermanagement.entity.UserEntity;
 import com.microservices.usermanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
     private UserService userService;
 
@@ -23,8 +24,9 @@ public class UserController {
         return userService.getUserByLogin(login);
     }
 
-    @PostMapping(value = "info")
-    UserEntity addUserToDatabase(@Valid @RequestBody UserDto userDto) {
-        return userService.addUserToDatabase(userDto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    UserEntity createUser(@Valid @RequestBody UserDto userDto) {
+        return userService.createUser(userDto);
     }
 }
