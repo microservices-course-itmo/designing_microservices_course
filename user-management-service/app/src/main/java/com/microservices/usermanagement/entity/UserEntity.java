@@ -1,22 +1,29 @@
 package com.microservices.usermanagement.entity;
 
+import com.microservices.usermanagement.dto.UserDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
+
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
+
     private String login;
+
     @Column(name = "card_info")
-    private String cardInfo;
+    @Enumerated(value = EnumType.STRING)
+    private CardInfo cardInfo;
+
+    public UserEntity(UserDto userDto) {
+        this.login = userDto.getLogin();
+        this.cardInfo = userDto.getCardInfo();
+    }
 }
