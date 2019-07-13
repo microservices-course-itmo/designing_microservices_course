@@ -15,7 +15,6 @@ import javax.persistence.Enumerated;
 public class CreateUserDto {
     private String login;
 
-    @Enumerated(value = EnumType.STRING)
     private CardInfo cardInfo;
 
     public CreateUserDto(UserEntity userEntity) {
