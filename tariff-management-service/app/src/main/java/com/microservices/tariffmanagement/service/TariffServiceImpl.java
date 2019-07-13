@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TariffServiceImpl implements TariffService {
@@ -24,6 +25,8 @@ public class TariffServiceImpl implements TariffService {
 
     @Override
     public TariffDto createTariff(CreationTariffDto tariff) {
+        Objects.requireNonNull(tariff);
+
         logger.info("Creating tariff: {}...", tariff);
         TariffEntity tariffEntity = new TariffEntity(tariff);
         TariffDto createdTariff = new TariffDto(tariffRepository.save(tariffEntity));
