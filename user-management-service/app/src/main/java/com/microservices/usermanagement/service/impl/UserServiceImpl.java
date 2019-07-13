@@ -40,6 +40,6 @@ public class UserServiceImpl implements UserService {
         logger.info("Creating user: {} ...", createUserDto);
         UserEntity createdUser = userRepository.save(new UserEntity(createUserDto));
         logger.info("Created new user: {}", createdUser);
-        return createUserDto;
+        return new CreateUserDto(createdUser);
     }
 }
