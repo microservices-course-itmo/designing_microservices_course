@@ -1,7 +1,7 @@
 package com.microservices.tariffmanagement.controller;
 
 import com.microservices.tariffmanagement.dto.CreationTariffDto;
-import com.microservices.tariffmanagement.entity.TariffEntity;
+import com.microservices.tariffmanagement.dto.TariffDto;
 import com.microservices.tariffmanagement.service.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +27,12 @@ public class TariffController {
     }
 
     @GetMapping
-    public List<TariffEntity> getAllTariffs() {
+    public List<TariffDto> getAllTariffs() {
         return tariffService.getAllTariffs();
     }
 
     @GetMapping(value = "{tariffId}")
-    public TariffEntity getTariffById(@PathVariable int tariffId) {
+    public TariffDto getTariffById(@PathVariable int tariffId) {
         return tariffService.getTariffById(tariffId);
     }
 }

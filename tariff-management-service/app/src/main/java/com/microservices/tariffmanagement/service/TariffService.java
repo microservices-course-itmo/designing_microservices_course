@@ -1,14 +1,14 @@
 package com.microservices.tariffmanagement.service;
 
 import com.microservices.tariffmanagement.dto.CreationTariffDto;
-import com.microservices.tariffmanagement.entity.TariffEntity;
+import com.microservices.tariffmanagement.dto.TariffDto;
 
 import java.util.List;
 
 public interface TariffService {
-    TariffEntity createTariff(CreationTariffDto tariff);
+    TariffDto createTariff(CreationTariffDto tariff);
 
-    List<TariffEntity> getAllTariffs();
+    List<TariffDto> getAllTariffs();
 
-    TariffEntity getTariffById(int tariffId);
+    TariffDto getTariffById(int tariffId);
 }
