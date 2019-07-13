@@ -2,6 +2,7 @@ package com.microservices.usermanagement.entity;
 
 import com.microservices.usermanagement.dto.CreateUserDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -20,9 +22,6 @@ public class UserEntity {
 
     @Enumerated(value = EnumType.STRING)
     private CardInfo cardInfo;
-
-    public UserEntity() {
-    }
 
     public UserEntity(CreateUserDto createUserDto) {
         Objects.requireNonNull(createUserDto);
