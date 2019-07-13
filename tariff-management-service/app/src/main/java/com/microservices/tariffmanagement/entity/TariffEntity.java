@@ -3,6 +3,7 @@ package com.microservices.tariffmanagement.entity;
 import com.microservices.tariffmanagement.dto.CreationTariffDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class TariffEntity {
     //in millis
     private long washingTime;
 
-    public TariffEntity(CreationTariffDto creationTariffDto) {
+    public TariffEntity(@NonNull CreationTariffDto creationTariffDto) {
         this.name = creationTariffDto.getName();
         this.price = creationTariffDto.getPrice();
         this.washingTime = creationTariffDto.getWashingTime();

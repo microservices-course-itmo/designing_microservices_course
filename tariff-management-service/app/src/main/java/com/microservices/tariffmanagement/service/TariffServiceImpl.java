@@ -39,7 +39,6 @@ public class TariffServiceImpl implements TariffService {
         List<TariffDto> allTariffs = new ArrayList<>();
         tariffRepository.findAll().forEach(tariffEntity ->
                 allTariffs.add(new TariffDto(tariffEntity)));
-        logger.info("Found all tariffs {}", allTariffs);
         return allTariffs;
     }
 
@@ -48,7 +47,6 @@ public class TariffServiceImpl implements TariffService {
         TariffEntity tariffEntity = tariffRepository.findById(tariffId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("No tariff with id " + tariffId + " found"));
-        logger.info("Found tariff by id {} - {}", tariffId, tariffEntity);
         return new TariffDto(tariffEntity);
     }
 }

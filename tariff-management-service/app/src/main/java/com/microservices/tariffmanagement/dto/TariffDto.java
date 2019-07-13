@@ -2,6 +2,7 @@ package com.microservices.tariffmanagement.dto;
 
 import com.microservices.tariffmanagement.entity.TariffEntity;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 
@@ -15,7 +16,7 @@ public class TariffDto {
 
     private long washingTime;
 
-    public TariffDto(TariffEntity tariffEntity) {
+    public TariffDto(@NonNull TariffEntity tariffEntity) {
         this.id = tariffEntity.getId();
         this.name = tariffEntity.getName();
         this.price = tariffEntity.getPrice();
