@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CreateUserDto createUser(CreateUserDto createUserDto) {
-        if (!userRepository.existsByLogin(createUserDto.getLogin())) {
+    public UserEntity createUser(CreateUserDto createUserDto) {
+        if (userRepository.existsByLogin(createUserDto.getLogin())) {
             throw new IllegalArgumentException("User with this login already exists, login: " +
                                                createUserDto.getLogin());
         }
         logger.info("Creating user: {} ...", createUserDto);
         UserEntity createdUser = userRepository.save(new UserEntity(createUserDto));
         logger.info("Created new user: {}", createdUser);
-        return new CreateUserDto(createdUser);
+        return createdUser;
     }
 }
