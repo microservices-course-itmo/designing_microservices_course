@@ -1,10 +1,10 @@
 package com.microservices.usermanagement.service;
 
 import com.microservices.usermanagement.dto.CreateUserDto;
-import com.microservices.usermanagement.entity.UserEntity;
+import com.microservices.usermanagement.dto.UserDto;
 
 public interface UserService {
-    UserEntity getUserByLogin(String login);
+    UserDto getUserByLogin(String login);
 
-    UserEntity createUser(CreateUserDto createUserDto);
+    UserDto createUser(CreateUserDto createUserDto);
 }

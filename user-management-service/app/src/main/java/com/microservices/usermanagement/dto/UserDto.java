@@ -3,6 +3,7 @@ package com.microservices.usermanagement.dto;
 import com.microservices.usermanagement.entity.CardInfo;
 import com.microservices.usermanagement.entity.UserEntity;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -16,7 +17,7 @@ public class UserDto {
 
     private CardInfo cardInfo;
 
-    public UserDto(UserEntity userEntity) {
+    public UserDto(@NonNull UserEntity userEntity) {
         this.id = userEntity.getId();
         this.login = userEntity.getLogin();
         this.cardInfo = userEntity.getCardInfo();

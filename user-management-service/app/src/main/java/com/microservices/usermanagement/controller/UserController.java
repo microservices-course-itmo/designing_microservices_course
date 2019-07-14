@@ -2,7 +2,6 @@ package com.microservices.usermanagement.controller;
 
 import com.microservices.usermanagement.dto.CreateUserDto;
 import com.microservices.usermanagement.dto.UserDto;
-import com.microservices.usermanagement.entity.UserEntity;
 import com.microservices.usermanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +20,13 @@ public class UserController {
     }
 
     @GetMapping(value = "{login}")
-    UserEntity getUserByLogin(@PathVariable String login) {
+    UserDto getUserByLogin(@PathVariable String login) {
         return userService.getUserByLogin(login);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     UserDto createUser(@Valid @RequestBody CreateUserDto createUserDto) {
-        return new UserDto(userService.createUser(createUserDto));
+        return userService.createUser(createUserDto);
     }
 }
