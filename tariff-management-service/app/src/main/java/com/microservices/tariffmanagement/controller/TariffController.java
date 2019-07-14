@@ -22,8 +22,8 @@ public class TariffController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public long createTariff(@Valid @RequestBody CreationTariffDto tariff) {
-        return tariffService.createTariff(tariff).getId();
+    public TariffDto createTariff(@Valid @RequestBody CreationTariffDto tariff) {
+        return tariffService.createTariff(tariff);
     }
 
     @GetMapping
