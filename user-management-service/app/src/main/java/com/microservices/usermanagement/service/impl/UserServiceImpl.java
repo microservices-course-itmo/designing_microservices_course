@@ -26,19 +26,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByLogin(String login) {
         Objects.requireNonNull(login);
-        logger.info("Find user in database with login: {}", login);
+        logger.info("Find user with login: {}", login);
         return new UserDto(userRepository.findByLogin(login)
-                .orElseThrow(() -> new IllegalArgumentException("There is no such user in database for login: " +
-                                                                login)));
+                .orElseThrow(() -> new IllegalArgumentException("There is no such user in database for login: " + login)));
     }
 
     @Override
     public UserDto createUser(CreateUserDto createUserDto) {
         if (userRepository.existsByLogin(createUserDto.getLogin())) {
-            throw new IllegalArgumentException("User with this login already exists, login: " +
-                                               createUserDto.getLogin());
+            throw new IllegalArgumentException("User already exists, login: " + createUserDto.getLogin());
         }
-        logger.info("Creating user: {} ...", createUserDto);
+        logger.info("Creating user: {} ", createUserDto);
         UserEntity createdUser = userRepository.save(new UserEntity(createUserDto));
         logger.info("Created new user: {}", createdUser);
         return new UserDto(createdUser);
