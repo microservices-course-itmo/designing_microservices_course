@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-group = 'com.microservices.api'
+group = 'com.microservices.taskcoordinator.api'
 version = apiVersion
 
 dependencies {
