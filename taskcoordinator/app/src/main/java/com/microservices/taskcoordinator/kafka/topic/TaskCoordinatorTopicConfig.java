@@ -26,7 +26,7 @@ public class TaskCoordinatorTopicConfig {
     }
 
     @Bean
-    public NewTopic taskcoordinatorTopic() {
+    public NewTopic taskCoordinatorTopic() {
         return new NewTopic(topicName, 1, (short) 1);
     }
 }

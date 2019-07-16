@@ -1,7 +1,7 @@
 package com.microservices.taskcoordinator.kafka.consumer;
 
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.kafka.message.OrderSubmittedMessageDeserializer;
+import com.microservices.taskcoordinator.kafka.message.LaundryManagementMessageDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ public class MessageConsumerConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "LaundryManagementServiceEventListener");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, OrderSubmittedMessageDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LaundryManagementMessageDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

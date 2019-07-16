@@ -36,6 +36,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'com.microservices.laundrymanagement.api:api:0.1-SNAPSHOT'
+    compile 'com.microservices.taskcoordinator.api:api:0.1-SNAPSHOT'
     compile 'org.springframework.kafka:spring-kafka'
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'

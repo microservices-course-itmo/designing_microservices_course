@@ -6,7 +6,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
 
-public class OrderSubmittedMessageDeserializer implements Deserializer<LaundryManagementEvent> {
+public class LaundryManagementMessageDeserializer implements Deserializer<LaundryManagementEvent> {
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
         //nothing to do
