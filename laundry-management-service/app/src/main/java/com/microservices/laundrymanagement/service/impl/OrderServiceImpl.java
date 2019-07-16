@@ -11,6 +11,8 @@ import com.microservices.laundrymanagement.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +42,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     // TODO sukhoa : as this method invocation results in publishing message shouldn't we return It (dto) as a returning value here?
-    public void submitOrder(OrderSubmissionDto orderSubmissionDto) {
+    @NewSpan(name = "submit_order")
+    public void submitOrder(@SpanTag("order.dto") OrderSubmissionDto orderSubmissionDto) {
         Objects.requireNonNull(orderSubmissionDto);
 
         if (orderRepository.existsById(orderSubmissionDto.getOrderId())) {
