@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -94,8 +95,11 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Override
     @Transactional
     public LaundryStateDto getLeastLoadedLaundry() {
-        return new LaundryStateDto(laundryStateRepository.getLeastLoadedLaundry()
-                .orElseThrow(() -> new IllegalArgumentException("there are no laundries to process the order")));
+        List<LaundryStateEntity> leastLoadedLaundries = laundryStateRepository.getLeastLoadedLaundries();
+        if (leastLoadedLaundries.isEmpty())
+            throw new IllegalArgumentException("there are no laundries to process the order");
+
+        return new LaundryStateDto(leastLoadedLaundries.get(0));
     }
 
     @Override
