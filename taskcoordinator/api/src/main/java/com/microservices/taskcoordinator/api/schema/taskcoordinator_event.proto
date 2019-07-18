@@ -6,5 +6,7 @@ option java_outer_classname = "TaskCoordinatorEventWrapper";
 import "order_submission_event.proto";
 
 message TaskCoordinatorEvent {
-    OrderSubmissionEvent orderSubmissionEvent = 1;
+    oneof payload {
+        OrderSubmissionEvent orderSubmissionEvent = 1;
+    }
 }

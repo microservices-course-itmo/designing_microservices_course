@@ -86,4 +86,9 @@ public class OrderServiceImpl implements OrderService {
     public void setLaundryStateService(LaundryStateService laundryStateService) {
         this.laundryStateService = laundryStateService;
     }
+
+    @Autowired
+    public void setTaskCoordinatorEventPublishingService(TaskCoordinatorEventPublishingService taskCoordinatorEventPublishingService) {
+        this.taskCoordinatorEventPublishingService = taskCoordinatorEventPublishingService;
+    }
 }
