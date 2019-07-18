@@ -96,7 +96,8 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     public LaundryStateDto getLeastLoadedLaundry() {
         return new LaundryStateDto(laundryStateRepository.getLeastLoadedLaundries()
                 .stream()
-                .findAny().orElseThrow(() ->
+                .findAny()
+                .orElseThrow(() ->
                         new IllegalArgumentException("there are no laundries to process the order")));
     }
 
