@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("orders")
 public class CoordinatorController {
@@ -22,17 +24,17 @@ public class CoordinatorController {
     private LaundryStateService laundryStateService;
 
     @PostMapping
-    OrderSubmissionDto coordinateOrder(@RequestBody OrderCoordinationDto orderCoordinationDTO) {
+    OrderSubmissionDto coordinateOrder(@Valid @RequestBody OrderCoordinationDto orderCoordinationDTO) {
         return orderService.coordinateOrder(orderCoordinationDTO);
     }
 
     @PutMapping("/{id}/status/submitted")
-    void processSubmittedOrder(@RequestBody OrderSubmittedDto orderSubmittedDTO) {
+    void processSubmittedOrder(@Valid @RequestBody OrderSubmittedDto orderSubmittedDTO) {
         laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDTO);
     }
 
     @PutMapping("/{id}/status/processed")
-    void processProcessedOrder(@RequestBody OrderProcessedDto orderProcessedDTO) {
+    void processProcessedOrder(@Valid @RequestBody OrderProcessedDto orderProcessedDTO) {
         laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDTO);
     }
 
