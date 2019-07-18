@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 public class MessageConsumer {
     @KafkaListener(topics = "${laundry.management.topic.name}",
             groupId = "LaundryManagementServiceEventListener",
-            containerFactory = "laundryManagementListenerContainerFactory")
+            containerFactory = "laundryManagementListenerContainerFactory",
+            autoStartup = "${kafka.activateConsumers}")
     public void listen(LaundryManagementEvent message) {
 
         switch (message.getPayloadCase()) {
