@@ -60,6 +60,9 @@ public class LaundryStateServiceImpl implements LaundryStateService {
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getOrderId() + "doesn't exist"));
         OrderDto order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
 
+        if (order.getStatus() != OrderStatus.RESERVED)
+            throw new IllegalArgumentException("Order must be reserved before submitting");
+
         changeLaundryStateConsistently(orderSubmittedDTO.getLaundryState(), laundryStateEntity);
         laundryStateEntity.setReservedTime(laundryStateEntity.getReservedTime() - order.getDuration());
 
@@ -79,6 +82,9 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderProcessedDTO.getLaundryState().getLaundryId())
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderProcessedDTO.getOrderId() + "does not exist"));
         OrderDto order = orderService.getOrderById(orderProcessedDTO.getOrderId());
+
+        if (order.getStatus() != OrderStatus.SUBMITTED)
+            throw new IllegalArgumentException("Order must be submitted before completion");
 
         changeLaundryStateConsistently(orderProcessedDTO.getLaundryState(), laundryStateEntity);
 
