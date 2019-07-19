@@ -25,7 +25,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
     @Override
     public LaundryStateDto getLaundryStateById(int laundryId) {
-        if (laundryId < 0 ) {
+        if (laundryId < 0) {
             throw new IllegalArgumentException("id can't be < 0");
         }
 
@@ -94,7 +94,9 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Override
     @Transactional
     public LaundryStateDto getLeastLoadedLaundry() {
-        return new LaundryStateDto(laundryStateRepository.getLeastLoadedLaundry()
+        return new LaundryStateDto(laundryStateRepository.getLeastLoadedLaundries()
+                .stream()
+                .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("there are no laundries to process the order")));
     }
 
