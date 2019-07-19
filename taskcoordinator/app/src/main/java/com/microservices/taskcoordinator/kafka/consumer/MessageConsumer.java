@@ -10,6 +10,11 @@ import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapp
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
+import com.microservices.taskcoordinator.service.LaundryStateService;
+import com.microservices.taskcoordinator.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +41,11 @@ public class MessageConsumer {
         this.tracing = tracing;
     }
 
+
+    private OrderService orderService;
+
+    private LaundryStateService laundryStateService;
+
     @KafkaListener(topics = "${laundry.management.topic.name}",
             groupId = "LaundryManagementServiceEventListener",
             containerFactory = "laundryManagementListenerContainerFactory",
@@ -53,6 +63,10 @@ public class MessageConsumer {
                 // here message processing
 
                 consumerSpan.finish();
+
+                //TODO afanay: some kind of validation
+                OrderProcessedDto orderProcessedDto = new OrderProcessedDto(event);
+                laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDto);
                 break;
             }
             case ORDERSUBMITTEDEVENT: {
@@ -65,6 +79,9 @@ public class MessageConsumer {
                 // here message processing
 
                 consumerSpan.finish();
+
+                OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(event);
+                laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
                 break;
             }
             default: {
@@ -72,6 +89,16 @@ public class MessageConsumer {
                 logger.info("Received unsupported event type: {}", message.getPayloadCase());
             }
         }
+    }
+
+    @Autowired
+    public void setLaundryStateService(LaundryStateService laundryStateService) {
+        this.laundryStateService = laundryStateService;
+    }
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     /**

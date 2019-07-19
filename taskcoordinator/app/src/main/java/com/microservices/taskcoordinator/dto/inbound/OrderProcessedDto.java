@@ -1,5 +1,6 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
+import com.microservices.laundrymanagement.api.messages.OrderProcessedEventWrapper.OrderProcessedEvent;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,13 +19,19 @@ import javax.validation.constraints.NotNull;
 public class OrderProcessedDto {
 
     @NotNull
-    Integer orderId;
+    private Integer orderId;
 
     @Valid
     @NotNull
-    InboundLaundryStateDto laundryState;
+    private InboundLaundryStateDto laundryState;
 
     @Min(value = 0L, message = "Order completion time must be positive")
     @NotNull
-    Long completionTime;
+    private Long completionTime;
+
+    public OrderProcessedDto(OrderProcessedEvent orderProcessedEvent) {
+        this.orderId = orderProcessedEvent.getOrderId();
+        this.laundryState = new InboundLaundryStateDto(orderProcessedEvent.getState());
+        this.completionTime = orderProcessedEvent.getCompleteTime();
+    }
 }

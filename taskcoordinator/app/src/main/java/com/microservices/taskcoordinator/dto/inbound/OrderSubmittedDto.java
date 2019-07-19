@@ -1,5 +1,7 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
+import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper;
+import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,4 +24,9 @@ public class OrderSubmittedDto {
     @Valid
     @NotNull
     private InboundLaundryStateDto laundryState;
+
+    public OrderSubmittedDto(OrderSubmittedEvent orderSubmittedEvent) {
+        this.orderId = orderSubmittedEvent.getOrderId();
+        this.laundryState = new InboundLaundryStateDto(orderSubmittedEvent.getState());
+    }
 }

@@ -1,5 +1,7 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
+import com.microservices.laundrymanagement.api.messages.LaundryStateWrapper;
+import com.microservices.laundrymanagement.api.messages.LaundryStateWrapper.LaundryState;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,5 +27,11 @@ public class InboundLaundryStateDto {
 
     @NotNull
     private Integer version;
+
+    public InboundLaundryStateDto(LaundryState laundryStateMessage) {
+        this.laundryId = laundryStateMessage.getLaundryId();
+        this.queueWaitingTime = laundryStateMessage.getQueueWaitingTime();
+        this.version = laundryStateMessage.getVersion();
+    }
 
 }
