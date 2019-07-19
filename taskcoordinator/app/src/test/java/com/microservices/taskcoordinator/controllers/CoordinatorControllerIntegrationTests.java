@@ -94,7 +94,7 @@ public class CoordinatorControllerIntegrationTests {
     }
 
     @Test
-    @Sql(scripts = "/test-data/basic1.sql")
+    @Sql(scripts = "/test-data/one_laundry.sql")
     @Transactional
     public void testSubmitOrder_fromReservedStatus() throws Exception {
         int orderId = 1;
@@ -142,7 +142,7 @@ public class CoordinatorControllerIntegrationTests {
     }
 
     @Test
-    @Sql(scripts = "/test-data/basic.sql")
+    @Sql(scripts = "/test-data/one_laundry.sql")
     @Transactional
     public void testProcessOrder_fromReservedStatus() throws Exception {
         int orderId = 1;
