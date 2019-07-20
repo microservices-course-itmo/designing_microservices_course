@@ -56,3 +56,5 @@ TODO sukhoa: refactor following
 ### Used frameworks and libs
 1. Swagger
 1. Feign
+1. Kafka [Setting up kafka](kafka/README.md)
+

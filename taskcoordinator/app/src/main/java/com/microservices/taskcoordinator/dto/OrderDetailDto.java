@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -16,12 +18,18 @@ import java.util.Objects;
 @NoArgsConstructor
 public class OrderDetailDto {
 
+    @NotNull
     private Integer id;
 
+    @NotNull
+    @Min(value = 0L, message = "Weight must a positive value")
     private Integer weight;
 
+    @NotNull
+    @Min(value = 0L, message = "Wash duration must be positive")
     private Long duration;
 
+    @NotNull
     private Integer orderId;
 
     public OrderDetailDto(OrderDetailEntity orderDetailEntity) {

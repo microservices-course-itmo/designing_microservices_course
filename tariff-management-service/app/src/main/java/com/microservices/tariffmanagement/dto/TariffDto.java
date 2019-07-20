@@ -1,24 +1,25 @@
 package com.microservices.tariffmanagement.dto;
 
+import com.microservices.tariffmanagement.entity.TariffEntity;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.NonNull;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
-@Setter
-@ToString
 public class TariffDto {
-    @NotNull
+    private int id;
+
     private String name;
 
-    @NotNull
-    @Digits(integer = 4, fraction = 2)
     private BigDecimal price;
 
-    @NotNull
-    private Long washingTime;
+    private long washingTime;
+
+    public TariffDto(@NonNull TariffEntity tariffEntity) {
+        this.id = tariffEntity.getId();
+        this.name = tariffEntity.getName();
+        this.price = tariffEntity.getPrice();
+        this.washingTime = tariffEntity.getWashingTime();
+    }
 }
