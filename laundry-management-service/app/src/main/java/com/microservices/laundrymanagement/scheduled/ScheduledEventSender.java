@@ -15,7 +15,7 @@ public class ScheduledEventSender {
         this.eventService = eventService;
     }
 
-    @Scheduled(fixedDelay = 2) // TODO sukhoa make it configurable
+    @Scheduled(fixedDelay = 200) // TODO sukhoa make it configurable
     public void sendEvent() throws InvalidProtocolBufferException {
         eventService.sendEldestNotSentEvent();
     }

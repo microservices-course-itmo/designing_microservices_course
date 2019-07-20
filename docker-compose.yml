@@ -11,9 +11,8 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #    following 2 limes make compose fail on windows machines
-  #    volumes:
-  #      - /var/run/docker.sock:/var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   zipkin:
     image: openzipkin/zipkin
     ports:
