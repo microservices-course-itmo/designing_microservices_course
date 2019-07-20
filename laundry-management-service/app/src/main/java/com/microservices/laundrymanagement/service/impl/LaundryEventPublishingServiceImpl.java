@@ -115,7 +115,7 @@ public class LaundryEventPublishingServiceImpl implements LaundryEventPublishing
     private Map<String, String> createTracingPropertiesToDistribute(Span span) {
         Map<String, String> tracingInformation = new HashMap<>();
         tracing.propagation()
-                .injector((t, s, v) -> tracingInformation.put(s, v))
+                .injector((carrier, key, val) -> tracingInformation.put(key, val))
                 .inject(span.context(), tracingInformation);
         return tracingInformation;
     }
