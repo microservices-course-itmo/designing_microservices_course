@@ -27,14 +27,6 @@ CREATE TABLE details
     order_id INT NOT NULL REFERENCES orders(id)
 );
 
-CREATE TABLE task_coordinator.taskcoordinator_events
-(
-  id           SERIAL NOT NULL PRIMARY KEY,
-  created_time BIGINT,
-  event_type   TEXT,
-  event_status TEXT,
-  message      BYTEA
-);
 CREATE TABLE taskcoordinator_events
 (
   id           SERIAL NOT NULL PRIMARY KEY,
