@@ -13,3 +13,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"

@@ -1,0 +1,3 @@
+rootProject.name = 'user-management-service'
+include 'app'
+

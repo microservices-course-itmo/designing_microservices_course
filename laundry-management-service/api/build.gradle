@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-group = 'com.microservices.api'
+group = 'com.microservices.laundrymanagement.api'
 version = apiVersion
 
 dependencies {

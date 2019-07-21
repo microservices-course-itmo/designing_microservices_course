@@ -1,4 +1,4 @@
-rootProject.name = 'task-coordinator'
+rootProject.name = 'task-coordinator-service'
 include 'app'
 include 'api'
 

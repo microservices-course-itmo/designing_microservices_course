@@ -11,4 +11,6 @@ message LaundryManagementEvent {
         OrderProcessedEvent orderProcessedEvent = 1;
         OrderSubmittedEvent orderSubmittedEvent = 2;
     }
+
+    map<string, string> properties = 3;
 }
