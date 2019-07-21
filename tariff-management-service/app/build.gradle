@@ -14,7 +14,7 @@ apply plugin: 'io.spring.dependency-management'
 
 bootJar {
     baseName = 'tariffmanagement-app'
-    version = '0.1-SNAPSHOT'
+    version = applicationVersion
     enabled = true
 }
 
