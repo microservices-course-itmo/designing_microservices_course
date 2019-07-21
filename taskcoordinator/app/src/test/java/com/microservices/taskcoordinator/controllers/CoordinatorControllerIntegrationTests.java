@@ -45,24 +45,21 @@ public class CoordinatorControllerIntegrationTests {
 
     private static final Long DEFAULT_DETAIL_DURATION = 50L;
 
-    private static final Integer INPUT_ORDER_ID = 100;
-
     private static final Integer DEFAULT_DETAIL_WEIGHT = 20;
-
-    private static final Integer DEFAULT_LAUNDRY_ID = 1;
-
-    private static final Integer RESERVED_ORDER_ID = 1;
-
-    private static final Integer SUBMITTED_ORDER_ID = 3;
-
-    private static final Long DEFAULT_QUEUE_WAITING_TIME = 200L;
 
     private static final Long DEFAULT_COMPLETION_TIME = 102L;
 
-    private static final Long DEFAULT_RESERVED_TIME = 100L;
+    private static final Integer INPUT_ORDER_ID = 100;
 
-    private static final Integer DEFAULT_LAUNDRY_STATE_VERSION = 2;
+    private static final Integer EXISTING_LAUNDRY_ID = 1;
 
+    private static final Integer EXISTING_RESERVED_ORDER_ID = 1;
+
+    private static final Integer EXISTING_SUBMITTED_ORDER_ID = 3;
+
+    private static final Long INBOUND_LAUNDRY_WAITING_TIME = 200L;
+
+    private static final Integer INBOUND_LAUNDRY_STATE_VERSION = 2;
 
     @Autowired
     private MockMvc mockMvc;
@@ -79,7 +76,6 @@ public class CoordinatorControllerIntegrationTests {
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
     public void testCoordinateOrder_allValidAndEquallyLoadedLaundries_orderCoordinatedAndLaundryStateChanged() throws Exception {
-
         LaundryStateDto laundryWillBeChosen = laundryStateService.getLeastLoadedLaundry();
 
         List<OrderDetailDto> inputOrderDetails = new ArrayList<>(Arrays.asList(
@@ -109,58 +105,76 @@ public class CoordinatorControllerIntegrationTests {
     }
 
     @Test
-    @Sql(scripts = "/test-data/one_laundry.sql")
+    @Sql(scripts = "/test-data/basic.sql")
     @Transactional
     public void testSubmitOrder_orderIsReserved_orderIsSubmitted() throws Exception {
-        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(DEFAULT_LAUNDRY_ID,
-                DEFAULT_QUEUE_WAITING_TIME, DEFAULT_LAUNDRY_STATE_VERSION);
-        OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(RESERVED_ORDER_ID, inboundLaundryStateDto);
+        Long existingOrderDuration = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID).getDuration();
+        Long reservedTimeBeforeOrderSubmitted = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID).getReservedTime();
+
+        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
+                EXISTING_LAUNDRY_ID,
+                INBOUND_LAUNDRY_WAITING_TIME,
+                INBOUND_LAUNDRY_STATE_VERSION);
+        OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(EXISTING_RESERVED_ORDER_ID, inboundLaundryStateDto);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
-        mockMvc.perform(put("/orders/" + RESERVED_ORDER_ID + "/status/submitted")
+        mockMvc.perform(put("/orders/" + EXISTING_RESERVED_ORDER_ID + "/status/submitted")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().isOk());
 
-        LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(DEFAULT_LAUNDRY_ID);
+        LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
 
-        assertEquals(DEFAULT_QUEUE_WAITING_TIME, updatedLaundryState.getQueueWaitingTime());
-        assertEquals(DEFAULT_RESERVED_TIME, updatedLaundryState.getReservedTime());
-        assertEquals(DEFAULT_LAUNDRY_STATE_VERSION, updatedLaundryState.getVersion());
-        assertEquals(OrderStatus.SUBMITTED, orderService.getOrderById(RESERVED_ORDER_ID).getStatus());
+        assertEquals(INBOUND_LAUNDRY_WAITING_TIME, updatedLaundryState.getQueueWaitingTime());
+        assertEquals(reservedTimeBeforeOrderSubmitted - existingOrderDuration, (long) updatedLaundryState.getReservedTime());
+        assertEquals(INBOUND_LAUNDRY_STATE_VERSION, updatedLaundryState.getVersion());
+        assertEquals(OrderStatus.SUBMITTED, orderService.getOrderById(EXISTING_RESERVED_ORDER_ID).getStatus());
     }
 
     @Test
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
     public void testProcessOrder_orderIsSubmitted_orderIsProcessed() throws Exception {
-        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(DEFAULT_LAUNDRY_ID,
-                DEFAULT_QUEUE_WAITING_TIME, DEFAULT_LAUNDRY_STATE_VERSION);
-        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(SUBMITTED_ORDER_ID, inboundLaundryStateDto, DEFAULT_COMPLETION_TIME);
+        Long reservedTimeBeforeOrderSubmitted = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID).getReservedTime();
 
-        String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
-        mockMvc.perform(put("/orders/" + SUBMITTED_ORDER_ID + "/status/processed")
+        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
+                EXISTING_LAUNDRY_ID,
+                INBOUND_LAUNDRY_WAITING_TIME,
+                INBOUND_LAUNDRY_STATE_VERSION);
+
+        OrderProcessedDto orderProcessedDto = new OrderProcessedDto(EXISTING_SUBMITTED_ORDER_ID,
+                inboundLaundryStateDto, DEFAULT_COMPLETION_TIME);
+
+        String orderSubmittedJson = objectMapper.writeValueAsString(orderProcessedDto);
+        mockMvc.perform(put("/orders/" + EXISTING_SUBMITTED_ORDER_ID + "/status/processed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().isOk());
 
-        LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(DEFAULT_LAUNDRY_ID);
+        LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
 
-        assertEquals(DEFAULT_QUEUE_WAITING_TIME, updatedLaundryState.getQueueWaitingTime());
-        assertEquals(DEFAULT_RESERVED_TIME, updatedLaundryState.getReservedTime());
-        assertEquals(DEFAULT_LAUNDRY_STATE_VERSION, updatedLaundryState.getVersion());
-        assertEquals(OrderStatus.COMPLETE, orderService.getOrderById(SUBMITTED_ORDER_ID).getStatus());
+        assertEquals(INBOUND_LAUNDRY_WAITING_TIME, updatedLaundryState.getQueueWaitingTime());
+        assertEquals(reservedTimeBeforeOrderSubmitted, updatedLaundryState.getReservedTime());
+        assertEquals(INBOUND_LAUNDRY_STATE_VERSION, updatedLaundryState.getVersion());
+        assertEquals(OrderStatus.COMPLETE, orderService.getOrderById(EXISTING_SUBMITTED_ORDER_ID).getStatus());
     }
 
     @Test
     @Sql(scripts = "/test-data/one_laundry.sql")
     @Transactional
-    public void testProcessOrder_orderIsReserved_orderIsNotProcessedDbIsNotChanged() throws Exception {
-        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(DEFAULT_LAUNDRY_ID, 200L, 2);
-        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(RESERVED_ORDER_ID, inboundLaundryStateDto, 102L);
+    public void testProcessOrder_orderIsReserved_orderIsNotSubmittedDbIsNotChanged() throws Exception {
+        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
+                EXISTING_LAUNDRY_ID,
+                INBOUND_LAUNDRY_WAITING_TIME,
+                INBOUND_LAUNDRY_STATE_VERSION);
 
-        LaundryStateDto initialLaundryState = laundryStateService.getLaundryStateById(DEFAULT_LAUNDRY_ID);
-        OrderDto initialOrder = orderService.getOrderById(RESERVED_ORDER_ID);
+        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(
+                EXISTING_RESERVED_ORDER_ID,
+                inboundLaundryStateDto,
+                DEFAULT_COMPLETION_TIME);
+
+        LaundryStateDto initialLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
+        OrderDto initialOrder = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
         try {
@@ -172,8 +186,8 @@ public class CoordinatorControllerIntegrationTests {
             } else
                 fail();
         } catch (Exception e) {
-            LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(DEFAULT_LAUNDRY_ID);
-            OrderDto updatedOrder = orderService.getOrderById(RESERVED_ORDER_ID);
+            LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
+            OrderDto updatedOrder = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID);
 
             assertEquals(initialLaundryState, updatedLaundryState);
             assertEquals(initialOrder, updatedOrder);
@@ -184,8 +198,15 @@ public class CoordinatorControllerIntegrationTests {
     @Test(expected = MethodArgumentNotValidException.class)
     //is rather a unit test
     public void testProcessOrder_invalidQueueWaitingTime_orderValidationExceptionIsThrown() throws Exception {
-        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(DEFAULT_LAUNDRY_ID, -100L, 2);
-        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(SUBMITTED_ORDER_ID, inboundLaundryStateDto, 100L);
+        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
+                EXISTING_LAUNDRY_ID,
+                -100L,
+                INBOUND_LAUNDRY_STATE_VERSION);
+
+        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(
+                EXISTING_SUBMITTED_ORDER_ID,
+                inboundLaundryStateDto,
+                DEFAULT_COMPLETION_TIME);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
         MvcResult mvcResult = mockMvc.perform(put("/orders/666/status/processed")

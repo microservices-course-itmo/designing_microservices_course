@@ -4,10 +4,10 @@ values (1, 1, 200, 100),
        (3, 1, 300, 0);
 
 insert into task_coordinator_test.orders
-values (3, 1, 1, 200, 'SUBMITTED', 200, 0),
-       (4, 2, 1, 250, 'SUBMITTED', 250, 0),
-       (1, 1, 1, 100, 'RESERVED', 300, 0),
+values (1, 1, 1, 100, 'RESERVED', 300, 0),
        (2, 2, 1, 150, 'RESERVED', 400, 0),
+       (3, 1, 1, 200, 'SUBMITTED', 200, 0),
+       (4, 2, 1, 250, 'SUBMITTED', 250, 0),
        (5, 3, 1, 300, 'SUBMITTED', 300, 0);
 
 insert into task_coordinator_test.details
