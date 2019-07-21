@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TaskCoordinatorEventRepository extends CrudRepository<TaskCoordinatorEventLogEntity, Integer> {
     @Query(value = "select * from task_coordinator.taskcoordinator_events where event_status = 'PENDING' " +
-            "order by created_time desc limit 1", nativeQuery = true)
+            "order by created_time asc limit 1", nativeQuery = true)
     Optional<TaskCoordinatorEventLogEntity> findEldestNotSentEvent();
 }

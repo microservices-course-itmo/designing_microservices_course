@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface LaundryEventRepository extends CrudRepository<LaundryEventLogEntity, Integer> {
     @Query(value = "select * from laundry_management.laundry_events where event_status = 'PENDING' " +
-            "order by created_time desc limit 1", nativeQuery = true)
+            "order by created_time asc limit 1", nativeQuery = true)
     Optional<LaundryEventLogEntity> findEldestNotSentEvent();
 }

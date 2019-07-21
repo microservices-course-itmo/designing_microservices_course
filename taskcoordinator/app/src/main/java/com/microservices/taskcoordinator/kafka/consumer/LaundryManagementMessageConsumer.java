@@ -7,13 +7,12 @@ import brave.propagation.TraceContext;
 import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;
 import com.microservices.laundrymanagement.api.messages.OrderProcessedEventWrapper.OrderProcessedEvent;
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -21,9 +20,10 @@ import org.springframework.stereotype.Component;
 import static brave.Span.Kind.CONSUMER;
 
 @Component
-// TODO sukhoa: maybe rename to something starting with "EVENT"?
-public class MessageConsumer {
-    private final Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
+public class LaundryManagementMessageConsumer {
+    //TODO sukhoa: maybe rename to something starting with "EVENT"?
+
+    private final Logger logger = LoggerFactory.getLogger(LaundryManagementMessageConsumer.class);
 
     /**
      * Objects from Brave library for accessing current trace, creating spans and so on
@@ -35,19 +35,13 @@ public class MessageConsumer {
      */
     private Tracing tracing;
 
-    @Autowired
-    public MessageConsumer(Tracer tracer, Tracing tracing) {
-        this.tracer = tracer;
-        this.tracing = tracing;
-    }
-
-
     private OrderService orderService;
 
     private LaundryStateService laundryStateService;
 
-    @KafkaListener(topics = "${laundry.management.topic.name}",
-            groupId = "LaundryManagementServiceEventListener",
+    @KafkaListener(
+            topics = "${laundry.management.topic.name}",
+            groupId = "${laundry.management.listener.name}",
             containerFactory = "laundryManagementListenerContainerFactory",
             autoStartup = "${kafka.activateConsumers}")
     public void listen(LaundryManagementEvent message) {
@@ -61,12 +55,11 @@ public class MessageConsumer {
                 consumerSpan.start();
 
                 // here message processing
-
-                consumerSpan.finish();
-
-                //TODO afanay: some kind of validation
+                //TODO afanay: some kind of validation?
                 OrderProcessedDto orderProcessedDto = new OrderProcessedDto(event);
                 laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDto);
+
+                consumerSpan.finish();
                 break;
             }
             case ORDERSUBMITTEDEVENT: {
@@ -77,11 +70,10 @@ public class MessageConsumer {
                 consumerSpan.start();
 
                 // here message processing
-
-                consumerSpan.finish();
-
                 OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(event);
                 laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
+
+                consumerSpan.finish();
                 break;
             }
             default: {
@@ -89,16 +81,6 @@ public class MessageConsumer {
                 logger.info("Received unsupported event type: {}", message.getPayloadCase());
             }
         }
-    }
-
-    @Autowired
-    public void setLaundryStateService(LaundryStateService laundryStateService) {
-        this.laundryStateService = laundryStateService;
-    }
-
-    @Autowired
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
     }
 
     /**
@@ -114,5 +96,25 @@ public class MessageConsumer {
 
         return tracer.nextSpan(extractor.extract(message))
                 .kind(CONSUMER);
+    }
+
+    @Autowired
+    public void setTracer(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
+    @Autowired
+    public void setTracing(Tracing tracing) {
+        this.tracing = tracing;
+    }
+
+    @Autowired
+    public void setLaundryStateService(LaundryStateService laundryStateService) {
+        this.laundryStateService = laundryStateService;
+    }
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }

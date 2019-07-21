@@ -1,5 +1,6 @@
 package com.microservices.laundrymanagement.kafka.consumer;
 
+import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
 import com.microservices.laundrymanagement.service.OrderService;
 import com.microservices.taskcoordinator.api.messages.OrderSubmissionEventWrapper.OrderSubmissionEvent;
 import com.microservices.taskcoordinator.api.messages.TaskCoordinatorEventWrapper.TaskCoordinatorEvent;
@@ -8,12 +9,13 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageConsumer {
+public class TaskCoordinatorMessageConsumer {
 
     private OrderService orderService;
 
-    @KafkaListener(topics = "${taskcoordinator.topic.name}",
-            groupId = "TaskCoordinatorServiceEventListener",
+    @KafkaListener(
+            topics = "${taskcoordinator.topic.name}",
+            groupId = "${taskcoordinator.listener.name}",
             containerFactory = "taskCoordinatorListenerContainerFactory",
             autoStartup = "${kafka.activateConsumers}")
     public void listen(TaskCoordinatorEvent message) {
@@ -23,7 +25,7 @@ public class MessageConsumer {
                 OrderSubmissionEvent event = message.getOrderSubmissionEvent();
                 System.out.println("Received OrderSubmissionEvent " + event);
 
-                orderService.submitOrder();
+                orderService.submitOrder(new OrderSubmissionDto(event));
                 break;
             }
             default: {
