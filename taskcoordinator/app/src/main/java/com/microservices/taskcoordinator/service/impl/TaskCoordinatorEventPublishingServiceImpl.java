@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class LaundryEventPublishingServiceImpl implements TaskCoordinatorEventPublishingService {
+public class TaskCoordinatorEventPublishingServiceImpl implements TaskCoordinatorEventPublishingService {
 
     private TaskCoordinatorEventRepository taskCoordinatorEventRepository;
 
     @Autowired
-    public LaundryEventPublishingServiceImpl(TaskCoordinatorEventRepository taskCoordinatorEventRepository) {
+    public TaskCoordinatorEventPublishingServiceImpl(TaskCoordinatorEventRepository taskCoordinatorEventRepository) {
         this.taskCoordinatorEventRepository = taskCoordinatorEventRepository;
     }
 
