@@ -117,7 +117,7 @@ public class CoordinatorControllerIntegrationTests {
         OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(RESERVED_ORDER_ID, inboundLaundryStateDto);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
-        mockMvc.perform(put("/orders/666/status/submitted")
+        mockMvc.perform(put("/orders/" + RESERVED_ORDER_ID + "/status/submitted")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().isOk());
@@ -139,7 +139,7 @@ public class CoordinatorControllerIntegrationTests {
         OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(SUBMITTED_ORDER_ID, inboundLaundryStateDto, DEFAULT_COMPLETION_TIME);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
-        mockMvc.perform(put("/orders/666/status/processed")
+        mockMvc.perform(put("/orders/" + SUBMITTED_ORDER_ID + "/status/processed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().isOk());
@@ -183,7 +183,7 @@ public class CoordinatorControllerIntegrationTests {
 
     @Test(expected = MethodArgumentNotValidException.class)
     //is rather a unit test
-    public void testProcessOrder_invalidInputDto_orderValidationExceptionIsThrown() throws Exception {
+    public void testProcessOrder_invalidQueueWaitingTime_orderValidationExceptionIsThrown() throws Exception {
         InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(DEFAULT_LAUNDRY_ID, -100L, 2);
         OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(SUBMITTED_ORDER_ID, inboundLaundryStateDto, 100L);
 
