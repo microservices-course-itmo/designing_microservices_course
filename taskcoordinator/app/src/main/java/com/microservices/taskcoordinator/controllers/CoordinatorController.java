@@ -40,8 +40,8 @@ public class CoordinatorController {
         laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDTO);
     }
 
-    @PutMapping("/{id}/status/processed")
-    void processProcessedOrder(@Valid @RequestBody OrderProcessedDto orderProcessedDTO,
+    @PutMapping("/{id}/status/completed")
+    void processCompletedOrder(@Valid @RequestBody OrderProcessedDto orderProcessedDTO,
                                @PathVariable int id) {
         if (id != orderProcessedDTO.getOrderId()) {
             throw new IllegalArgumentException(INCONSISTENT_ID_ERROR_MESSAGE);

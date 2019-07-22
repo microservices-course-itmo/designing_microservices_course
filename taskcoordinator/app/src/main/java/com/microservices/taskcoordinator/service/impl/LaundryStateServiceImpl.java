@@ -90,7 +90,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
         changeLaundryStateConsistently(orderProcessedDTO.getLaundryState(), laundryStateEntity);
 
-        order.setStatus(OrderStatus.COMPLETE);
+        order.setStatus(OrderStatus.COMPLETED);
         order.setCompletionTime(orderProcessedDTO.getCompletionTime());
 
         orderService.updateOrder(order);

@@ -49,13 +49,13 @@ public class CoordinatorControllerIntegrationTests {
 
     private static final Long DEFAULT_COMPLETION_TIME = 102L;
 
-    private static final Integer INPUT_ORDER_ID = 100;
-
     private static final Integer EXISTING_LAUNDRY_ID = 1;
 
     private static final Integer EXISTING_RESERVED_ORDER_ID = 1;
 
     private static final Integer EXISTING_SUBMITTED_ORDER_ID = 3;
+
+    private static final Integer INBOUND_ORDER_ID = 100;
 
     private static final Long INBOUND_LAUNDRY_WAITING_TIME = 200L;
 
@@ -79,10 +79,10 @@ public class CoordinatorControllerIntegrationTests {
         LaundryStateDto laundryWillBeChosen = laundryStateService.getLeastLoadedLaundry();
 
         List<OrderDetailDto> inputOrderDetails = new ArrayList<>(Arrays.asList(
-                new OrderDetailDto(10, DEFAULT_DETAIL_WEIGHT, DEFAULT_DETAIL_DURATION, INPUT_ORDER_ID),
-                new OrderDetailDto(11, DEFAULT_DETAIL_WEIGHT, DEFAULT_DETAIL_DURATION, INPUT_ORDER_ID)
+                new OrderDetailDto(10, DEFAULT_DETAIL_WEIGHT, DEFAULT_DETAIL_DURATION, INBOUND_ORDER_ID),
+                new OrderDetailDto(11, DEFAULT_DETAIL_WEIGHT, DEFAULT_DETAIL_DURATION, INBOUND_ORDER_ID)
         ));
-        OrderCoordinationDto coordinationDto = new OrderCoordinationDto(INPUT_ORDER_ID, inputOrderDetails);
+        OrderCoordinationDto coordinationDto = new OrderCoordinationDto(INBOUND_ORDER_ID, inputOrderDetails);
 
         String coordinationDtoJson = objectMapper.writeValueAsString(coordinationDto);
         String responseOrderSubmission = mockMvc.perform(MockMvcRequestBuilders.post("/orders")
@@ -93,7 +93,7 @@ public class CoordinatorControllerIntegrationTests {
         OrderSubmissionDto orderSubmissionDto = objectMapper.readValue(responseOrderSubmission, OrderSubmissionDto.class);
 
         //checkout order and laundryState from DB to see a difference
-        OrderDto orderCreated = orderService.getOrderById(INPUT_ORDER_ID);
+        OrderDto orderCreated = orderService.getOrderById(INBOUND_ORDER_ID);
         LaundryStateDto laundryStateForCreatedOrder = laundryStateService.getLaundryStateById(orderSubmissionDto.getLaundryId());
 
         assertEquals(coordinationDto.getOrderId(), orderSubmissionDto.getOrderId());
@@ -107,7 +107,7 @@ public class CoordinatorControllerIntegrationTests {
     @Test
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
-    public void testSubmitOrder_orderIsReserved_orderIsSubmitted() throws Exception {
+    public void testProcessSubmittedOrder_orderIsReserved_orderIsSubmitted() throws Exception {
         Long existingOrderDuration = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID).getDuration();
         Long reservedTimeBeforeOrderSubmitted = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID).getReservedTime();
 
@@ -134,7 +134,7 @@ public class CoordinatorControllerIntegrationTests {
     @Test
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
-    public void testProcessOrder_orderIsSubmitted_orderIsProcessed() throws Exception {
+    public void testProcessCompletedOrder_orderIsSubmitted_orderIsProcessed() throws Exception {
         Long reservedTimeBeforeOrderSubmitted = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID).getReservedTime();
 
         InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
@@ -146,7 +146,7 @@ public class CoordinatorControllerIntegrationTests {
                 inboundLaundryStateDto, DEFAULT_COMPLETION_TIME);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderProcessedDto);
-        mockMvc.perform(put("/orders/" + EXISTING_SUBMITTED_ORDER_ID + "/status/processed")
+        mockMvc.perform(put("/orders/" + EXISTING_SUBMITTED_ORDER_ID + "/status/completed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().isOk());
@@ -156,19 +156,22 @@ public class CoordinatorControllerIntegrationTests {
         assertEquals(INBOUND_LAUNDRY_WAITING_TIME, updatedLaundryState.getQueueWaitingTime());
         assertEquals(reservedTimeBeforeOrderSubmitted, updatedLaundryState.getReservedTime());
         assertEquals(INBOUND_LAUNDRY_STATE_VERSION, updatedLaundryState.getVersion());
-        assertEquals(OrderStatus.COMPLETE, orderService.getOrderById(EXISTING_SUBMITTED_ORDER_ID).getStatus());
+        assertEquals(OrderStatus.COMPLETED, orderService.getOrderById(EXISTING_SUBMITTED_ORDER_ID).getStatus());
     }
 
     /**
      * Checks that in case of an attempt of processing order with wrong status (not {@link OrderStatus#SUBMITTED}),
-     * the exception is thrown and DB is not changed
+     * the exception is thrown and DB is not changed.
+     * Input: order with {@link OrderStatus#RESERVED}
+     * Output: error, because only order with {@link OrderStatus#SUBMITTED} can be processed (or change it's status
+     * to {@link OrderStatus#COMPLETED} using PUT /orders/{id}/status/completed
      *
-     * @throws Exception in an object cannot be serialized
+     * @throws Exception if object cannot be serialized
      */
     @Test
-    @Sql(scripts = "/test-data/one_laundry.sql")
+    @Sql(scripts = "/test-data/basic.sql")
     @Transactional
-    public void testProcessOrder_orderIsReserved_orderIsNotSubmittedDbIsNotChanged() throws Exception {
+    public void testProcessCompletedOrder_orderIsReserved_orderIsNotProcessedDbIsNotChanged() throws Exception {
         InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
                 EXISTING_LAUNDRY_ID,
                 INBOUND_LAUNDRY_WAITING_TIME,
@@ -184,7 +187,7 @@ public class CoordinatorControllerIntegrationTests {
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
         try {
-            Exception mvcResult = mockMvc.perform(put("/orders/" + EXISTING_RESERVED_ORDER_ID + "/status/processed")
+            Exception mvcResult = mockMvc.perform(put("/orders/" + EXISTING_RESERVED_ORDER_ID + "/status/completed")
                     .contentType(APPLICATION_JSON.toString())
                     .content(orderSubmittedJson))
                     .andReturn().getResolvedException();
@@ -204,8 +207,7 @@ public class CoordinatorControllerIntegrationTests {
     }
 
     @Test(expected = MethodArgumentNotValidException.class)
-    //is rather a unit test
-    public void testProcessOrder_invalidQueueWaitingTime_orderValidationExceptionIsThrown() throws Exception {
+    public void testProcessCompletedOrder_invalidQueueWaitingTime_orderValidationExceptionIsThrown() throws Exception {
         InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(
                 EXISTING_LAUNDRY_ID,
                 -100L,
@@ -217,7 +219,7 @@ public class CoordinatorControllerIntegrationTests {
                 DEFAULT_COMPLETION_TIME);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
-        MvcResult mvcResult = mockMvc.perform(put("/orders/666/status/processed")
+        MvcResult mvcResult = mockMvc.perform(put("/orders/666/status/completed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().is4xxClientError())
