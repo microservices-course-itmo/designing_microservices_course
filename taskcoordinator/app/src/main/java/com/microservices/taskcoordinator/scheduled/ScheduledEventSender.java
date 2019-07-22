@@ -12,7 +12,7 @@ public class ScheduledEventSender {
 
     private EventService eventService;
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 50)
     @Transactional
     public void sendEvent() throws InvalidProtocolBufferException {
         eventService.sendEldestNotSentEvent();

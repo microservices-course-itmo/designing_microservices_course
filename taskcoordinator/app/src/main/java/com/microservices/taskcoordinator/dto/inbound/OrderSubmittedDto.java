@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,6 +27,8 @@ public class OrderSubmittedDto {
     private InboundLaundryStateDto laundryState;
 
     public OrderSubmittedDto(OrderSubmittedEvent orderSubmittedEvent) {
+        Objects.requireNonNull(orderSubmittedEvent);
+
         this.orderId = orderSubmittedEvent.getOrderId();
         this.laundryState = new InboundLaundryStateDto(orderSubmittedEvent.getState());
     }

@@ -1,7 +1,7 @@
 package com.microservices.taskcoordinator.kafka.consumer;
 
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.kafka.message.LaundryManagementMessageDeserializer;
+import com.microservices.taskcoordinator.kafka.message.LaundryManagementEventDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class LaundryManagementMessageConsumerConfiguration {
+public class LaundryManagementEventConsumerConfiguration {
 
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
@@ -31,7 +31,7 @@ public class LaundryManagementMessageConsumerConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LaundryManagementMessageDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LaundryManagementEventDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

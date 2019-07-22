@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 import static brave.Span.Kind.CONSUMER;
 
 @Component
-public class LaundryManagementMessageConsumer {
+public class LaundryManagementEventConsumer {
     //TODO sukhoa: maybe rename to something starting with "EVENT"?
 
-    private final Logger logger = LoggerFactory.getLogger(LaundryManagementMessageConsumer.class);
+    private final Logger logger = LoggerFactory.getLogger(LaundryManagementEventConsumer.class);
 
     /**
      * Objects from Brave library for accessing current trace, creating spans and so on
@@ -35,8 +35,6 @@ public class LaundryManagementMessageConsumer {
      */
     private Tracing tracing;
 
-    private OrderService orderService;
-
     private LaundryStateService laundryStateService;
 
     @KafkaListener(
@@ -44,33 +42,33 @@ public class LaundryManagementMessageConsumer {
             groupId = "${laundry.management.listener.name}",
             containerFactory = "laundryManagementListenerContainerFactory",
             autoStartup = "${kafka.activateConsumers}")
-    public void listen(LaundryManagementEvent message) {
+    public void listen(LaundryManagementEvent laundryManagementEvent) {
 
-        switch (message.getPayloadCase()) {
+        switch (laundryManagementEvent.getPayloadCase()) {
             case ORDERPROCESSEDEVENT: {
-                OrderProcessedEvent event = message.getOrderProcessedEvent();
-                logger.info("Received OrderProcessedEvent " + event);
-                Span consumerSpan = createConsumerSideSpanFromMessage(message)
+                OrderProcessedEvent orderProcessedEvent = laundryManagementEvent.getOrderProcessedEvent();
+                logger.info("Received OrderProcessedEvent " + orderProcessedEvent);
+                Span consumerSpan = createConsumerSideSpanFromMessage(laundryManagementEvent)
                         .name("consume_order_processed_event");
                 consumerSpan.start();
 
                 // here message processing
                 //TODO afanay: some kind of validation?
-                OrderProcessedDto orderProcessedDto = new OrderProcessedDto(event);
+                OrderProcessedDto orderProcessedDto = new OrderProcessedDto(orderProcessedEvent);
                 laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDto);
 
                 consumerSpan.finish();
                 break;
             }
             case ORDERSUBMITTEDEVENT: {
-                OrderSubmittedEvent event = message.getOrderSubmittedEvent();
-                logger.info("Received OrderSubmittedEvent" + event);
-                Span consumerSpan = createConsumerSideSpanFromMessage(message)
+                OrderSubmittedEvent orderSubmittedEvent = laundryManagementEvent.getOrderSubmittedEvent();
+                logger.info("Received OrderSubmittedEvent" + orderSubmittedEvent);
+                Span consumerSpan = createConsumerSideSpanFromMessage(laundryManagementEvent)
                         .name("consume_order_submitted_event");
                 consumerSpan.start();
 
                 // here message processing
-                OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(event);
+                OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(orderSubmittedEvent);
                 laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
 
                 consumerSpan.finish();
@@ -78,7 +76,7 @@ public class LaundryManagementMessageConsumer {
             }
             default: {
                 // TODO Vlad : report this event to metric registry
-                logger.info("Received unsupported event type: {}", message.getPayloadCase());
+                logger.info("Received unsupported event type: {}", laundryManagementEvent.getPayloadCase());
             }
         }
     }
@@ -90,11 +88,11 @@ public class LaundryManagementMessageConsumer {
      * <p>
      * This allows Zipkin to visualize the way of request along different services
      */
-    private Span createConsumerSideSpanFromMessage(LaundryManagementEvent message) {
+    private Span createConsumerSideSpanFromMessage(LaundryManagementEvent event) {
         TraceContext.Extractor<Object> extractor = tracing.propagation()
-                .extractor((c, key) -> message.getPropertiesMap().get(key));
+                .extractor((c, key) -> event.getPropertiesMap().get(key));
 
-        return tracer.nextSpan(extractor.extract(message))
+        return tracer.nextSpan(extractor.extract(event))
                 .kind(CONSUMER);
     }
 
@@ -111,10 +109,5 @@ public class LaundryManagementMessageConsumer {
     @Autowired
     public void setLaundryStateService(LaundryStateService laundryStateService) {
         this.laundryStateService = laundryStateService;
-    }
-
-    @Autowired
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
     }
 }

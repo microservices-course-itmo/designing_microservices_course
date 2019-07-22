@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
 
-public class TaskCoordinatorMessageDeserializer implements Deserializer<TaskCoordinatorEventWrapper.TaskCoordinatorEvent> {
+public class TaskCoordinatorEventDeserializer implements Deserializer<TaskCoordinatorEventWrapper.TaskCoordinatorEvent> {
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {

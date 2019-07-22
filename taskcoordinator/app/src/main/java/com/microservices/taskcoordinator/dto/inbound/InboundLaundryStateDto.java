@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -29,6 +30,8 @@ public class InboundLaundryStateDto {
     private Integer version;
 
     public InboundLaundryStateDto(LaundryState laundryStateMessage) {
+        Objects.requireNonNull(laundryStateMessage);
+
         this.laundryId = laundryStateMessage.getLaundryId();
         this.queueWaitingTime = laundryStateMessage.getQueueWaitingTime();
         this.version = laundryStateMessage.getVersion();

@@ -6,15 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @ToString
 public class DetailSubmissionDto {
-    private int detailId;
-    private int weight;
-    private long duration;
+    private Integer detailId;
+    private Integer weight;
+    private Long duration;
 
     public DetailSubmissionDto(OrderDetail orderDetailMessage) {
+        Objects.requireNonNull(orderDetailMessage);
+
         this.detailId = orderDetailMessage.getDetailId();
         this.weight = orderDetailMessage.getWeight();
         this.duration = orderDetailMessage.getDuration();

@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -30,6 +31,8 @@ public class OrderProcessedDto {
     private Long completionTime;
 
     public OrderProcessedDto(OrderProcessedEvent orderProcessedEvent) {
+        Objects.requireNonNull(orderProcessedEvent);
+
         this.orderId = orderProcessedEvent.getOrderId();
         this.laundryState = new InboundLaundryStateDto(orderProcessedEvent.getState());
         this.completionTime = orderProcessedEvent.getCompleteTime();

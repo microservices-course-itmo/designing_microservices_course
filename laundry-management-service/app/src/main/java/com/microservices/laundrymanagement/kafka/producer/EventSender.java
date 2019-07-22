@@ -1,4 +1,4 @@
-package com.microservices.taskcoordinator.kafka.producer;
+package com.microservices.laundrymanagement.kafka.producer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,15 +11,15 @@ import org.springframework.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Component
-public class MessageSender {
+public class EventSender {
 
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
 
-    @Value(value = "${taskcoordinator.topic.name}")
+    @Value(value = "${laundry.management.topic.name}")
     private String topicName;
 
     @Autowired
-    public MessageSender(KafkaTemplate<String, byte[]> kafkaTemplate) {
+    public EventSender(KafkaTemplate<String, byte[]> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

@@ -38,7 +38,3 @@ publishing {
         }
     }
 }
-
-testClasses.finalizedBy publishToMavenLocal
-
-//clean build uploadArchives

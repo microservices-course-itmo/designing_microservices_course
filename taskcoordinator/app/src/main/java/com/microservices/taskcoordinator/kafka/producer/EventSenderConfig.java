@@ -1,4 +1,4 @@
-package com.microservices.laundrymanagement.kafka.producer;
+package com.microservices.taskcoordinator.kafka.producer;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class MessageSenderConfig {
+public class EventSenderConfig {
 
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
