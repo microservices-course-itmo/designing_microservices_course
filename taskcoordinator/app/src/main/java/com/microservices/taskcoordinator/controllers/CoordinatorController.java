@@ -33,17 +33,19 @@ public class CoordinatorController {
 
     @PutMapping("/{id}/status/submitted")
     void processSubmittedOrder(@Valid @RequestBody OrderSubmittedDto orderSubmittedDTO,
-                               @PathVariable Integer id) {
-        if (!id.equals(orderSubmittedDTO.getOrderId()))
+                               @PathVariable int id) {
+        if (id != orderSubmittedDTO.getOrderId()) {
             throw new IllegalArgumentException(INCONSISTENT_ID_ERROR_MESSAGE);
+        }
         laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDTO);
     }
 
     @PutMapping("/{id}/status/processed")
     void processProcessedOrder(@Valid @RequestBody OrderProcessedDto orderProcessedDTO,
-                               @PathVariable Integer id) {
-        if (!id.equals(orderProcessedDTO.getOrderId()))
+                               @PathVariable int id) {
+        if (id != orderProcessedDTO.getOrderId()) {
             throw new IllegalArgumentException(INCONSISTENT_ID_ERROR_MESSAGE);
+        }
         laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDTO);
     }
 

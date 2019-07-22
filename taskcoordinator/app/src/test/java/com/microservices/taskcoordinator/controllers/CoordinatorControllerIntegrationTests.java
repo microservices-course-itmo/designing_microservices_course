@@ -159,6 +159,12 @@ public class CoordinatorControllerIntegrationTests {
         assertEquals(OrderStatus.COMPLETE, orderService.getOrderById(EXISTING_SUBMITTED_ORDER_ID).getStatus());
     }
 
+    /**
+     * Checks that in case of an attempt of processing order with wrong status (not {@link OrderStatus#SUBMITTED}),
+     * the exception is thrown and DB is not changed
+     *
+     * @throws Exception in an object cannot be serialized
+     */
     @Test
     @Sql(scripts = "/test-data/one_laundry.sql")
     @Transactional
@@ -178,13 +184,15 @@ public class CoordinatorControllerIntegrationTests {
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
         try {
-            Exception mvcResult = mockMvc.perform(put("/orders/666/status/processed")
+            Exception mvcResult = mockMvc.perform(put("/orders/" + EXISTING_RESERVED_ORDER_ID + "/status/processed")
                     .contentType(APPLICATION_JSON.toString())
-                    .content(orderSubmittedJson)).andReturn().getResolvedException();
+                    .content(orderSubmittedJson))
+                    .andReturn().getResolvedException();
             if (mvcResult != null) {
                 throw mvcResult;
-            } else
+            } else {
                 fail();
+            }
         } catch (Exception e) {
             LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
             OrderDto updatedOrder = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID);
