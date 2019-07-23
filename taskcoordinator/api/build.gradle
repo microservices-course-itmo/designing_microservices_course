@@ -38,5 +38,3 @@ publishing {
         }
     }
 }
-
-//clean build uploadArchives

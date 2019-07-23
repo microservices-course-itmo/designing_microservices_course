@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.taskcoordinator.api.messages";
+option java_outer_classname = "TaskCoordinatorEventWrapper";
+
+import "order_submission_event.proto";
+
+message TaskCoordinatorEvent {
+    oneof payload {
+        OrderSubmissionEvent orderSubmissionEvent = 1;
+    }
+}

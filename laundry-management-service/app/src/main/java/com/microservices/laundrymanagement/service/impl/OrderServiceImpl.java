@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
     private LaundryStateEntity updateQueueInfo(OrderEntity order, RequestType requestType) {
         int queueId = order.getLaundryId();
         LaundryStateEntity laundryState = laundryStateRepository.findById(queueId)
-                .orElseThrow(() -> new IllegalArgumentException("Queue with id " + queueId + "is not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Queue with id=" + queueId + " is not found"));
 
         switch (requestType) {
             case SUBMIT:
