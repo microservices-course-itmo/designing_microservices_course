@@ -33,11 +33,11 @@ public class OrderEntity {
         this.id = orderSubmissionDto.getOrderId();
         this.submittedTime = System.currentTimeMillis();
         this.estimatedTime = orderSubmissionDto.getDetails().stream()
-                .map(DetailSubmissionDto::getTime)
+                .map(DetailSubmissionDto::getDuration)
                 .reduce(0L, Long::sum);
         this.status = OrderStatus.QUEUED;
         this.laundryId = orderSubmissionDto.getLaundryId();
-        this.bucket = orderSubmissionDto.getBucketId();
+        this.bucket = orderSubmissionDto.getBucket();
     }
 
 }

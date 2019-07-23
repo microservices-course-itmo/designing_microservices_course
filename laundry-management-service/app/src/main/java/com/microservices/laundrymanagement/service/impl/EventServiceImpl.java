@@ -2,7 +2,7 @@ package com.microservices.laundrymanagement.service.impl;
 
 import com.microservices.laundrymanagement.entity.EventStatus;
 import com.microservices.laundrymanagement.entity.LaundryEventLogEntity;
-import com.microservices.laundrymanagement.kafka.producer.MessageSender;
+import com.microservices.laundrymanagement.kafka.producer.EventSender;
 import com.microservices.laundrymanagement.repository.LaundryEventRepository;
 import com.microservices.laundrymanagement.service.EventService;
 import org.slf4j.Logger;
@@ -20,12 +20,12 @@ public class EventServiceImpl implements EventService {
 
     private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
-    private final MessageSender messageSender;
+    private final EventSender eventSender;
 
     @Autowired
-    public EventServiceImpl(LaundryEventRepository eventRepository, MessageSender messageSender) {
+    public EventServiceImpl(LaundryEventRepository eventRepository, EventSender eventSender) {
         this.eventRepository = eventRepository;
-        this.messageSender = messageSender;
+        this.eventSender = eventSender;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class EventServiceImpl implements EventService {
         if (eldestNotSentEvent.isPresent()) {
             LaundryEventLogEntity event = eldestNotSentEvent.get();
             try {
-                messageSender.sendMessage(event.getMessage());
+                eventSender.sendMessage(event.getMessage());
             } catch (Throwable t) {
                 // TODO sukhoa : deal with exceptions
                 logger.info("Failed to send message to Kafka", t);

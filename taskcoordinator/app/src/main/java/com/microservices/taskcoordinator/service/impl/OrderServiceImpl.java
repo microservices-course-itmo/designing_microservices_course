@@ -9,6 +9,7 @@ import com.microservices.taskcoordinator.entity.OrderStatus;
 import com.microservices.taskcoordinator.repository.OrderRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
+import com.microservices.taskcoordinator.service.TaskCoordinatorEventPublishingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     private LaundryStateService laundryStateService;
+
+    private TaskCoordinatorEventPublishingService taskCoordinatorEventPublishingService;
 
     @Override
     @Transactional
@@ -68,7 +71,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(orderEntity);
         laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getLaundryId(), orderEntity.getDuration());
 
-        return new OrderSubmissionDto(orderEntity);
+        OrderSubmissionDto orderSubmissionDto = new OrderSubmissionDto(orderEntity);
+        taskCoordinatorEventPublishingService.buildAndPublishOrderSubmissionEvent(orderSubmissionDto);
+
+        return orderSubmissionDto;
     }
 
     @Autowired
@@ -79,5 +85,10 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     public void setLaundryStateService(LaundryStateService laundryStateService) {
         this.laundryStateService = laundryStateService;
+    }
+
+    @Autowired
+    public void setTaskCoordinatorEventPublishingService(TaskCoordinatorEventPublishingService taskCoordinatorEventPublishingService) {
+        this.taskCoordinatorEventPublishingService = taskCoordinatorEventPublishingService;
     }
 }

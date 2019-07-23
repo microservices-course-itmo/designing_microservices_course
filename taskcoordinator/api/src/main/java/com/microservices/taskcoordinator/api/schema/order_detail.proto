@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.taskcoordinator.api.messages";
+option java_outer_classname = "OrderDetailWrapper";
+
+message OrderDetail {
+    int32 detailId = 1;
+    int32 weight = 2;
+    int64 duration = 3;
+    int32 orderId = 4;
+}
