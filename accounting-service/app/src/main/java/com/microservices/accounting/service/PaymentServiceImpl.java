@@ -6,6 +6,7 @@ import com.microservices.accounting.dto.PaymentStatus;
 import com.microservices.accounting.temporarydtos.CardInfo;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 @Service
@@ -15,13 +16,14 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDetailsDto invokePayment(InvokePaymentDto invokePaymentDto) {
         CardInfo cardInfo = invokePaymentDto.getUser().getCardInfo();
         Integer userId = invokePaymentDto.getUser().getId();
+        BigDecimal amountOfMoney = invokePaymentDto.getAmountOfMoney();
         switch (cardInfo) {
             case VALID:
                 return isStatusApproved()
-                        ? new PaymentDetailsDto(userId, PaymentStatus.ACCEPTED)
-                        : new PaymentDetailsDto(userId, PaymentStatus.DENIED);
+                        ? new PaymentDetailsDto(userId, amountOfMoney, PaymentStatus.ACCEPTED)
+                        : new PaymentDetailsDto(userId, amountOfMoney, PaymentStatus.DENIED);
             case INVALID:
-                return new PaymentDetailsDto(userId, PaymentStatus.DENIED);
+                return new PaymentDetailsDto(userId, amountOfMoney, PaymentStatus.DENIED);
             default:
                 throw new AssertionError("Unknown card status: " + cardInfo);
         }
