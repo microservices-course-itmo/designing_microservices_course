@@ -7,10 +7,9 @@ import brave.propagation.TraceContext;
 import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;
 import com.microservices.laundrymanagement.api.messages.OrderProcessedEventWrapper.OrderProcessedEvent;
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderCompletedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
-import com.microservices.taskcoordinator.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,27 +46,27 @@ public class LaundryManagementEventConsumer {
         switch (laundryManagementEvent.getPayloadCase()) {
             case ORDERPROCESSEDEVENT: {
                 OrderProcessedEvent orderProcessedEvent = laundryManagementEvent.getOrderProcessedEvent();
-                logger.info("Received OrderProcessedEvent " + orderProcessedEvent);
+                logger.info("Received OrderProcessedEvent: {}", orderProcessedEvent);
+
                 Span consumerSpan = createConsumerSideSpanFromMessage(laundryManagementEvent)
                         .name("consume_order_processed_event");
                 consumerSpan.start();
 
-                // here message processing
                 //TODO afanay: some kind of validation?
-                OrderProcessedDto orderProcessedDto = new OrderProcessedDto(orderProcessedEvent);
-                laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDto);
+                OrderCompletedDto orderCompletedDto = new OrderCompletedDto(orderProcessedEvent);
+                laundryStateService.updateLaundryStateWithOrderProcessed(orderCompletedDto);
 
                 consumerSpan.finish();
                 break;
             }
             case ORDERSUBMITTEDEVENT: {
                 OrderSubmittedEvent orderSubmittedEvent = laundryManagementEvent.getOrderSubmittedEvent();
-                logger.info("Received OrderSubmittedEvent" + orderSubmittedEvent);
+                logger.info("Received OrderSubmittedEvent: {}", orderSubmittedEvent);
+
                 Span consumerSpan = createConsumerSideSpanFromMessage(laundryManagementEvent)
                         .name("consume_order_submitted_event");
                 consumerSpan.start();
 
-                // here message processing
                 OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(orderSubmittedEvent);
                 laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
 

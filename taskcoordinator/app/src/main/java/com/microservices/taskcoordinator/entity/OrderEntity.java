@@ -5,6 +5,7 @@ import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Entity
+@ToString
 @Table(name = "orders")
 public class OrderEntity {
 
