@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 //will be lately imported from user management service api
 public class UserDto {
-    @NotNull
-    private Integer id;
 
     @NotNull
     private String login;
