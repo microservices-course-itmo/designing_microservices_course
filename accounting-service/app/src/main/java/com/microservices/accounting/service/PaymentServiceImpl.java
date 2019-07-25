@@ -29,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
         Objects.requireNonNull(invokePaymentDto);
 
         CardInfo cardInfo = invokePaymentDto.getUser().getCardInfo();
-        PaymentStatus paymentStatus = cardInfo.equals(CardInfo.VALID) && isRequestApproved()
+        PaymentStatus paymentStatus = (cardInfo == CardInfo.VALID && isRequestApproved())
                 ? PaymentStatus.ACCEPTED
                 : PaymentStatus.DENIED;
 
@@ -43,14 +43,23 @@ public class PaymentServiceImpl implements PaymentService {
         Objects.requireNonNull(revertPaymentDto);
 
         PaymentEntity paymentToRevert = paymentRepository.findById(revertPaymentDto.getPaymentId())
-                .orElseThrow(() -> new IllegalArgumentException("No payment with id" + revertPaymentDto.getPaymentId()));
+                .orElseThrow(() -> new IllegalArgumentException("No payment with id " + revertPaymentDto.getPaymentId()));
 
-        if (isRequestApproved()) {
-            paymentToRevert.setPaymentStatus(PaymentStatus.REVERTED);
-            PaymentEntity updatedPaymentEntity = paymentRepository.save(paymentToRevert);
-            return new PaymentDetailsDto(updatedPaymentEntity);
-        } else {
-            throw new UnavailableException("Payment reversion cannot be processed now. Try later");
+        switch (paymentToRevert.getPaymentStatus()) {
+            case REVERTED:
+                return new PaymentDetailsDto(paymentToRevert);
+            case DENIED:
+                throw new IllegalArgumentException("Denied payment cannot be reverted");
+            case ACCEPTED:
+                if (isRequestApproved()) {
+                    paymentToRevert.setPaymentStatus(PaymentStatus.REVERTED);
+                    PaymentEntity updatedPaymentEntity = paymentRepository.save(paymentToRevert);
+                    return new PaymentDetailsDto(updatedPaymentEntity);
+                } else {
+                    throw new UnavailableException("Payment reversion cannot be processed now. Try later");
+                }
+            default:
+                throw new AssertionError("Unknown payment status");
         }
     }
 
