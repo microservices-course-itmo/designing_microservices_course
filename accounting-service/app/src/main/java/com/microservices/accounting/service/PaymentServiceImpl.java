@@ -7,6 +7,8 @@ import com.microservices.accounting.dto.RevertPaymentDto;
 import com.microservices.accounting.entity.PaymentEntity;
 import com.microservices.accounting.repository.PaymentRepository;
 import com.microservices.accounting.temporaryclasses.CardInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.util.Random;
 @Service
 public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
+    private final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Autowired
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
@@ -28,34 +31,41 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDetailsDto invokePayment(InvokePaymentDto invokePaymentDto) {
         Objects.requireNonNull(invokePaymentDto);
 
+        logger.info("Invoking payment: {}...", invokePaymentDto);
         CardInfo cardInfo = invokePaymentDto.getUser().getCardInfo();
         PaymentStatus paymentStatus = (cardInfo == CardInfo.VALID && isRequestApproved())
                 ? PaymentStatus.ACCEPTED
                 : PaymentStatus.DENIED;
 
-        PaymentEntity save = paymentRepository.save(new PaymentEntity(invokePaymentDto, paymentStatus));
-        return new PaymentDetailsDto(save);
+        PaymentEntity savedPayment = paymentRepository.save(new PaymentEntity(invokePaymentDto, paymentStatus));
+        logger.info("Saved payment: {}", savedPayment);
+        return new PaymentDetailsDto(savedPayment);
     }
 
     @Override
     @Transactional
     public PaymentDetailsDto revertPayment(RevertPaymentDto revertPaymentDto) throws UnavailableException {
         Objects.requireNonNull(revertPaymentDto);
+        logger.info("Reverting payment: {}", revertPaymentDto);
 
         PaymentEntity paymentToRevert = paymentRepository.findById(revertPaymentDto.getPaymentId())
                 .orElseThrow(() -> new IllegalArgumentException("No payment with id " + revertPaymentDto.getPaymentId()));
 
         switch (paymentToRevert.getPaymentStatus()) {
             case REVERTED:
+                logger.info("Payment with id {} is already reverted", paymentToRevert.getPaymentId());
                 return new PaymentDetailsDto(paymentToRevert);
             case DENIED:
+                logger.error("Payment with id {} cannot be reverted. Has a denied status", paymentToRevert.getPaymentId());
                 throw new IllegalArgumentException("Denied payment cannot be reverted");
             case ACCEPTED:
                 if (isRequestApproved()) {
                     paymentToRevert.setPaymentStatus(PaymentStatus.REVERTED);
                     PaymentEntity updatedPaymentEntity = paymentRepository.save(paymentToRevert);
+                    logger.info("Payment with id {} is reverted");
                     return new PaymentDetailsDto(updatedPaymentEntity);
                 } else {
+                    logger.error("Payment reversion cannot be processed");
                     throw new UnavailableException("Payment reversion cannot be processed now. Try later");
                 }
             default:
