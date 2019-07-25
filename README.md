@@ -56,7 +56,7 @@ TODO sukhoa: refactor following
 ### Used frameworks and libs
 1. Swagger
 1. Feign
-1. Eureka Discovery service. [Setting up discovery service](eureka-discovery-service/README.md)
+1. Eureka Discovery service. [Setting up discovery service](eureka-service-discovery/README.md)
 1. Kafka [Setting up kafka](kafka/README.md)
 1. Protocol Buffers
 1. Spring Cloud Sleuth - distributed tracing solution for Spring Cloud. Configured to sent tracing information to Zipkin.
