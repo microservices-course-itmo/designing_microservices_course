@@ -17,8 +17,6 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-
-//TODO shine2: fix flyway
 @AllArgsConstructor
 @Getter
 @Setter
