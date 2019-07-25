@@ -1,5 +1,6 @@
-package com.microservices.accounting.temporarydtos;
+package com.microservices.accounting.dto;
 
+import com.microservices.accounting.temporaryclasses.CardInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 @NoArgsConstructor
-//will be lately imported from user management service api
 public class UserDto {
 
     @NotNull

@@ -1,6 +1,5 @@
 package com.microservices.accounting.dto;
 
-import com.microservices.accounting.temporarydtos.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

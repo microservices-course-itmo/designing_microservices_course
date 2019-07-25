@@ -1,5 +1,4 @@
 buildscript {
-    // these repositories and dependencies are used by Gradle itself
     repositories {
         mavenCentral()
     }
@@ -21,21 +20,12 @@ bootJar {
 
 sourceCompatibility = 1.8
 
-// these repositories are used in project
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${releaseTrainVersion}"
-    }
-}
-
-// these dependencies are used in project
 dependencies {
-    compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.flywaydb:flyway-core:5.2.4'
@@ -44,5 +34,4 @@ dependencies {
     runtime 'org.postgresql:postgresql:42.2.5'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
-    testCompile 'junit:junit:4.12'
 }

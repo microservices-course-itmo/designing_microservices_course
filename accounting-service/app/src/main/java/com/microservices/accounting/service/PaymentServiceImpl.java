@@ -6,10 +6,12 @@ import com.microservices.accounting.dto.PaymentStatus;
 import com.microservices.accounting.dto.RevertPaymentDto;
 import com.microservices.accounting.entity.PaymentEntity;
 import com.microservices.accounting.repository.PaymentRepository;
-import com.microservices.accounting.temporarydtos.CardInfo;
+import com.microservices.accounting.temporaryclasses.CardInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.UnavailableException;
 import java.util.Objects;
 import java.util.Random;
 
@@ -27,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
         Objects.requireNonNull(invokePaymentDto);
 
         CardInfo cardInfo = invokePaymentDto.getUser().getCardInfo();
-        PaymentStatus paymentStatus = cardInfo.equals(CardInfo.VALID) && isStatusApproved()
+        PaymentStatus paymentStatus = cardInfo.equals(CardInfo.VALID) && isRequestApproved()
                 ? PaymentStatus.ACCEPTED
                 : PaymentStatus.DENIED;
 
@@ -36,21 +38,28 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentDetailsDto revertPayment(RevertPaymentDto revertPaymentDto) {
+    @Transactional
+    public PaymentDetailsDto revertPayment(RevertPaymentDto revertPaymentDto) throws UnavailableException {
         Objects.requireNonNull(revertPaymentDto);
 
         PaymentEntity paymentToRevert = paymentRepository.findById(revertPaymentDto.getPaymentId())
                 .orElseThrow(() -> new IllegalArgumentException("No payment with id" + revertPaymentDto.getPaymentId()));
 
-        paymentToRevert.setPaymentStatus(PaymentStatus.REVERTED);
-        PaymentEntity updatedPaymentEntity = paymentRepository.save(paymentToRevert);
-        return new PaymentDetailsDto(updatedPaymentEntity);
+        if (isRequestApproved()) {
+            paymentToRevert.setPaymentStatus(PaymentStatus.REVERTED);
+            PaymentEntity updatedPaymentEntity = paymentRepository.save(paymentToRevert);
+            return new PaymentDetailsDto(updatedPaymentEntity);
+        } else {
+            throw new UnavailableException("Payment reversion cannot be processed now. Try later");
+        }
     }
 
     /**
-     * Define is payment approved. 1 of 10 valid cards are denied
+     * A random boolean generator. Is a mock for real request processing (for example, bank validation).
+     * <br/>
+     * 1 of 10 requests are denied
      */
-    private boolean isStatusApproved() { //TODO shine2: rename and add to re
+    private boolean isRequestApproved() {
         return new Random().nextInt(10) > 1;
     }
 }
