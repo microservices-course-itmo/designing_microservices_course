@@ -36,7 +36,7 @@ Outbound channels:
 1. Message broker's queues and topics where services push outgoing events and messages 
 1. Local datastore (DB, caches).
 
-![Typical microservice architecture](course-materials/git-images/typical-service-arch.png)
+![Typical service architecture](course-materials/git-images/typical-service-arch.png)
 
 Services _do not_ have any shared entities or data structures and each service has its own schema in our Postgres instance 
 which allows us:
@@ -56,6 +56,7 @@ TODO sukhoa: refactor following
 ### Used frameworks and libs
 1. Swagger
 1. Feign
+1. Eureka Discovery service. [Setting up discovery service](eureka-discovery-service/README.md)
 1. Kafka [Setting up kafka](kafka/README.md)
 1. Protocol Buffers
 1. Spring Cloud Sleuth - distributed tracing solution for Spring Cloud. Configured to sent tracing information to Zipkin.

@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'eureka-service-diskovery'
+rootProject.name = 'eureka-service-discovery'
