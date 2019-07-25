@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * <br/>
  * Swagger configuration in json format: http://{host}:{port}/v2/api-docs
  * <br/>
- * Swagger UI: http://{host}:{port}/v2/swagger-ui.html
+ * Swagger UI: http://{host}:{port}/swagger-ui.html
  */
 @SpringBootApplication
 @EnableSwagger2

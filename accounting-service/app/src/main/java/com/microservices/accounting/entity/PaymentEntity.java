@@ -4,6 +4,7 @@ import com.microservices.accounting.dto.InvokePaymentDto;
 import com.microservices.accounting.dto.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "payments")
 public class PaymentEntity {
     @Id
@@ -30,7 +32,7 @@ public class PaymentEntity {
 
     private BigDecimal amount;
 
-    private String userName;
+    private String username;
 
     @Enumerated(value = EnumType.STRING)
     private PaymentStatus paymentStatus;
@@ -39,7 +41,7 @@ public class PaymentEntity {
         Objects.requireNonNull(invokePaymentDto);
 
         this.amount = invokePaymentDto.getAmountOfMoney();
-        this.userName = invokePaymentDto.getUser().getLogin();
+        this.username = invokePaymentDto.getUser().getLogin();
         this.paymentStatus = Objects.requireNonNull(status);
 //        this.paymentStatus = status;
     }

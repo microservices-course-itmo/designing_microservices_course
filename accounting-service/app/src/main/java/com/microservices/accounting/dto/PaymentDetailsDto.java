@@ -22,7 +22,7 @@ public class PaymentDetailsDto {
     private Integer paymentId;
 
     @NotNull
-    private String userName;
+    private String username;
 
     @NotNull
     @Digits(integer = 4, fraction = 2)
@@ -35,7 +35,7 @@ public class PaymentDetailsDto {
         Objects.requireNonNull(paymentEntity);
 
         this.paymentId = paymentEntity.getPaymentId();
-        this.userName = paymentEntity.getUserName();
+        this.username = paymentEntity.getUsername();
         this.amount = paymentEntity.getAmount();
         this.paymentStatus = paymentEntity.getPaymentStatus();
     }
