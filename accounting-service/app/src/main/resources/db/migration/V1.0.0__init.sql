@@ -2,8 +2,8 @@ CREATE SCHEMA IF NOT EXISTS account_management;
 
 CREATE TABLE account_management.payments
 (
-  id            INT           NOT NULL PRIMARY KEY,
-  amount        NUMERIC(6, 2) NOT NULL,
-  userName      TEXT UNIQUE   NOT NULL,
-  paymentStatus VARCHAR(20)   NOT NULL
+  payment_id     SERIAL        NOT NULL PRIMARY KEY,
+  amount         NUMERIC(6, 2) NOT NULL,
+  username       TEXT          NOT NULL,
+  payment_status VARCHAR(20)   NOT NULL
 );
