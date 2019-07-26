@@ -28,12 +28,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -229,7 +231,14 @@ public class CoordinatorControllerIntegrationTests {
 
     @Test(expected = IllegalArgumentException.class)
     @Transactional
-    public void testCoordinateOrder_noLaundries_exceptionIsThrown() {
-        laundryStateService.getLeastLoadedLaundry();
+    public void testCoordinateOrder_noLaundries_exceptionIsThrown() throws Exception {
+        OrderCoordinationDto coordinationDto = new OrderCoordinationDto(0, Collections.emptyList());
+
+        String coordinationDtoJson = objectMapper.writeValueAsString(coordinationDto);
+        Exception resolvedException = mockMvc.perform(post("/ orders")
+                .contentType(APPLICATION_JSON.toString())
+                .content(coordinationDtoJson))
+                .andReturn().getResolvedException();
+        throw Objects.requireNonNull(resolvedException);
     }
 }
