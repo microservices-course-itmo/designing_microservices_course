@@ -36,7 +36,7 @@ Outbound channels:
 1. Message broker's queues and topics where services push outgoing events and messages 
 1. Local datastore (DB, caches).
 
-![Typical microservice architecture](course-materials/git-images/typical-service-arch.png)
+![Typical service architecture](course-materials/git-images/typical-service-arch.png)
 
 Services _do not_ have any shared entities or data structures and each service has its own schema in our Postgres instance 
 which allows us:
@@ -56,12 +56,13 @@ TODO sukhoa: refactor following
 ### Used frameworks and libs
 1. Swagger
 1. Feign
+1. Eureka Discovery service. [Setting up discovery service](eureka-service-discovery/README.md)
 1. Kafka [Setting up kafka](kafka/README.md)
 1. Protocol Buffers
 1. Spring Cloud Sleuth - distributed tracing solution for Spring Cloud. Configured to sent tracing information to Zipkin.
 1. [Zipkin](https://zipkin.io/) - a distributed tracing system. By default Spring Cloud Sleuth sends tracing information 
 to localhost:9411. You can configure the location of the service using `spring.zipkin.baseUrl` property. Zipkin can be
-ran in separate container by performing `docker run -d -p 9411:9411 openzipkin/zipkin` command. Also can be ran as part of
+run in separate container by performing `docker run -d -p 9411:9411 openzipkin/zipkin` command. Also can be ran as part of
 our infrastructure services by invoking `docker-compose up` from the project root directory.
 
 
