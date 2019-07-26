@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.ordermanagement.api.events";
+option java_outer_classname = "OrderManagementEventWrapper";
+
+import "order_created_event.proto";
+
+message OrderManagementEvent {
+    oneof payload {
+        OrderCreatedEvent orderCreatedEvent = 1;
+    }
+}

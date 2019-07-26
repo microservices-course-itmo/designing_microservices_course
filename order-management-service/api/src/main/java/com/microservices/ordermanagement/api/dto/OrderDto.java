@@ -1,7 +1,6 @@
-package com.microservices.ordermanagement.app.dto;
+package com.microservices.ordermanagement.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.microservices.ordermanagement.app.entity.OrderStatus;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;

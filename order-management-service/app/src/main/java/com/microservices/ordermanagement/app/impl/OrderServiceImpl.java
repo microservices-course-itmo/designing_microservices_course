@@ -1,9 +1,9 @@
 package com.microservices.ordermanagement.app.impl;
 
 import com.microservices.ordermanagement.app.api.OrderService;
-import com.microservices.ordermanagement.app.dto.AddDetailDto;
-import com.microservices.ordermanagement.app.dto.AssignTariffDto;
-import com.microservices.ordermanagement.app.dto.OrderDto;
+import com.microservices.ordermanagement.api.dto.AddDetailDto;
+import com.microservices.ordermanagement.api.dto.AssignTariffDto;
+import com.microservices.ordermanagement.api.dto.OrderDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import com.microservices.ordermanagement.app.entity.PendingDetailEntity;
 import com.microservices.ordermanagement.app.repository.OrderRepository;

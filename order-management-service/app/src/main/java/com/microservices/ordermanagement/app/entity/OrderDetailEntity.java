@@ -1,6 +1,6 @@
 package com.microservices.ordermanagement.app.entity;
 
-import com.microservices.ordermanagement.app.dto.TariffDto;
+import com.microservices.ordermanagement.api.dto.TariffDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

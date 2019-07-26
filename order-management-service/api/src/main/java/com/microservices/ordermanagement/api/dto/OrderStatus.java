@@ -1,4 +1,4 @@
-package com.microservices.ordermanagement.app.entity;
+package com.microservices.ordermanagement.api.dto;
 
 public enum OrderStatus {
     PENDING,

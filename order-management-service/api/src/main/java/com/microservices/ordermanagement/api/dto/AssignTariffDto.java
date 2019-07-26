@@ -1,4 +1,4 @@
-package com.microservices.ordermanagement.app.dto;
+package com.microservices.ordermanagement.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
