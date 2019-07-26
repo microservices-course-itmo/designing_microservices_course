@@ -41,6 +41,5 @@ public class PaymentEntity {
         this.amount = invokePaymentDto.getAmountOfMoney();
         this.username = invokePaymentDto.getUser().getLogin();
         this.paymentStatus = Objects.requireNonNull(status);
-//        this.paymentStatus = status;
     }
 }

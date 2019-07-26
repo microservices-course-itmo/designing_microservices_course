@@ -3,7 +3,6 @@ package com.microservices.accounting.service;
 import com.microservices.accounting.dto.InvokePaymentDto;
 import com.microservices.accounting.dto.PaymentDetailsDto;
 import com.microservices.accounting.dto.PaymentStatus;
-import com.microservices.accounting.dto.RevertPaymentDto;
 import com.microservices.accounting.entity.PaymentEntity;
 import com.microservices.accounting.repository.PaymentRepository;
 import com.microservices.accounting.temporaryclasses.CardInfo;
@@ -13,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.UnavailableException;
 import java.util.Objects;
 import java.util.Random;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-    private PaymentRepository paymentRepository;
     private final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
+
+    private PaymentRepository paymentRepository;
 
     @Autowired
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
@@ -38,18 +37,17 @@ public class PaymentServiceImpl implements PaymentService {
                 : PaymentStatus.DENIED;
 
         PaymentEntity savedPayment = paymentRepository.save(new PaymentEntity(invokePaymentDto, paymentStatus));
-        logger.info("Saved payment: {}", savedPayment);
+        logger.info("Payment completed: {}", savedPayment);
         return new PaymentDetailsDto(savedPayment);
     }
 
     @Override
     @Transactional
-    public PaymentDetailsDto revertPayment(RevertPaymentDto revertPaymentDto) throws UnavailableException {
-        Objects.requireNonNull(revertPaymentDto);
-        logger.info("Reverting payment: {}", revertPaymentDto);
+    public PaymentDetailsDto revertPayment(int paymentId) {
+        logger.info("Reverting payment with id: {}", paymentId);
 
-        PaymentEntity paymentToRevert = paymentRepository.findById(revertPaymentDto.getPaymentId())
-                .orElseThrow(() -> new IllegalArgumentException("No payment with id " + revertPaymentDto.getPaymentId()));
+        PaymentEntity paymentToRevert = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new IllegalArgumentException("No payment with id " + paymentId));
 
         switch (paymentToRevert.getPaymentStatus()) {
             case REVERTED:
@@ -66,7 +64,7 @@ public class PaymentServiceImpl implements PaymentService {
                     return new PaymentDetailsDto(updatedPaymentEntity);
                 } else {
                     logger.error("Payment reversion cannot be processed");
-                    throw new UnavailableException("Payment reversion cannot be processed now. Try later");
+                    throw new IllegalStateException("Payment reversion cannot be processed now. Try later");
                 }
             default:
                 throw new AssertionError("Unknown payment status");
