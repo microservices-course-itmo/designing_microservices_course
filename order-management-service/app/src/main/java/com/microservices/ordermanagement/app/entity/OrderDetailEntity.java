@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
@@ -25,15 +26,16 @@ public class OrderDetailEntity {
 
     private Integer tariffId;
 
-    private BigDecimal price;
+    @NotNull
+    private BigDecimal price = BigDecimal.ZERO;
 
-    public OrderDetailEntity(int id, int orderId, int weight) {
+    OrderDetailEntity(int id, int orderId, int weight) {
         this.id = id;
         this.orderId = orderId;
         this.weight = weight;
     }
 
-    public void addTariffInformation(TariffDto tariffDto) {
+    void addTariffInformation(TariffDto tariffDto) {
         this.setTariffId(tariffDto.getId());
         this.setPrice(tariffDto.getPrice());
     }

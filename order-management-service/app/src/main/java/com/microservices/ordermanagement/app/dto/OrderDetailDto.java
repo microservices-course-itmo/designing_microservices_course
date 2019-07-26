@@ -4,17 +4,26 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Getter
 @ToString
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class AddDetailDto {
+class OrderDetailDto {
     @NotNull
-    private Integer pendingDetailId;
-
-    private Integer orderId; // if exists
+    private Integer id;
 
     @NotNull
-    private Integer userId;
+    private Integer orderId;
+
+    @NotNull
+    private Integer weight;
+
+    private Integer tariffId;
+
+    @NotNull
+    @Digits(integer = 4, fraction = 2)
+    private BigDecimal price;
 }

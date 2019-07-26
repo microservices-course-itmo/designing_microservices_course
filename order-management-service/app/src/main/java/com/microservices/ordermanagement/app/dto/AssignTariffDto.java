@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -11,10 +12,13 @@ import javax.validation.constraints.NotNull;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class AssignTariffDto {
     @NotNull
-    Integer orderId;
+    private Integer orderId;
+
     @NotNull
-    Integer detailId;
+    private Integer detailId;
+
     @NotNull
-    TariffDto tariffDto;
+    @Valid
+    private TariffDto tariffDto;
 }
 

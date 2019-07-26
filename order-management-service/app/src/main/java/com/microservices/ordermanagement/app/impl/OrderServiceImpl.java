@@ -3,17 +3,23 @@ package com.microservices.ordermanagement.app.impl;
 import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.dto.AddDetailDto;
 import com.microservices.ordermanagement.app.dto.AssignTariffDto;
+import com.microservices.ordermanagement.app.dto.OrderDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import com.microservices.ordermanagement.app.entity.PendingDetailEntity;
 import com.microservices.ordermanagement.app.repository.OrderRepository;
 import com.microservices.ordermanagement.app.repository.PendingDetailsRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -23,10 +29,22 @@ public class OrderServiceImpl implements OrderService {
 
     private PendingDetailsRepository pendingDetailsRepository;
 
+    /**
+     * Objects for mapping DTOs to entities and vise versa
+     */
+    private ModelMapper modelMapper;
+
+    /**
+     * Javax calidator preconfigured by Spring Boot.
+     */
+    private Validator validator;
+
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, PendingDetailsRepository pendingDetailsRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, PendingDetailsRepository pendingDetailsRepository, ModelMapper modelMapper, Validator validator) {
         this.orderRepository = orderRepository;
         this.pendingDetailsRepository = pendingDetailsRepository;
+        this.modelMapper = modelMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -38,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderEntity addDetailToOrder(AddDetailDto addDetailDto) {
+    public OrderDto addDetailToOrder(AddDetailDto addDetailDto) {
         Objects.requireNonNull(addDetailDto);
 
         PendingDetailEntity pendingDetail = pendingDetailsRepository.findById(addDetailDto.getPendingDetailId())
@@ -56,18 +74,31 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Binding pending detail with order {}", addDetailDto);
 
         pendingDetailsRepository.deleteById(addDetailDto.getPendingDetailId());
-        return orderRepository.save(order);
+        OrderEntity savedOrder = orderRepository.save(order);
+
+        return mapToDtoAndValidate(savedOrder);
     }
 
     @Override
     @Transactional
-    public OrderEntity assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
+    public OrderDto assignTariffToOrderDetail(AssignTariffDto assignTariffDto) {
         Objects.requireNonNull(assignTariffDto);
 
         OrderEntity order = this.getOrderById(assignTariffDto.getOrderId());
         order.assignTariffToOrderDetail(assignTariffDto);
         logger.info("Assigning tariff to order detail {}", assignTariffDto);
 
-        return orderRepository.save(order);
+        OrderEntity savedOrder = orderRepository.save(order);
+
+        return mapToDtoAndValidate(savedOrder);
+    }
+
+    private OrderDto mapToDtoAndValidate(OrderEntity order) {
+        OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+        Set<ConstraintViolation<OrderDto>> violations = validator.validate(orderDto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+        return orderDto;
     }
 }

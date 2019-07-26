@@ -3,6 +3,7 @@ package com.microservices.ordermanagement.app.controller;
 import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.dto.AddDetailDto;
 import com.microservices.ordermanagement.app.dto.AssignTariffDto;
+import com.microservices.ordermanagement.app.dto.OrderDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +31,12 @@ public class OrderController {
     }
 
     @PutMapping(value = "detail")
-    OrderEntity addDetailToOrder(@Valid @RequestBody AddDetailDto addDetailDto) {
+    OrderDto addDetailToOrder(@Valid @RequestBody AddDetailDto addDetailDto) {
         return orderService.addDetailToOrder(addDetailDto);
     }
 
     @PutMapping(value = "tariff")
-    OrderEntity assignTariffToOrderDetail(@Valid @RequestBody AssignTariffDto assignTariffDto) {
+    OrderDto assignTariffToOrderDetail(@Valid @RequestBody AssignTariffDto assignTariffDto) {
         return orderService.assignTariffToOrderDetail(assignTariffDto);
     }
 }
