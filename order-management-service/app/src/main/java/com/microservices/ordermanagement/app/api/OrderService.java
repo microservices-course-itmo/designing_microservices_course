@@ -1,7 +1,8 @@
 package com.microservices.ordermanagement.app.api;
 
-import com.microservices.ordermanagement.app.dto.AddDetailDto;
-import com.microservices.ordermanagement.app.dto.AssignTariffDto;
+import com.microservices.ordermanagement.api.dto.AddDetailDto;
+import com.microservices.ordermanagement.api.dto.AssignTariffDto;
+import com.microservices.ordermanagement.api.dto.OrderDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 
 public interface OrderService {
@@ -21,7 +22,7 @@ public interface OrderService {
      * @param addDetailDto contains ids of order and detail
      * @return representative state of {@link OrderEntity} after operation is finished
      */
-    OrderEntity addDetailToOrder(AddDetailDto addDetailDto);
+    OrderDto addDetailToOrder(AddDetailDto addDetailDto);
 
     /**
      * Assign given tariff to detail associated with given id in order associated with given id
@@ -30,5 +31,5 @@ public interface OrderService {
      * @param assignTariffDto contains all sufficient parameters for operation
      * @return representative state of {@link OrderEntity} after operation is finished
      */
-    OrderEntity assignTariffToOrderDetail(AssignTariffDto assignTariffDto);
+    OrderDto assignTariffToOrderDetail(AssignTariffDto assignTariffDto);
 }
