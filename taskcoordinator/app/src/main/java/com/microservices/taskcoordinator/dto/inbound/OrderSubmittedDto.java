@@ -1,12 +1,12 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
-import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper;
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,6 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @EqualsAndHashCode
 @NoArgsConstructor
+@ToString
 public class OrderSubmittedDto {
 
     @NotNull

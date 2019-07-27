@@ -8,6 +8,8 @@ import com.microservices.taskcoordinator.entity.EventType;
 import com.microservices.taskcoordinator.entity.TaskCoordinatorEventLogEntity;
 import com.microservices.taskcoordinator.repository.TaskCoordinatorEventRepository;
 import com.microservices.taskcoordinator.service.TaskCoordinatorEventPublishingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskCoordinatorEventPublishingServiceImpl implements TaskCoordinatorEventPublishingService {
+
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private TaskCoordinatorEventRepository taskCoordinatorEventRepository;
 
@@ -31,6 +35,7 @@ public class TaskCoordinatorEventPublishingServiceImpl implements TaskCoordinato
     @Transactional(propagation = Propagation.REQUIRED)
     public void buildAndPublishOrderSubmissionEvent(OrderSubmissionDto orderSubmissionDto) {
 
+        logger.info("Start building OrderSubmissionEvent from OrderSubmissionDto: {}", orderSubmissionDto);
         List<OrderDetailWrapper.OrderDetail> orderDetails = orderSubmissionDto.getDetails().stream()
                 .map(od -> OrderDetailWrapper.OrderDetail.newBuilder()
                         .setDetailId(od.getId())
@@ -55,7 +60,8 @@ public class TaskCoordinatorEventPublishingServiceImpl implements TaskCoordinato
         TaskCoordinatorEventLogEntity taskCoordinatorEventLogEntity = new TaskCoordinatorEventLogEntity(
                 EventType.ORDER_SUBMISSION_EVENT, taskCoordinatorEvent.toByteArray());
 
-        taskCoordinatorEventRepository.save(taskCoordinatorEventLogEntity);
+        TaskCoordinatorEventLogEntity savedEvent = taskCoordinatorEventRepository.save(taskCoordinatorEventLogEntity);
+        logger.info("Event has been successfully saved into DB: {}", savedEvent);
     }
 
 }

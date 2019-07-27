@@ -1,12 +1,12 @@
 package com.microservices.taskcoordinator.dto.inbound;
 
-import com.microservices.laundrymanagement.api.messages.LaundryStateWrapper;
 import com.microservices.laundrymanagement.api.messages.LaundryStateWrapper.LaundryState;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -17,6 +17,7 @@ import java.util.Objects;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class InboundLaundryStateDto {
 
     @NotNull
