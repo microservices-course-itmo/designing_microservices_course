@@ -3,6 +3,7 @@ package com.microservices.ordermanagement.app.api;
 import com.microservices.ordermanagement.api.dto.AddDetailDto;
 import com.microservices.ordermanagement.api.dto.AssignTariffDto;
 import com.microservices.ordermanagement.api.dto.OrderDto;
+import com.microservices.ordermanagement.api.dto.OrderStatus;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 
 public interface OrderService {
@@ -32,4 +33,14 @@ public interface OrderService {
      * @return representative state of {@link OrderEntity} after operation is finished
      */
     OrderDto assignTariffToOrderDetail(AssignTariffDto assignTariffDto);
+
+    /**
+     * Sets passed {@link OrderStatus} to the order associated with given id if
+     * this status transition is allowed. For example transition from {@link OrderStatus#PENDING}
+     * to {@link OrderStatus#COMPLETE} is not allowed because we can't just skip the {@link OrderStatus#CREATED}
+     * stage.
+     *
+     * @return the representational state of {@link OrderEntity} after operation applying
+     */
+    OrderDto changeOrderStatus(int orderId, OrderStatus orderStatus);
 }

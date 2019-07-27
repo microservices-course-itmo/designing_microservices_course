@@ -1,9 +1,10 @@
 package com.microservices.ordermanagement.app.controller;
 
-import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.api.dto.AddDetailDto;
 import com.microservices.ordermanagement.api.dto.AssignTariffDto;
 import com.microservices.ordermanagement.api.dto.OrderDto;
+import com.microservices.ordermanagement.api.dto.OrderStatus;
+import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,5 +39,10 @@ public class OrderController {
     @PutMapping(value = "tariff")
     OrderDto assignTariffToOrderDetail(@Valid @RequestBody AssignTariffDto assignTariffDto) {
         return orderService.assignTariffToOrderDetail(assignTariffDto);
+    }
+
+    @PutMapping(value = "{orderId}/status/{status}")
+    OrderDto setOrderStatus(@PathVariable("orderId") int orderId, @PathVariable("status") OrderStatus status) {
+        return orderService.changeOrderStatus(orderId, status);
     }
 }

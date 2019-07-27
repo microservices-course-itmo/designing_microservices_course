@@ -10,13 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "order_details")
-public class OrderDetailEntity {
+class OrderDetailEntity {
     @Id
     int id;
 
@@ -36,7 +37,9 @@ public class OrderDetailEntity {
     }
 
     void addTariffInformation(TariffDto tariffDto) {
-        this.setTariffId(tariffDto.getId());
-        this.setPrice(tariffDto.getPrice());
+        Objects.requireNonNull(tariffDto);
+
+        this.setTariffId(Objects.requireNonNull(tariffDto.getId()));
+        this.setPrice(Objects.requireNonNull(tariffDto.getPrice()));
     }
 }

@@ -36,7 +36,7 @@ public class OrderEntity {
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status = OrderStatus.PENDING;
 
-    private int userId;
+    private String username;
 
     private long createdTime = System.currentTimeMillis();
 
@@ -49,7 +49,11 @@ public class OrderEntity {
     @JoinColumn(name = "orderId")
     private List<OrderDetailEntity> detailEntities = new ArrayList<>();
 
-    public void addPendingDetail(PendingDetailEntity pendingDetail) {
+    public OrderEntity(String username) {
+        this.username = Objects.requireNonNull(username);
+    }
+
+    public void addDetail(PendingDetailEntity pendingDetail) {
         if (detailEntities.stream().anyMatch(d -> d.getId() == pendingDetail.getId())) {
             return;
         }

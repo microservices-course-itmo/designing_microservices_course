@@ -11,8 +11,8 @@ CREATE TABLE order_management.order_details
 
 CREATE TABLE order_management.orders
 (
-    id             SERIAL NOT NULL PRIMARY KEY,
-    user_id        INT    NOT NULL,
+    id             SERIAL      NOT NULL PRIMARY KEY,
+    username       VARCHAR(20) NOT NULL,
     created_time   BIGINT,
     estimated_time BIGINT,
     status         VARCHAR(20),

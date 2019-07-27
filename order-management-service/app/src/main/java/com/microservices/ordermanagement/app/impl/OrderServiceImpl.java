@@ -1,9 +1,10 @@
 package com.microservices.ordermanagement.app.impl;
 
-import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.api.dto.AddDetailDto;
 import com.microservices.ordermanagement.api.dto.AssignTariffDto;
 import com.microservices.ordermanagement.api.dto.OrderDto;
+import com.microservices.ordermanagement.api.dto.OrderStatus;
+import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import com.microservices.ordermanagement.app.entity.PendingDetailEntity;
 import com.microservices.ordermanagement.app.repository.OrderRepository;
@@ -65,12 +66,12 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity order;
         if (addDetailDto.getOrderId() == null) { // in case first detail. when order doesn't exist yet
-            order = orderRepository.save(new OrderEntity());
+            order = orderRepository.save(new OrderEntity(addDetailDto.getUsername()));
             logger.info("Created new order with id: {}", order.getId());
         } else {
             order = this.getOrderById(addDetailDto.getOrderId());
         }
-        order.addPendingDetail(pendingDetail);
+        order.addDetail(pendingDetail);
         logger.info("Binding pending detail with order {}", addDetailDto);
 
         pendingDetailsRepository.deleteById(addDetailDto.getPendingDetailId());
@@ -89,7 +90,44 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Assigning tariff to order detail {}", assignTariffDto);
 
         OrderEntity savedOrder = orderRepository.save(order);
+        return mapToDtoAndValidate(savedOrder);
+    }
 
+    @Override
+    @Transactional
+    public OrderDto changeOrderStatus(int orderId, OrderStatus newStatus) {
+        Objects.requireNonNull(newStatus);
+
+        OrderEntity order = this.getOrderById(orderId);
+        switch (newStatus) {
+            case SUBMITTED: {
+                if (order.getStatus() == OrderStatus.CREATED) {
+                    order.setStatus(newStatus);
+                } else {
+                    throw new IllegalStateException("Not allowed status transition from " +
+                            newStatus + " to " + order.getStatus());
+                }
+                break;
+            }
+            case COMPLETE: {
+                if (order.getStatus() == OrderStatus.SUBMITTED) {
+                    order.setStatus(newStatus);
+                } else {
+                    throw new IllegalStateException("Not allowed status transition from " +
+                            newStatus + " to " + order.getStatus());
+                }
+                break;
+            }
+            case FAILED: {
+                // TODO sukhoa handle this in proper way
+                throw new UnsupportedOperationException("Not implemented FAILED status setting operation");
+            }
+            default: {
+                throw new IllegalArgumentException("Not supported status setting operation for: " + newStatus);
+            }
+        }
+
+        OrderEntity savedOrder = orderRepository.save(order);
         return mapToDtoAndValidate(savedOrder);
     }
 
