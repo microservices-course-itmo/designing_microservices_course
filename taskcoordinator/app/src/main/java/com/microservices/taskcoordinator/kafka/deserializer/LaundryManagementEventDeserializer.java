@@ -1,4 +1,4 @@
-package com.microservices.taskcoordinator.kafka.message;
+package com.microservices.taskcoordinator.kafka.deserializer;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;

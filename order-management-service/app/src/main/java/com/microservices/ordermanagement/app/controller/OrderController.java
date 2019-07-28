@@ -4,6 +4,7 @@ import com.microservices.ordermanagement.api.dto.AddDetailDto;
 import com.microservices.ordermanagement.api.dto.AssignTariffDto;
 import com.microservices.ordermanagement.api.dto.OrderDto;
 import com.microservices.ordermanagement.api.dto.OrderStatus;
+import com.microservices.ordermanagement.api.dto.PaymentDetailsDto;
 import com.microservices.ordermanagement.app.api.OrderService;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class OrderController {
     @PutMapping(value = "{orderId}/status/{status}")
     OrderDto setOrderStatus(@PathVariable("orderId") int orderId, @PathVariable("status") OrderStatus status) {
         return orderService.changeOrderStatus(orderId, status);
+    }
+
+    @PutMapping(value = "approve/{orderId}")
+    OrderDto approveOrder(@PathVariable("orderId") int orderId, @RequestBody @Valid PaymentDetailsDto paymentDetailsDto) {
+        return orderService.checkValidAndApprove(orderId, paymentDetailsDto);
     }
 }

@@ -1,4 +1,4 @@
-package com.microservices.taskcoordinator.kafka.consumer;
+package com.microservices.ordermanagement.app.kafka.consumer;
 
 import brave.Span;
 import brave.Tracer;
@@ -7,9 +7,6 @@ import brave.propagation.TraceContext;
 import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;
 import com.microservices.laundrymanagement.api.messages.OrderProcessedEventWrapper.OrderProcessedEvent;
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
-import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
-import com.microservices.taskcoordinator.service.LaundryStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +29,6 @@ public class LaundryManagementEventConsumer {
      */
     private Tracing tracing;
 
-    private LaundryStateService laundryStateService;
-
     @KafkaListener(
             topics = "${laundry.management.topic.name}",
             groupId = "${laundry.management.listener.name}",
@@ -50,9 +45,6 @@ public class LaundryManagementEventConsumer {
                 consumerSpan.start();
 
                 // here deserializer processing
-                //TODO afanay: some kind of validation?
-                OrderProcessedDto orderProcessedDto = new OrderProcessedDto(orderProcessedEvent);
-                laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDto);
 
                 consumerSpan.finish();
                 break;
@@ -65,8 +57,6 @@ public class LaundryManagementEventConsumer {
                 consumerSpan.start();
 
                 // here deserializer processing
-                OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(orderSubmittedEvent);
-                laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
 
                 consumerSpan.finish();
                 break;
@@ -101,10 +91,5 @@ public class LaundryManagementEventConsumer {
     @Autowired
     public void setTracing(Tracing tracing) {
         this.tracing = tracing;
-    }
-
-    @Autowired
-    public void setLaundryStateService(LaundryStateService laundryStateService) {
-        this.laundryStateService = laundryStateService;
     }
 }

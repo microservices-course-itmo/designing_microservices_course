@@ -4,6 +4,7 @@ import com.microservices.ordermanagement.api.dto.AddDetailDto;
 import com.microservices.ordermanagement.api.dto.AssignTariffDto;
 import com.microservices.ordermanagement.api.dto.OrderDto;
 import com.microservices.ordermanagement.api.dto.OrderStatus;
+import com.microservices.ordermanagement.api.dto.PaymentDetailsDto;
 import com.microservices.ordermanagement.app.entity.OrderEntity;
 
 public interface OrderService {
@@ -43,4 +44,14 @@ public interface OrderService {
      * @return the representational state of {@link OrderEntity} after operation applying
      */
     OrderDto changeOrderStatus(int orderId, OrderStatus orderStatus);
+
+    /**
+     * Check some invariants for order and if all is good approve order and publish order created event to
+     * event bus.
+     *
+     * @param orderId           to approve
+     * @param paymentDetailsDto contains information about successful payment
+     * @return the representational state of {@link OrderEntity} after operation applying
+     */
+    OrderDto checkValidAndApprove(int orderId, PaymentDetailsDto paymentDetailsDto);
 }

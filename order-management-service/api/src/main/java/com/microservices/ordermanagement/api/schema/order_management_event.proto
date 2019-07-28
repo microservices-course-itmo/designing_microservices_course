@@ -9,4 +9,6 @@ message OrderManagementEvent {
     oneof payload {
         OrderCreatedEvent orderCreatedEvent = 1;
     }
+
+    map<string, string> properties = 2;
 }

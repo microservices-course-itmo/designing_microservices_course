@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_details")
-class OrderDetailEntity {
+public class OrderDetailEntity {
     @Id
     int id;
 
@@ -26,6 +26,8 @@ class OrderDetailEntity {
     private int weight;
 
     private Integer tariffId;
+
+    private Long duration;
 
     @NotNull
     private BigDecimal price = BigDecimal.ZERO;
@@ -41,5 +43,6 @@ class OrderDetailEntity {
 
         this.setTariffId(Objects.requireNonNull(tariffDto.getId()));
         this.setPrice(Objects.requireNonNull(tariffDto.getPrice()));
+        this.setDuration(Objects.requireNonNull(tariffDto.getDuration()));
     }
 }

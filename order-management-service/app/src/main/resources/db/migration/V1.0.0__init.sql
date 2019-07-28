@@ -6,6 +6,7 @@ CREATE TABLE order_management.order_details
     order_id  INT NOT NULL,
     weight    INT NOT NULL,
     tariff_id INT,
+    duration  BIGINT,
     price     NUMERIC(6, 2)
 );
 
