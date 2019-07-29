@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -230,15 +231,17 @@ public class CoordinatorControllerIntegrationTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @Transactional
-    public void testCoordinateOrder_noLaundries_exceptionIsThrown() throws Exception {
+    public void testCoordinateOrder_noLaundries_exceptionIsThrown() throws Throwable {
         OrderCoordinationDto coordinationDto = new OrderCoordinationDto(0, Collections.emptyList());
 
         String coordinationDtoJson = objectMapper.writeValueAsString(coordinationDto);
-        Exception resolvedException = mockMvc.perform(post("/ orders")
-                .contentType(APPLICATION_JSON.toString())
-                .content(coordinationDtoJson))
-                .andReturn().getResolvedException();
-        throw Objects.requireNonNull(resolvedException);
+        try {
+            mockMvc.perform(post("/orders")
+                    .contentType(APPLICATION_JSON.toString())
+                    .content(coordinationDtoJson));
+        } catch (NestedServletException e) {
+            throw e.getCause();
+        }
+        fail();
     }
 }
