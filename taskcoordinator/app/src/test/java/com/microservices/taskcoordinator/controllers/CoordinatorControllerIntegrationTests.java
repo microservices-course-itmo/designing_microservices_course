@@ -107,6 +107,47 @@ public class CoordinatorControllerIntegrationTests {
         assertEquals((long) orderCreated.getDuration(), reserveDiff);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testCoordinateOrder_noLaundries_exceptionIsThrown() throws Throwable {
+        OrderCoordinationDto coordinationDto = new OrderCoordinationDto(0, Collections.emptyList());
+
+        String coordinationDtoJson = objectMapper.writeValueAsString(coordinationDto);
+        try {
+            mockMvc.perform(post("/orders")
+                    .contentType(APPLICATION_JSON.toString())
+                    .content(coordinationDtoJson));
+        } catch (NestedServletException e) {
+            throw e.getCause();
+        }
+        fail();
+    }
+
+
+    @Test
+    @Sql(scripts = "/test-data/basic.sql")
+    @Transactional
+    public void testProcessSubmittedOrder_earlierVersion_queueWaitingTimeNotChanged() throws Exception {
+        LaundryStateDto initialLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
+        OrderDto reservedOrder = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID);
+
+        InboundLaundryStateDto inboundLaundryStateDto = new InboundLaundryStateDto(EXISTING_LAUNDRY_ID,
+                INBOUND_LAUNDRY_WAITING_TIME,
+                initialLaundryState.getVersion() - 1);
+        OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(EXISTING_RESERVED_ORDER_ID, inboundLaundryStateDto);
+
+        String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
+        mockMvc.perform(put("/orders/" + EXISTING_RESERVED_ORDER_ID + "/status/submitted")
+                .contentType(APPLICATION_JSON.toString())
+                .content(orderSubmittedJson))
+                .andExpect(status().isOk());
+
+        LaundryStateDto updatedLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
+        assertEquals(initialLaundryState.getVersion(), updatedLaundryState.getVersion());
+        assertEquals(initialLaundryState.getQueueWaitingTime(), updatedLaundryState.getQueueWaitingTime());
+        assertEquals(initialLaundryState.getReservedTime() - reservedOrder.getDuration(), updatedLaundryState.getReservedTime().longValue());
+        assertEquals(OrderStatus.SUBMITTED, orderService.getOrderById(EXISTING_RESERVED_ORDER_ID).getStatus());
+    }
+
     @Test
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
@@ -228,20 +269,5 @@ public class CoordinatorControllerIntegrationTests {
                 .andExpect(status().is4xxClientError())
                 .andReturn();
         throw Objects.requireNonNull(mvcResult.getResolvedException());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCoordinateOrder_noLaundries_exceptionIsThrown() throws Throwable {
-        OrderCoordinationDto coordinationDto = new OrderCoordinationDto(0, Collections.emptyList());
-
-        String coordinationDtoJson = objectMapper.writeValueAsString(coordinationDto);
-        try {
-            mockMvc.perform(post("/orders")
-                    .contentType(APPLICATION_JSON.toString())
-                    .content(coordinationDtoJson));
-        } catch (NestedServletException e) {
-            throw e.getCause();
-        }
-        fail();
     }
 }
