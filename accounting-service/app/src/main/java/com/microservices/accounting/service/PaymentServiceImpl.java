@@ -67,7 +67,7 @@ public class PaymentServiceImpl implements PaymentService {
                     throw new IllegalStateException("Payment reversion cannot be processed now. Try later");
                 }
             default:
-                throw new AssertionError("Unknown payment status");
+                throw new IllegalArgumentException("Unknown payment status");
         }
     }
 

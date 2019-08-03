@@ -29,7 +29,7 @@ public class AccountingServiceController {
         return paymentService.invokePayment(invokePaymentDto);
     }
 
-    @PutMapping("/revert/{paymentId}")
+    @PutMapping("/cancel/{paymentId}")
     public PaymentDetailsDto revertPayment(@PathVariable int paymentId) {
         return paymentService.revertPayment(paymentId);
     }
