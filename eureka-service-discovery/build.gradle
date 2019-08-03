@@ -1,0 +1,51 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'java'
+    id 'com.bmuschko.docker-remote-api' version '4.10.0'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.microservices'
+version = applicationVersion
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "Greenwich.SR2")
+}
+
+dependencies {
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+task copyJar(type: Copy) {
+    from file("$buildDir/libs")
+    into file("$buildDir/docker")
+}
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task createDockerfile(type: Dockerfile) {
+    destFile = file("${buildDir}/docker/Dockerfile")
+    from 'openjdk:8-jre-alpine'
+    copyFile "${rootProject.name}-${applicationVersion}.jar", "/${rootProject.name}-${applicationVersion}.jar"
+    exposePort 8761
+    defaultCommand 'java', '-jar', "${rootProject.name}-${applicationVersion}.jar"
+}
+
+task buildImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+    inputDir = file("${buildDir}/docker")
+    tags.add('eureka-server')
+}

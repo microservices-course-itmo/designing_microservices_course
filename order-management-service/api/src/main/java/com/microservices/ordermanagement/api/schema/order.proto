@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.microservices.ordermanagement.api.events";
+option java_outer_classname = "OrderWrapper";
+
+import "order_detail.proto";
+
+message Order {
+    int32 orderId = 1;
+    repeated OrderDetail details = 4;
+}

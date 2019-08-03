@@ -1,18 +1,24 @@
-package com.microservices.ordermanagement.app.dto;
+package com.microservices.ordermanagement.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @ToString
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class AddDetailDto {
+public class AssignTariffDto {
     @NotNull
-    private Integer pendingDetailId;
-    private Integer orderId; // if exists
+    private Integer orderId;
+
     @NotNull
-    private Integer userId;
+    private Integer detailId;
+
+    @NotNull
+    @Valid
+    private TariffDto tariffDto;
 }
+
