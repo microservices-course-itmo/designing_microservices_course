@@ -1,7 +1,7 @@
 package com.microservices.taskcoordinator.controllers;
 
-import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderCompletedDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
@@ -47,13 +47,13 @@ public class CoordinatorController {
     }
 
     @PutMapping("/{id}/status/completed")
-    void processCompletedOrder(@Valid @RequestBody OrderProcessedDto orderProcessedDTO,
+    void processCompletedOrder(@Valid @RequestBody OrderCompletedDto orderCompletedDto,
                                @PathVariable int id) {
-        logger.info("Received completed order to process: {}", orderCompletedDTO);
-        if (id != orderProcessedDTO.getOrderId()) {
+        logger.info("Received completed order to process: {}", orderCompletedDto);
+        if (id != orderCompletedDto.getOrderId()) {
             throw new IllegalArgumentException(INCONSISTENT_ID_ERROR_MESSAGE);
         }
-        laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDTO);
+        laundryStateService.updateLaundryStateWithOrderProcessed(orderCompletedDto);
     }
 
     @Autowired

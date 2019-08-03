@@ -5,8 +5,8 @@ import com.microservices.taskcoordinator.dto.LaundryStateDto;
 import com.microservices.taskcoordinator.dto.OrderDetailDto;
 import com.microservices.taskcoordinator.dto.OrderDto;
 import com.microservices.taskcoordinator.dto.inbound.InboundLaundryStateDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderCompletedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
-import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 import com.microservices.taskcoordinator.entity.OrderStatus;
@@ -145,10 +145,10 @@ public class CoordinatorControllerIntegrationTests {
                 INBOUND_LAUNDRY_WAITING_TIME,
                 INBOUND_LAUNDRY_STATE_VERSION);
 
-        OrderProcessedDto orderProcessedDto = new OrderProcessedDto(EXISTING_SUBMITTED_ORDER_ID,
+        OrderCompletedDto orderCompletedDto = new OrderCompletedDto(EXISTING_SUBMITTED_ORDER_ID,
                 inboundLaundryStateDto, DEFAULT_COMPLETION_TIME);
 
-        String orderSubmittedJson = objectMapper.writeValueAsString(orderProcessedDto);
+        String orderSubmittedJson = objectMapper.writeValueAsString(orderCompletedDto);
         mockMvc.perform(put("/orders/" + EXISTING_SUBMITTED_ORDER_ID + "/status/completed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
@@ -180,7 +180,7 @@ public class CoordinatorControllerIntegrationTests {
                 INBOUND_LAUNDRY_WAITING_TIME,
                 INBOUND_LAUNDRY_STATE_VERSION);
 
-        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(
+        OrderCompletedDto orderCompletedDto = new OrderCompletedDto(
                 EXISTING_RESERVED_ORDER_ID,
                 inboundLaundryStateDto,
                 DEFAULT_COMPLETION_TIME);
@@ -188,7 +188,7 @@ public class CoordinatorControllerIntegrationTests {
         LaundryStateDto initialLaundryState = laundryStateService.getLaundryStateById(EXISTING_LAUNDRY_ID);
         OrderDto initialOrder = orderService.getOrderById(EXISTING_RESERVED_ORDER_ID);
 
-        String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
+        String orderSubmittedJson = objectMapper.writeValueAsString(orderCompletedDto);
         try {
             Exception mvcResult = mockMvc.perform(put("/orders/" + EXISTING_RESERVED_ORDER_ID + "/status/completed")
                     .contentType(APPLICATION_JSON.toString())
@@ -216,12 +216,12 @@ public class CoordinatorControllerIntegrationTests {
                 -100L,
                 INBOUND_LAUNDRY_STATE_VERSION);
 
-        OrderProcessedDto orderSubmittedDto = new OrderProcessedDto(
+        OrderCompletedDto orderCompletedDto = new OrderCompletedDto(
                 EXISTING_SUBMITTED_ORDER_ID,
                 inboundLaundryStateDto,
                 DEFAULT_COMPLETION_TIME);
 
-        String orderSubmittedJson = objectMapper.writeValueAsString(orderSubmittedDto);
+        String orderSubmittedJson = objectMapper.writeValueAsString(orderCompletedDto);
         MvcResult mvcResult = mockMvc.perform(put("/orders/666/status/completed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
