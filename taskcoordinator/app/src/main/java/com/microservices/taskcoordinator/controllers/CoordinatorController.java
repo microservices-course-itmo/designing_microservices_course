@@ -31,14 +31,14 @@ public class CoordinatorController {
     private static final String INCONSISTENT_ID_ERROR_MESSAGE = "Order id in path and in DTO must be equal";
 
     @PostMapping
-    OrderSubmissionDto coordinateOrder(@Valid @RequestBody OrderCoordinationDto orderCoordinationDTO) {
+    public OrderSubmissionDto coordinateOrder(@Valid @RequestBody OrderCoordinationDto orderCoordinationDTO) {
         logger.info("Received order-coordination request for orderId = {}", orderCoordinationDTO.getOrderId());
         return orderService.coordinateOrder(orderCoordinationDTO);
     }
 
     @PutMapping("/{id}/status/submitted")
-    void processSubmittedOrder(@Valid @RequestBody OrderSubmittedDto orderSubmittedDTO,
-                               @PathVariable int id) {
+    public void processSubmittedOrder(@Valid @RequestBody OrderSubmittedDto orderSubmittedDTO,
+                                      @PathVariable int id) {
         logger.info("Received submitted order to process: {}", orderSubmittedDTO);
         if (id != orderSubmittedDTO.getOrderId()) {
             throw new IllegalArgumentException(INCONSISTENT_ID_ERROR_MESSAGE);
@@ -47,8 +47,8 @@ public class CoordinatorController {
     }
 
     @PutMapping("/{id}/status/completed")
-    void processCompletedOrder(@Valid @RequestBody OrderCompletedDto orderCompletedDto,
-                               @PathVariable int id) {
+    public void processCompletedOrder(@Valid @RequestBody OrderCompletedDto orderCompletedDto,
+                                      @PathVariable int id) {
         logger.info("Received completed order to process: {}", orderCompletedDto);
         if (id != orderCompletedDto.getOrderId()) {
             throw new IllegalArgumentException(INCONSISTENT_ID_ERROR_MESSAGE);
