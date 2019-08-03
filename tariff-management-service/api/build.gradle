@@ -1,13 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'maven-publish'
-
 
 group 'com.microservices.tariffmanagement.api'
 version = apiVersion
