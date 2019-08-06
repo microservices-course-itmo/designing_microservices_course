@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_details")
-class OrderDetailEntity {
+public class OrderDetailEntity {
     @Id
     int id;
 
