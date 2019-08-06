@@ -82,7 +82,7 @@ public class OrderManagementEventPublishingServiceImpl implements OrderManagemen
 
     /**
      * Result map contains headers (trace id, span id and so on) which will be propagated
-     * in deserializer in order for receiving side to be able to attach further actions to current trace TODO sukhoa rewrite doc
+     * in message in order for receiving side to be able to attach further actions to current trace TODO sukhoa rewrite doc
      */
     private Map<String, String> createTracingPropertiesToDistribute(Span span) {
         Map<String, String> tracingInformation = new HashMap<>();
