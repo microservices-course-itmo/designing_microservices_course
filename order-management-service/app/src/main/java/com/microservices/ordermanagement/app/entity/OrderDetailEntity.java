@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_details")
-public class OrderDetailEntity {
+class OrderDetailEntity {
     @Id
     int id;
 
@@ -44,5 +44,11 @@ public class OrderDetailEntity {
         this.setTariffId(Objects.requireNonNull(tariffDto.getId()));
         this.setPrice(Objects.requireNonNull(tariffDto.getPrice()));
         this.setDuration(Objects.requireNonNull(tariffDto.getDuration()));
+    }
+
+    boolean isTariffAssigned() {
+        return Objects.nonNull(tariffId) &&
+                Objects.nonNull(duration) &&
+                Objects.nonNull(price) && price.compareTo(BigDecimal.ZERO) > 0;
     }
 }

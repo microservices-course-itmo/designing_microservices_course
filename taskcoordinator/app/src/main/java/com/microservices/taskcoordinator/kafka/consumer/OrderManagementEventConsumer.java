@@ -3,6 +3,7 @@ package com.microservices.taskcoordinator.kafka.consumer;
 import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
+import brave.propagation.CurrentTraceContext;
 import brave.propagation.TraceContext;
 import com.microservices.ordermanagement.api.events.OrderCreatedEventWrapper.OrderCreatedEvent;
 import com.microservices.ordermanagement.api.events.OrderManagementEventWrapper.OrderManagementEvent;
@@ -39,41 +40,49 @@ public class OrderManagementEventConsumer {
             autoStartup = "${kafka.activateConsumers}")
     public void listen(OrderManagementEvent orderManagementEvent) {
 
-        switch (orderManagementEvent.getPayloadCase()) {
-            case ORDERCREATEDEVENT: {
-                OrderCreatedEvent orderCreatedEvent = orderManagementEvent.getOrderCreatedEvent();
-                logger.info("Received OrderCreatedEvent " + orderCreatedEvent);
-                Span consumerSpan = createConsumerSideSpanFromMessage(orderManagementEvent)
-                        .name("consume_order_processed_event");
-                consumerSpan.start();
+        try (CurrentTraceContext.Scope scope = initNewScopeFromExtractedTraceInfo(orderManagementEvent)) {
+            Span consumerSpan = tracer.nextSpan()
+                    .kind(CONSUMER)
+                    .start();
 
-                // here deserializer processing
-                orderService.coordinateOrder(new OrderCoordinationDto(orderCreatedEvent));
+            switch (orderManagementEvent.getPayloadCase()) {
+                case ORDERCREATEDEVENT: {
+                    OrderCreatedEvent orderCreatedEvent = orderManagementEvent.getOrderCreatedEvent();
 
-                consumerSpan.finish();
-                break;
+                    consumerSpan
+                            .customizer()
+                            .name("consume_order_created_event");
+
+                    logger.info("Received OrderCreatedEvent " + orderCreatedEvent);
+                    orderService.coordinateOrder(new OrderCoordinationDto(orderCreatedEvent));
+                    break;
+                }
+                default: {
+                    // TODO Vlad : report this event to metric registry
+                    logger.info("Received unsupported event type: {}", orderManagementEvent.getPayloadCase());
+                }
             }
-            default: {
-                // TODO Vlad : report this event to metric registry
-                logger.info("Received unsupported event type: {}", orderManagementEvent.getPayloadCase());
-            }
+            consumerSpan.finish();
         }
     }
 
     /**
      * Retrieve tracing headers set by brave such as trace id, span id and use them to
-     * create new consumer side span and bind it to existing trace which was initiated earlier
-     * on producer side.
+     * propagate tracing context from producer to consumer side.
+     * <p>
+     * I did not find another way how to propagate existing context and place all
+     * subsequent spans under it. Ones we figure out how to do it automatically or
+     * just in more elegant way this code should be replaced
      * <p>
      * This allows Zipkin to visualize the way of request along different services
+     *
+     * @return new scope which should be closed
      */
     // TODO sukhoa: following code is duplicated in all consumers
-    private Span createConsumerSideSpanFromMessage(OrderManagementEvent event) {
+    private CurrentTraceContext.Scope initNewScopeFromExtractedTraceInfo(OrderManagementEvent event) {
         TraceContext.Extractor<Object> extractor = tracing.propagation()
                 .extractor((c, key) -> event.getPropertiesMap().get(key));
-
-        return tracer.nextSpan(extractor.extract(event))
-                .kind(CONSUMER);
+        return tracing.currentTraceContext().newScope(extractor.extract(event).context());
     }
 
     @Autowired

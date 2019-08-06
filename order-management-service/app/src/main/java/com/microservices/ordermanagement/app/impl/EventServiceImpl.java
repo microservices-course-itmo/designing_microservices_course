@@ -43,6 +43,7 @@ public class EventServiceImpl implements EventService {
             }
             event.setEventStatus(EventStatus.IN_QUEUE);
             orderManagementEventRepository.save(event);
+            // TODO sukhoa: log success
         }
     }
 }

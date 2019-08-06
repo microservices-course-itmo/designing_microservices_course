@@ -2,6 +2,7 @@ package com.microservices.ordermanagement.app.entity;
 
 import com.microservices.ordermanagement.api.dto.AssignTariffDto;
 import com.microservices.ordermanagement.api.dto.OrderStatus;
+import com.microservices.ordermanagement.api.dto.PaymentDetailsDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -73,5 +74,26 @@ public class OrderEntity {
                 .map(OrderDetailEntity::getPrice)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    public void checkApproveInvariants(PaymentDetailsDto paymentDetailsDto) {
+        if (this.getStatus() != OrderStatus.PENDING) {
+            throw new IllegalStateException("Order already not in PENDING status and cannot be approved again");
+        }
+
+        if (!this.getDetailEntities().stream()
+                .allMatch(OrderDetailEntity::isTariffAssigned)) {
+            throw new IllegalStateException("Some of the order's details don't contain tariff info");
+        }
+
+        if (!this.getTotalPrice().equals(paymentDetailsDto.getAmount())) {
+            throw new IllegalStateException("Order price: " + this.getTotalPrice() +
+                    " . Doesn't match payment amount: " + paymentDetailsDto.getAmount());
+        }
+
+        if (!this.getUsername().equals(paymentDetailsDto.getUsername())) {
+            throw new IllegalStateException("Order user: " + this.getUsername() +
+                    " . Doesn't match payment principal: " + paymentDetailsDto.getUsername());
+        }
     }
 }

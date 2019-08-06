@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -149,22 +151,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto checkValidAndApprove(int orderId, PaymentDetailsDto paymentDetailsDto) {
+    @NewSpan("order_approval")
+    public OrderDto checkValidAndApprove(@SpanTag("order.id") int orderId,
+                                         @SpanTag("payment.details") PaymentDetailsDto paymentDetailsDto) {
         Objects.requireNonNull(paymentDetailsDto);
 
         logger.info("Attempt approve order id {}, payment details {}", orderId, paymentDetailsDto);
 
         OrderEntity order = this.getOrderById(orderId);
-        if (order.getStatus() != OrderStatus.PENDING) {
-            throw new IllegalStateException("Order already not in PENDING status and cannot be approved again");
-        }
 
-        if (!order.getTotalPrice().equals(paymentDetailsDto.getAmount())) {
-            throw new IllegalStateException("Order price: " + order.getTotalPrice() +
-                    " . Doesn't match payment amount: " + paymentDetailsDto.getAmount());
-        }
-
-        // TODO sukhoa: check username
+        order.checkApproveInvariants(paymentDetailsDto);
 
         order.setStatus(OrderStatus.CREATED);
         OrderEntity savedOrder = orderRepository.save(order);

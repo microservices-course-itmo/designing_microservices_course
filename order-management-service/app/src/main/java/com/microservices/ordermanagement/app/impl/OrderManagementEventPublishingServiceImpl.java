@@ -40,12 +40,6 @@ public class OrderManagementEventPublishingServiceImpl implements OrderManagemen
      */
     private Tracing tracing;
 
-
-    @Autowired
-    public OrderManagementEventPublishingServiceImpl(OrderManagementEventRepository eventRepository) {
-        this.eventRepository = eventRepository;
-    }
-
     @Override
     // should be always performed in current transaction if exists to support transactional messaging pattern
     @Transactional(propagation = Propagation.REQUIRED)
@@ -82,8 +76,8 @@ public class OrderManagementEventPublishingServiceImpl implements OrderManagemen
                 EventType.ORDER_CREATED_EVENT, orderManagementEvent.toByteArray());
 
         eventRepository.save(event);
-        oneWaySend.finish();
 
+        oneWaySend.flush();
     }
 
     /**
@@ -96,5 +90,20 @@ public class OrderManagementEventPublishingServiceImpl implements OrderManagemen
                 .injector((carrier, key, val) -> tracingInformation.put(key, val))
                 .inject(span.context(), tracingInformation);
         return tracingInformation;
+    }
+
+    @Autowired
+    public void setEventRepository(OrderManagementEventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
+    @Autowired
+    public void setTracer(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
+    @Autowired
+    public void setTracing(Tracing tracing) {
+        this.tracing = tracing;
     }
 }

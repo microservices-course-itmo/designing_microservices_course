@@ -9,4 +9,6 @@ message TaskCoordinatorEvent {
     oneof payload {
         OrderSubmissionEvent orderSubmissionEvent = 1;
     }
+
+    map<string, string> properties = 2;
 }
