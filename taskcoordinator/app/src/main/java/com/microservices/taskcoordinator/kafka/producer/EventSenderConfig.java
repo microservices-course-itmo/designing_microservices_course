@@ -31,6 +31,4 @@ public class EventSenderConfig {
     public KafkaTemplate<String, byte[]> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-
-
 }
