@@ -16,12 +16,12 @@ import java.util.stream.StreamSupport;
 
 @Component
 public class LaundryWorkingActivityEmulator {
+    private static final Logger logger = LoggerFactory.getLogger(LaundryWorkingActivityEmulator.class);
 
     private final LaundryStateRepository laundryStateRepository;
 
     private final OrderService orderService;
 
-    private final Logger logger = LoggerFactory.getLogger(LaundryWorkingActivityEmulator.class);
 
     @Autowired
     public LaundryWorkingActivityEmulator(LaundryStateRepository laundryStateRepository, OrderService orderService) {

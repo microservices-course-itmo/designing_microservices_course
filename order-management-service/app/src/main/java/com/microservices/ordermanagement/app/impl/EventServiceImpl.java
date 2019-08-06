@@ -16,9 +16,9 @@ import java.util.Optional;
 @Service
 public class EventServiceImpl implements EventService {
 
-    private OrderManagementEventRepository orderManagementEventRepository;
+    private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
-    private Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
+    private OrderManagementEventRepository orderManagementEventRepository;
 
     private EventSender eventSender;
 

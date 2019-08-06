@@ -19,7 +19,7 @@ import static brave.Span.Kind.CONSUMER;
 
 @Component
 public class OrderManagementEventConsumer {
-    private final Logger logger = LoggerFactory.getLogger(OrderManagementEventConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderManagementEventConsumer.class);
 
     /**
      * Objects from Brave library for accessing current trace, creating spans and so on

@@ -21,7 +21,7 @@ import static brave.Span.Kind.CONSUMER;
 
 @Component
 public class LaundryManagementEventConsumer {
-    private final Logger logger = LoggerFactory.getLogger(LaundryManagementEventConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(LaundryManagementEventConsumer.class);
 
     /**
      * Objects from Brave library for accessing current trace, creating spans and so on

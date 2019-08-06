@@ -20,8 +20,7 @@ import static brave.Span.Kind.CONSUMER;
 @Component
 public class TaskCoordinatorEventConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(TaskCoordinatorEventConsumer.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(TaskCoordinatorEventConsumer.class);
 
     /**
      * Objects from Brave library for accessing current trace, creating spans and so on

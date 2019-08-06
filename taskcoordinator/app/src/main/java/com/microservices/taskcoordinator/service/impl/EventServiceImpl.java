@@ -15,10 +15,9 @@ import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService {
+    private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private final TaskCoordinatorEventRepository taskCoordinatorEventRepository;
-
-    private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private final EventSender eventSender;
 

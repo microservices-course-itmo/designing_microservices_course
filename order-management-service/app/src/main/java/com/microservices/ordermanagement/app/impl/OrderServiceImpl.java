@@ -28,7 +28,7 @@ import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    private final Logger logger = LoggerFactory.getLogger(PendingDetailServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(PendingDetailServiceImpl.class);
 
     private OrderRepository orderRepository;
 
