@@ -1,5 +1,7 @@
 package com.microservices.taskcoordinator.kafka.producer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,6 +14,8 @@ import java.util.concurrent.ExecutionException;
 
 @Component
 public class EventSender {
+
+    private final Logger logger = LoggerFactory.getLogger(EventSender.class);
 
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
 
@@ -29,7 +33,7 @@ public class EventSender {
         try {
             future.get();
         } catch (ExecutionException e) {
-            // TODO Log exception
+            logger.error("Unable to send event", e);
             throw e.getCause();
         }
     }

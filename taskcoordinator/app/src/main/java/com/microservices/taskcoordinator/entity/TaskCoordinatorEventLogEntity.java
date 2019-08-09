@@ -3,6 +3,7 @@ package com.microservices.taskcoordinator.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @Entity
+@ToString
 @Table(name = "taskcoordinator_events")
 public class TaskCoordinatorEventLogEntity {
 
@@ -31,6 +33,7 @@ public class TaskCoordinatorEventLogEntity {
     @Enumerated(value = EnumType.STRING)
     private EventType eventType;
 
+    @ToString.Exclude
     private byte[] message;
 
     public TaskCoordinatorEventLogEntity(EventType eventType, byte[] message) {

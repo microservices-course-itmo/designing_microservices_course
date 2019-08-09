@@ -10,6 +10,8 @@ import com.microservices.taskcoordinator.repository.OrderRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
 import com.microservices.taskcoordinator.service.TaskCoordinatorEventPublishingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.cloud.sleuth.annotation.SpanTag;
@@ -20,6 +22,8 @@ import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private OrderRepository orderRepository;
 
@@ -34,13 +38,15 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity existingOrder = orderRepository.findById(orderDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Order with id = " + orderDTO.getId()+ " was not found"));
-
+        logger.info("Got order to be updated: {}", existingOrder);
         //TODO add formatted exceptions
 
         //nothing else can be updated
         existingOrder.setStatus(orderDTO.getStatus());
         existingOrder.setCompletionTime(orderDTO.getCompletionTime());
         OrderEntity orderSaved = orderRepository.save(existingOrder);
+
+        logger.info("Order has been successfully updated: {}", orderSaved);
 
         return new OrderDto(orderSaved);
     }
@@ -71,8 +77,10 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = new OrderEntity(inboundOrder, leastLoadedLaundry.getId(), estimatedCompletionTime);
         orderEntity.setStatus(OrderStatus.RESERVED);
 
-        orderRepository.save(orderEntity);
+        OrderEntity savedOrder = orderRepository.save(orderEntity);
         laundryStateService.updateLaundryStateWithOrderSubmission(orderEntity.getLaundryId(), orderEntity.getDuration());
+
+        logger.info("New order has been successfully coordinated: {}", savedOrder);
 
         OrderSubmissionDto orderSubmissionDto = new OrderSubmissionDto(orderEntity);
         taskCoordinatorEventPublishingService.buildAndPublishOrderSubmissionEvent(orderSubmissionDto);

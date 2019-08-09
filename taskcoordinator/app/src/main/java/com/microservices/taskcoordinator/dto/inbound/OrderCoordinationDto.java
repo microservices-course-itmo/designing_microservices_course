@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class OrderCoordinationDto {
 
     @NotNull

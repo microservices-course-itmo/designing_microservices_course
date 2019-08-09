@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -17,7 +18,8 @@ import java.util.Objects;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderProcessedDto {
+@ToString
+public class OrderCompletedDto {
 
     @NotNull
     private Integer orderId;
@@ -30,7 +32,7 @@ public class OrderProcessedDto {
     @NotNull
     private Long completionTime;
 
-    public OrderProcessedDto(OrderProcessedEvent orderProcessedEvent) {
+    public OrderCompletedDto(OrderProcessedEvent orderProcessedEvent) {
         Objects.requireNonNull(orderProcessedEvent);
 
         this.orderId = orderProcessedEvent.getOrderId();

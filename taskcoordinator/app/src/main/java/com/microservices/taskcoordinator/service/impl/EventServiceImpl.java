@@ -31,8 +31,11 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public void sendEldestNotSentEvent() {
         Optional<TaskCoordinatorEventLogEntity> eldestNotSentEvent = taskCoordinatorEventRepository.findEldestNotSentEvent();
+
         if (eldestNotSentEvent.isPresent()) {
             TaskCoordinatorEventLogEntity event = eldestNotSentEvent.get();
+            logger.info("Trying to send eldest not sent event with id = {}", event.getId());
+
             try {
                 eventSender.sendMessage(event.getMessage());
             } catch (Throwable t) {
@@ -40,8 +43,11 @@ public class EventServiceImpl implements EventService {
                 logger.info("Failed to send message to Kafka", t);
                 return;
             }
+
             event.setEventStatus(EventStatus.IN_QUEUE);
             taskCoordinatorEventRepository.save(event);
+
+            logger.info("Event with id = {} has been sent and has status = {}", event.getId(), event.getEventStatus());
         }
     }
 }

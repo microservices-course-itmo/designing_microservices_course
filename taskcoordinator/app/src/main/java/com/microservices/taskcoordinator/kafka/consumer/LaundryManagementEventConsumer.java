@@ -8,7 +8,7 @@ import brave.propagation.TraceContext;
 import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;
 import com.microservices.laundrymanagement.api.messages.OrderProcessedEventWrapper.OrderProcessedEvent;
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.dto.inbound.OrderProcessedDto;
+import com.microservices.taskcoordinator.dto.inbound.OrderCompletedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import org.slf4j.Logger;
