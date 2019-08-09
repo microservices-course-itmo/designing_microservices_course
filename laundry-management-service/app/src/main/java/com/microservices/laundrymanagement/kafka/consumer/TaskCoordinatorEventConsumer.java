@@ -56,7 +56,6 @@ public class TaskCoordinatorEventConsumer {
 
                     orderService.submitOrder(new OrderSubmissionDto(orderSubmissionEvent));
 
-                    consumerSpan.finish();
                     break;
                 }
                 default: {
@@ -64,6 +63,8 @@ public class TaskCoordinatorEventConsumer {
                     logger.info("Received unsupported event type: {}", taskCoordinatorEvent.getPayloadCase());
                 }
             }
+
+            consumerSpan.finish();
         }
     }
 

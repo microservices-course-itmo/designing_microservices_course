@@ -51,7 +51,6 @@ public class LaundryManagementEventConsumer {
 
                     // here deserializer processing
 
-                    consumerSpan.finish();
                     break;
                 }
                 case ORDERSUBMITTEDEVENT: {
@@ -63,7 +62,6 @@ public class LaundryManagementEventConsumer {
 
                     // here deserializer processing
 
-                    consumerSpan.finish();
                     break;
                 }
                 default: {
@@ -71,6 +69,7 @@ public class LaundryManagementEventConsumer {
                     logger.info("Received unsupported event type: {}", laundryManagementEvent.getPayloadCase());
                 }
             }
+
             consumerSpan.finish();
         }
     }

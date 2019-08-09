@@ -55,10 +55,9 @@ public class LaundryManagementEventConsumer {
                             .name("consume_order_processed_event");
 
                     //TODO afanay: some kind of validation?
-                    OrderProcessedDto orderProcessedDto = new OrderProcessedDto(orderProcessedEvent);
-                    laundryStateService.updateLaundryStateWithOrderProcessed(orderProcessedDto);
+                    OrderCompletedDto orderCompletedDto = new OrderCompletedDto(orderProcessedEvent);
+                    laundryStateService.updateLaundryStateWithOrderProcessed(orderCompletedDto);
 
-                    consumerSpan.finish();
                     break;
                 }
                 case ORDERSUBMITTEDEVENT: {
@@ -73,7 +72,6 @@ public class LaundryManagementEventConsumer {
                     OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(orderSubmittedEvent);
                     laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
 
-                    consumerSpan.finish();
                     break;
                 }
                 default: {
