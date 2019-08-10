@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LaundryServiceImpl implements LaundryService {
-    private final Logger logger = LoggerFactory.getLogger(LaundryServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(LaundryServiceImpl.class);
 
     private LaundryStateRepository laundryStateRepository;
 

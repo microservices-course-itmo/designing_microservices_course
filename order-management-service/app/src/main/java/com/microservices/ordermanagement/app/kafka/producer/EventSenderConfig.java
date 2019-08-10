@@ -1,4 +1,4 @@
-package com.microservices.taskcoordinator.kafka.producer;
+package com.microservices.ordermanagement.app.kafka.producer;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.ByteArraySerializer;

@@ -51,7 +51,6 @@ public class LaundryEventPublishingServiceImpl implements LaundryEventPublishing
     @Transactional(propagation = Propagation.REQUIRED)
     @NewSpan(name = "publish_order_submitted_event")
     public void buildAndPublishOrderSubmittedEvent(@SpanTag(key = "order.id") int orderId, LaundryStateEntity laundryState) {
-        // TODO sukhoa consider abitily to create custom aspect for this
         Span oneWaySend = tracer.currentSpan() // might return null
                 .kind(PRODUCER)
                 .start();

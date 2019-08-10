@@ -16,9 +16,9 @@ import java.util.Optional;
 @Service
 public class EventServiceImpl implements EventService {
 
-    private final LaundryEventRepository eventRepository;
+    private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
-    private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
+    private final LaundryEventRepository eventRepository;
 
     private final EventSender eventSender;
 

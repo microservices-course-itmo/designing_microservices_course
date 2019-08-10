@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PendingDetailServiceImpl implements PendingDetailService {
-    private final Logger logger = LoggerFactory.getLogger(PendingDetailServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(PendingDetailServiceImpl.class);
 
     private PendingDetailsRepository pendingDetailsRepository;
 

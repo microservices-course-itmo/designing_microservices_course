@@ -1,14 +1,14 @@
-package com.microservices.laundrymanagement.kafka.consumer;
+package com.microservices.taskcoordinator.kafka.consumer;
 
 import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
 import brave.propagation.CurrentTraceContext;
 import brave.propagation.TraceContext;
-import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
-import com.microservices.laundrymanagement.service.OrderService;
-import com.microservices.taskcoordinator.api.messages.OrderSubmissionEventWrapper.OrderSubmissionEvent;
-import com.microservices.taskcoordinator.api.messages.TaskCoordinatorEventWrapper.TaskCoordinatorEvent;
+import com.microservices.ordermanagement.api.events.OrderCreatedEventWrapper.OrderCreatedEvent;
+import com.microservices.ordermanagement.api.events.OrderManagementEventWrapper.OrderManagementEvent;
+import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
+import com.microservices.taskcoordinator.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,8 @@ import org.springframework.stereotype.Component;
 import static brave.Span.Kind.CONSUMER;
 
 @Component
-public class TaskCoordinatorEventConsumer {
-
-    private static final Logger logger = LoggerFactory.getLogger(TaskCoordinatorEventConsumer.class);
+public class OrderManagementEventConsumer {
+    private static final Logger logger = LoggerFactory.getLogger(OrderManagementEventConsumer.class);
 
     /**
      * Objects from Brave library for accessing current trace, creating spans and so on
@@ -35,35 +34,34 @@ public class TaskCoordinatorEventConsumer {
     private OrderService orderService;
 
     @KafkaListener(
-            topics = "${taskcoordinator.topic.name}",
-            groupId = "${taskcoordinator.listener.name}",
-            containerFactory = "taskCoordinatorListenerContainerFactory",
+            topics = "${order.management.topic.name}",
+            groupId = "${order.management.listener.name}",
+            containerFactory = "orderManagementListenerContainerFactory",
             autoStartup = "${kafka.activateConsumers}")
-    public void listen(TaskCoordinatorEvent taskCoordinatorEvent) {
-        try (CurrentTraceContext.Scope scope = initNewScopeFromExtractedTraceInfo(taskCoordinatorEvent)) {
+    public void listen(OrderManagementEvent orderManagementEvent) {
+
+        try (CurrentTraceContext.Scope scope = initNewScopeFromExtractedTraceInfo(orderManagementEvent)) {
             Span consumerSpan = tracer.nextSpan()
                     .kind(CONSUMER)
                     .start();
 
-            switch (taskCoordinatorEvent.getPayloadCase()) {
-                case ORDERSUBMISSIONEVENT: {
-                    OrderSubmissionEvent orderSubmissionEvent = taskCoordinatorEvent.getOrderSubmissionEvent();
-                    logger.info("Received OrderSubmissionEvent " + orderSubmissionEvent);
+            switch (orderManagementEvent.getPayloadCase()) {
+                case ORDERCREATEDEVENT: {
+                    OrderCreatedEvent orderCreatedEvent = orderManagementEvent.getOrderCreatedEvent();
 
                     consumerSpan
                             .customizer()
-                            .name("consume_order_submission_event");
+                            .name("consume_order_created_event");
 
-                    orderService.submitOrder(new OrderSubmissionDto(orderSubmissionEvent));
-
+                    logger.info("Received OrderCreatedEvent " + orderCreatedEvent);
+                    orderService.coordinateOrder(new OrderCoordinationDto(orderCreatedEvent));
                     break;
                 }
                 default: {
-                    //TODO Vlad: add metrics
-                    logger.info("Received unsupported event type: {}", taskCoordinatorEvent.getPayloadCase());
+                    // TODO Vlad : report this event to metric registry
+                    logger.info("Received unsupported event type: {}", orderManagementEvent.getPayloadCase());
                 }
             }
-
             consumerSpan.finish();
         }
     }
@@ -81,15 +79,15 @@ public class TaskCoordinatorEventConsumer {
      * @return new scope which should be closed
      */
     // TODO sukhoa: following code is duplicated in all consumers
-    private CurrentTraceContext.Scope initNewScopeFromExtractedTraceInfo(TaskCoordinatorEvent event) {
+    private CurrentTraceContext.Scope initNewScopeFromExtractedTraceInfo(OrderManagementEvent event) {
         TraceContext.Extractor<Object> extractor = tracing.propagation()
                 .extractor((c, key) -> event.getPropertiesMap().get(key));
         return tracing.currentTraceContext().newScope(extractor.extract(event).context());
     }
 
     @Autowired
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
+    public void setTracer(Tracer tracer) {
+        this.tracer = tracer;
     }
 
     @Autowired
@@ -98,7 +96,7 @@ public class TaskCoordinatorEventConsumer {
     }
 
     @Autowired
-    public void setTracer(Tracer tracer) {
-        this.tracer = tracer;
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }
