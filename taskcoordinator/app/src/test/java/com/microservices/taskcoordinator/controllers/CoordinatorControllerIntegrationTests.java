@@ -123,6 +123,13 @@ public class CoordinatorControllerIntegrationTests {
     }
 
 
+    /**
+     * Checks that in case of submitting DTO with outdated laundry state (earlier version) the laundry state in DB doesn't change
+     * Input: {@link InboundLaundryStateDto} with an earlier version than the current one
+     * Output: laundry state doesn't change
+     *
+     * @throws Exception if object cannot be serialized
+     */
     @Test
     @Sql(scripts = "/test-data/basic.sql")
     @Transactional
@@ -263,7 +270,7 @@ public class CoordinatorControllerIntegrationTests {
                 DEFAULT_COMPLETION_TIME);
 
         String orderSubmittedJson = objectMapper.writeValueAsString(orderCompletedDto);
-        MvcResult mvcResult = mockMvc.perform(put("/orders/666/status/completed")
+        MvcResult mvcResult = mockMvc.perform(put("/orders/" + EXISTING_SUBMITTED_ORDER_ID + "/status/completed")
                 .contentType(APPLICATION_JSON.toString())
                 .content(orderSubmittedJson))
                 .andExpect(status().is4xxClientError())
