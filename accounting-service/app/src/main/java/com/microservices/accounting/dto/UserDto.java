@@ -1,6 +1,5 @@
 package com.microservices.accounting.dto;
 
-import com.microservices.accounting.temporaryclasses.CardInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

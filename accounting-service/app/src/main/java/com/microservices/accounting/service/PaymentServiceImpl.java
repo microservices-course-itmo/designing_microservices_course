@@ -1,11 +1,11 @@
 package com.microservices.accounting.service;
 
+import com.microservices.accounting.dto.CardInfo;
 import com.microservices.accounting.dto.InvokePaymentDto;
 import com.microservices.accounting.dto.PaymentDetailsDto;
 import com.microservices.accounting.dto.PaymentStatus;
 import com.microservices.accounting.entity.PaymentEntity;
 import com.microservices.accounting.repository.PaymentRepository;
-import com.microservices.accounting.temporaryclasses.CardInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
