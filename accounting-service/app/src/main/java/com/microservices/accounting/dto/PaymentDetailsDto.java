@@ -18,7 +18,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 public class PaymentDetailsDto {
-    @NotNull //through that dto will be used by other modules, validation annotations will be processed in them
+    @NotNull //since that dto will be used by other modules, validation annotations will be processed in them
     private Integer paymentId;
 
     @NotNull
