@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -15,6 +16,6 @@ public class AddDetailDto {
 
     private Integer orderId; // if exists
 
-    @NotNull
-    private Integer userId;
+    @NotBlank
+    private String username;
 }

@@ -13,6 +13,8 @@ import com.microservices.taskcoordinator.service.TaskCoordinatorEventPublishingS
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,11 +63,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderSubmissionDto coordinateOrder(OrderCoordinationDto inboundOrder) {
+    @NewSpan(name = "coordinate_order")
+    public OrderSubmissionDto coordinateOrder(@SpanTag("order.coordination.dto") OrderCoordinationDto inboundOrder) {
         Objects.requireNonNull(inboundOrder);
 
         if (orderRepository.existsById(inboundOrder.getOrderId())) {
-            throw new IllegalArgumentException("Order with id " + inboundOrder.getOrderId() + "already exists");
+            throw new IllegalArgumentException("Order with id " + inboundOrder.getOrderId() + " already exists");
         }
 
         LaundryStateDto leastLoadedLaundry = laundryStateService.getLeastLoadedLaundry();

@@ -1,7 +1,7 @@
-package com.microservices.taskcoordinator.kafka.consumer;
+package com.microservices.ordermanagement.app.kafka.consumer;
 
-import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.kafka.deserializer.LaundryManagementEventDeserializer;
+import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;
+import com.microservices.ordermanagement.app.kafka.deserializer.LaundryManagementEventDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +25,7 @@ public class LaundryManagementEventConsumerConfiguration {
     @Value(value = "${laundry.management.listener.name}")
     private String groupId;
 
-    @SuppressWarnings("Duplicates")
-    private ConsumerFactory<String, OrderSubmittedEvent> consumerFactory() {
+    private ConsumerFactory<String, LaundryManagementEvent> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -36,8 +35,8 @@ public class LaundryManagementEventConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderSubmittedEvent> laundryManagementListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, OrderSubmittedEvent> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, LaundryManagementEvent> laundryManagementListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, LaundryManagementEvent> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;

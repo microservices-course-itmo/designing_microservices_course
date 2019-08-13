@@ -1,4 +1,4 @@
-package com.microservices.taskcoordinator.kafka.consumer;
+package com.microservices.ordermanagement.app.kafka.consumer;
 
 import brave.Span;
 import brave.Tracer;
@@ -8,9 +8,6 @@ import brave.propagation.TraceContext;
 import com.microservices.laundrymanagement.api.messages.LaundryManagementEventWrapper.LaundryManagementEvent;
 import com.microservices.laundrymanagement.api.messages.OrderProcessedEventWrapper.OrderProcessedEvent;
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.dto.inbound.OrderCompletedDto;
-import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
-import com.microservices.taskcoordinator.service.LaundryStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +30,6 @@ public class LaundryManagementEventConsumer {
      */
     private Tracing tracing;
 
-    private LaundryStateService laundryStateService;
-
     @KafkaListener(
             topics = "${laundry.management.topic.name}",
             groupId = "${laundry.management.listener.name}",
@@ -54,23 +49,18 @@ public class LaundryManagementEventConsumer {
                             .customizer()
                             .name("consume_order_processed_event");
 
-                    //TODO afanay: some kind of validation?
-                    OrderCompletedDto orderCompletedDto = new OrderCompletedDto(orderProcessedEvent);
-                    laundryStateService.updateLaundryStateWithOrderProcessed(orderCompletedDto);
+                    // here deserializer processing
 
                     break;
                 }
                 case ORDERSUBMITTEDEVENT: {
                     OrderSubmittedEvent orderSubmittedEvent = laundryManagementEvent.getOrderSubmittedEvent();
                     logger.info("Received OrderSubmittedEvent" + orderSubmittedEvent);
-
                     consumerSpan
                             .customizer()
                             .name("consume_order_submitted_event");
 
                     // here deserializer processing
-                    OrderSubmittedDto orderSubmittedDto = new OrderSubmittedDto(orderSubmittedEvent);
-                    laundryStateService.updateLaundryStateWithOrderSubmitted(orderSubmittedDto);
 
                     break;
                 }
@@ -79,9 +69,9 @@ public class LaundryManagementEventConsumer {
                     logger.info("Received unsupported event type: {}", laundryManagementEvent.getPayloadCase());
                 }
             }
+
             consumerSpan.finish();
         }
-
     }
 
     /**
@@ -111,10 +101,5 @@ public class LaundryManagementEventConsumer {
     @Autowired
     public void setTracing(Tracing tracing) {
         this.tracing = tracing;
-    }
-
-    @Autowired
-    public void setLaundryStateService(LaundryStateService laundryStateService) {
-        this.laundryStateService = laundryStateService;
     }
 }

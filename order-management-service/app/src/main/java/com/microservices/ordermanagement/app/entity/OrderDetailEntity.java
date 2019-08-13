@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,6 +27,8 @@ public class OrderDetailEntity {
 
     private Integer tariffId;
 
+    private Long duration;
+
     @NotNull
     private BigDecimal price = BigDecimal.ZERO;
 
@@ -36,7 +39,16 @@ public class OrderDetailEntity {
     }
 
     void addTariffInformation(TariffDto tariffDto) {
-        this.setTariffId(tariffDto.getId());
-        this.setPrice(tariffDto.getPrice());
+        Objects.requireNonNull(tariffDto);
+
+        this.setTariffId(Objects.requireNonNull(tariffDto.getId()));
+        this.setPrice(Objects.requireNonNull(tariffDto.getPrice()));
+        this.setDuration(Objects.requireNonNull(tariffDto.getDuration()));
+    }
+
+    boolean isTariffAssigned() {
+        return Objects.nonNull(tariffId) &&
+                Objects.nonNull(duration) &&
+                Objects.nonNull(price) && price.compareTo(BigDecimal.ZERO) > 0;
     }
 }

@@ -15,7 +15,9 @@ import java.util.Objects;
 
 @Service
 public class TariffServiceImpl implements TariffService {
-    private final Logger logger = LoggerFactory.getLogger(TariffServiceImpl.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(TariffServiceImpl.class);
+
     private TariffRepository tariffRepository;
 
     @Autowired
