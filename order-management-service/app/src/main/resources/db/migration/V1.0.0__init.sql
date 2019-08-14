@@ -6,13 +6,14 @@ CREATE TABLE order_management.order_details
     order_id  INT NOT NULL,
     weight    INT NOT NULL,
     tariff_id INT,
+    duration  BIGINT,
     price     NUMERIC(6, 2)
 );
 
 CREATE TABLE order_management.orders
 (
-    id             SERIAL NOT NULL PRIMARY KEY,
-    user_id        INT    NOT NULL,
+    id             SERIAL      NOT NULL PRIMARY KEY,
+    username       VARCHAR(20) NOT NULL,
     created_time   BIGINT,
     estimated_time BIGINT,
     status         VARCHAR(20),

@@ -37,6 +37,7 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 task createDockerfile(type: Dockerfile) {
+    dependsOn copyJar
     destFile = file("${buildDir}/docker/Dockerfile")
     from 'openjdk:8-jre-alpine'
     copyFile "${rootProject.name}-${applicationVersion}.jar", "/${rootProject.name}-${applicationVersion}.jar"

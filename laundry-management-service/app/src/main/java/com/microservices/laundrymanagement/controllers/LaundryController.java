@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("laundries")
 public class LaundryController {
-    private final Logger logger = LoggerFactory.getLogger(LaundryController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LaundryController.class);
 
     private LaundryService laundryService;
 

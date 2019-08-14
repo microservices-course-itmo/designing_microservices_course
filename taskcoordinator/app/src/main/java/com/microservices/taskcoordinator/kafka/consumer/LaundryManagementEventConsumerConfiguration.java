@@ -1,7 +1,7 @@
 package com.microservices.taskcoordinator.kafka.consumer;
 
 import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapper.OrderSubmittedEvent;
-import com.microservices.taskcoordinator.kafka.message.LaundryManagementEventDeserializer;
+import com.microservices.taskcoordinator.kafka.deserializer.LaundryManagementEventDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

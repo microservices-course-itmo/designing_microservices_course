@@ -16,4 +16,7 @@ public class TariffDto {
 
     @NotNull
     BigDecimal price;
+
+    @NotNull
+    Long duration;
 }
