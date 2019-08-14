@@ -54,7 +54,12 @@ via java client wrapper.
 
 TODO sukhoa: refactor following
 ### Used frameworks and libs
-1. Swagger
+1. [Swagger UI](https://swagger.io/tools/swagger-ui/) - an open source project for RESTful services. Swagger automatically generates documentation and HTML for interacting with REST endpoints through UI. For projects with enabled Swagger (have `@EnableSwagger2` annotation in the main class): 
+    * Swagger configuration in json format: http://{host}:{port}/v2/api-docs
+    * Swagger UI: http://{host}:{port}/swagger-ui.html 
+    
+    {host} is localhost by default.
+    {port} is configured with `server.port` property
 1. Feign
 1. Eureka Discovery service. [Setting up discovery service](eureka-service-discovery/README.md)
 1. Kafka [Setting up kafka](kafka/README.md)
