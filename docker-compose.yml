@@ -21,3 +21,8 @@ services:
     image: eureka-server
     ports:
       - "8761:8761"
+  postgres:
+    build: ./postgres
+    ports:
+      - "5432:5432"
+
