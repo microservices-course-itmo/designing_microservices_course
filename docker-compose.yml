@@ -21,6 +21,10 @@ services:
     image: eureka-server
     ports:
       - "8761:8761"
+  user-management:
+    image: user-server
+    ports:
+      - "8094:8094"
   postgres:
     build: ./postgres
     ports:
