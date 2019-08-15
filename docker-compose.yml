@@ -21,10 +21,22 @@ services:
     image: accounting-server
     ports:
       - "8093:8093"
+  laundry-management:
+    image: laundry-server
+    ports:
+      - "8089:8089"
   eureka:
     image: eureka-server
     ports:
       - "8761:8761"
+  tariff-management:
+    image: tariff-server
+    ports:
+      - "8092:8092"
+  taskcoordinator:
+    image: taskcoordinator-server
+    ports:
+      - "8095:8095"
   user-management:
     image: user-server
     ports:
