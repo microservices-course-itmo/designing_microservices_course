@@ -29,6 +29,10 @@ services:
     image: eureka-server
     ports:
       - "8761:8761"
+  order-management:
+    image: order-server
+    ports:
+      - "8091:8091"
   tariff-management:
     image: tariff-server
     ports:
