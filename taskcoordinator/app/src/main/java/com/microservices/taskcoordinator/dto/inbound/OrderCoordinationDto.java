@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
