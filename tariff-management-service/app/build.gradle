@@ -13,7 +13,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'tariffmanagement-app'
+    baseName = 'tariff-management-service-app'
     version = applicationVersion
     enabled = true
 }
