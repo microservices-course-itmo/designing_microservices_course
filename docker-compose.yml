@@ -17,36 +17,11 @@ services:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
-  accounting:
-    image: accounting-server
-    ports:
-      - "8093:8093"
-  laundry-management:
-    image: laundry-server
-    ports:
-      - "8089:8089"
   eureka:
     image: eureka-server
     ports:
       - "8761:8761"
-  order-management:
-    image: order-server
-    ports:
-      - "8091:8091"
-  tariff-management:
-    image: tariff-server
-    ports:
-      - "8092:8092"
-  taskcoordinator:
-    image: taskcoordinator-server
-    ports:
-      - "8095:8095"
-  user-management:
-    image: user-server
-    ports:
-      - "8094:8094"
   postgres:
     build: ./postgres
     ports:
       - "5432:5432"
-
