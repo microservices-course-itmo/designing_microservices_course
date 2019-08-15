@@ -13,7 +13,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'accountingservice-app'
+    baseName = 'accounting-service-app'
     version = applicationVersion
     enabled = true
 }
