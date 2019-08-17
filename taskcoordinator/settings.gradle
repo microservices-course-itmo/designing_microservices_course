@@ -1,5 +1,5 @@
 rootProject.name = 'task-coordinator-service'
-include 'app'
-include 'api'
+include 'taskcoordinator-app'
+include 'taskcoordinator-api'
 
 

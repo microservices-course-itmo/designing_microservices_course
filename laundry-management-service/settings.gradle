@@ -1,4 +1,4 @@
 rootProject.name = 'laundry-management-service'
-include 'app'
-include 'api'
+include 'laundrymanagement-app'
+include 'laundrymanagement-api'
 

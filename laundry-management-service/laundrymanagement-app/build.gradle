@@ -1,9 +1,10 @@
 buildscript {
+    // these repositories and dependencies are used by Gradle itself
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE'
     }
 }
 
@@ -13,13 +14,14 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'taskcoordinator-app'
+    baseName = 'laundry-management-service-app'
     version = applicationVersion
     enabled = true
 }
 
 sourceCompatibility = 1.8
 
+// these repositories are used in project
 repositories {
     mavenCentral()
     mavenLocal()
@@ -31,13 +33,13 @@ dependencyManagement {
     }
 }
 
+// these dependencies are used in project
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'com.microservices.laundrymanagement.api:api:0.1-SNAPSHOT'
-    compile 'com.microservices.ordermanagement.api:api:0.1-SNAPSHOT'
-    compile 'com.microservices.taskcoordinator.api:api:0.1-SNAPSHOT'
+    compile 'com.microservices.laundrymanagement:laundrymanagement-api:0.1-SNAPSHOT'
+    compile 'com.microservices.taskcoordinator:taskcoordinator-api:0.1-SNAPSHOT'
     compile 'org.springframework.kafka:spring-kafka'
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'
@@ -46,6 +48,5 @@ dependencies {
     runtime 'org.postgresql:postgresql:42.2.5'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'junit:junit:4.12'
 }
