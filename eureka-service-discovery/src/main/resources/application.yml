@@ -1,7 +1,9 @@
 server:
   port: 8761
 
+#Eureka properties
 eureka:
+  #Eureka setting for other service run outside the docker-container
   instance:
     hostname: localhost
   client:
@@ -9,3 +11,12 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+
+#Eureka setting for other service run inside the docker-container
+---
+spring:
+  profiles: docker
+eureka:
+  instance:
+    hostname: eureka
