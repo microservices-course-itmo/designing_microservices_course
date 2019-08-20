@@ -19,7 +19,7 @@ import java.util.List;
  * the name of the service the request should be redirected to.
  */
 @Primary
-@FeignClient(name = "tariff-management-service/tariffs")
+@FeignClient(name = "${tariff.management.service.name}/tariffs")
 public interface TariffServiceClient extends TariffServiceApi {
 
     /**
