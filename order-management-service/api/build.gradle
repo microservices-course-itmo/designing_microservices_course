@@ -1,7 +1,16 @@
-plugins {
-    id 'java'
-    id 'com.google.protobuf' version '0.8.8'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
+        classpath("com.google.protobuf:protobuf-gradle-plugin:0.8.8")
+    }
 }
+
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
+apply plugin: 'io.spring.dependency-management'
 
 repositories {
     mavenCentral()
@@ -14,6 +23,7 @@ dependencies {
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'javax.validation:validation-api:2.0.0.Final'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.9'
+    compile 'org.springframework.cloud:spring-cloud-openfeign-core'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
 }
@@ -31,6 +41,12 @@ sourceSets {
             srcDir "$projectDir/src/main/java/com/microservices/ordermanagement/api/schema"
             include '**/*.proto'
         }
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${releaseTrainVersion}"
     }
 }
 
