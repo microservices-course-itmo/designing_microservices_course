@@ -18,7 +18,6 @@ import java.util.List;
  * for Ribbon load balancing client and Eureka discovery service to understand
  * the name of the service the request should be redirected to.
  */
-@Primary
 @FeignClient(name = "${tariff.management.service.name}/tariffs")
 public interface TariffServiceClient extends TariffServiceApi {
 
