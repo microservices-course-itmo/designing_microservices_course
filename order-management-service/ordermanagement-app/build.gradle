@@ -35,8 +35,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
-    compile 'com.microservices.ordermanagement:ordermanagement-api:0.1-SNAPSHOT'
-    compile 'com.microservices.laundrymanagement:laundrymanagement-api:0.1-SNAPSHOT'
+    compile "com.microservices.ordermanagement:ordermanagement-api:${applicationVersion}"
+    compile "com.microservices.laundrymanagement:laundrymanagement-api:${applicationVersion}"
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'    
     compile 'org.springframework.kafka:spring-kafka'
