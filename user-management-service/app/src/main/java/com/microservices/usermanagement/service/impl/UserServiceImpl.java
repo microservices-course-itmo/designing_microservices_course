@@ -1,7 +1,7 @@
 package com.microservices.usermanagement.service.impl;
 
+import com.microservices.usermanagement.api.dto.UserDto;
 import com.microservices.usermanagement.dto.CreateUserDto;
-import com.microservices.usermanagement.dto.UserDto;
 import com.microservices.usermanagement.entity.UserEntity;
 import com.microservices.usermanagement.repository.UserRepository;
 import com.microservices.usermanagement.service.UserService;
@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByLogin(String login) {
         Objects.requireNonNull(login);
         logger.info("Find user with login: {}", login);
-        return new UserDto(userRepository.findByLogin(login)
-                .orElseThrow(() -> new IllegalArgumentException("There is no such user in database for login: " + login)));
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("There is no such user in database for login: " + login)).toUserDto();
     }
 
     @Override
@@ -39,6 +39,6 @@ public class UserServiceImpl implements UserService {
         logger.info("Creating user: {} ", createUserDto);
         UserEntity createdUser = userRepository.save(new UserEntity(createUserDto));
         logger.info("Created new user: {}", createdUser);
-        return new UserDto(createdUser);
+        return createdUser.toUserDto();
     }
 }
