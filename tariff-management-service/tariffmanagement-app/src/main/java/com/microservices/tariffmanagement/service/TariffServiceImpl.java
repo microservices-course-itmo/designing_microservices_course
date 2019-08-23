@@ -1,7 +1,7 @@
 package com.microservices.tariffmanagement.service;
 
+import com.microservices.tariffmanagement.api.dto.TariffDto;
 import com.microservices.tariffmanagement.dto.CreationTariffDto;
-import com.microservices.tariffmanagement.dto.TariffDto;
 import com.microservices.tariffmanagement.entity.TariffEntity;
 import com.microservices.tariffmanagement.repository.TariffRepository;
 import org.slf4j.Logger;
@@ -30,8 +30,8 @@ public class TariffServiceImpl implements TariffService {
         Objects.requireNonNull(tariff);
 
         logger.info("Creating tariff: {}...", tariff);
-        TariffEntity tariffEntity = new TariffEntity(tariff);
-        TariffDto createdTariff = new TariffDto(tariffRepository.save(tariffEntity));
+        TariffEntity savedTariff = tariffRepository.save(new TariffEntity(tariff));
+        TariffDto createdTariff = savedTariff.toTariffDto();
         logger.info("Created new tariff: {}", createdTariff);
         return createdTariff;
     }
@@ -40,7 +40,7 @@ public class TariffServiceImpl implements TariffService {
     public List<TariffDto> getAllTariffs() {
         List<TariffDto> allTariffs = new ArrayList<>();
         tariffRepository.findAll().forEach(tariffEntity ->
-                allTariffs.add(new TariffDto(tariffEntity)));
+                allTariffs.add(tariffEntity.toTariffDto()));
         return allTariffs;
     }
 
@@ -49,6 +49,6 @@ public class TariffServiceImpl implements TariffService {
         TariffEntity tariffEntity = tariffRepository.findById(tariffId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("No tariff with id " + tariffId + " found"));
-        return new TariffDto(tariffEntity);
+        return tariffEntity.toTariffDto();
     }
 }

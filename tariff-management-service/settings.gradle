@@ -1,3 +1,4 @@
 rootProject.name = 'tariff-management-service'
 include 'tariffmanagement-app'
+include 'tariffmanagement-api'
 
