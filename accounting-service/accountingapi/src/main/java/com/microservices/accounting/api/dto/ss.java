@@ -1,4 +1,5 @@
-//package com.microservices.accounting.dto;
+//package com.microservices.accounting.api.dto;
+//
 //
 //import lombok.Getter;
 //import lombok.Setter;

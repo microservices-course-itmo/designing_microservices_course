@@ -1,3 +1,4 @@
 rootProject.name = 'accounting-service'
 include 'app'
+include 'accountingapi'
 

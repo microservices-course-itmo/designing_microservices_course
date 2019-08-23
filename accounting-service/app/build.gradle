@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.microservices.accounting.api:accountingapi:0.1-SNAPSHOT'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.flywaydb:flyway-core:5.2.4'
