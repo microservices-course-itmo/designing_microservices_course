@@ -8,8 +8,17 @@ services:
     build: ./kafka
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      #Comma-separated list of listeners, and the host/ip and port to which Kafka binds to on which to listen
+      KAFKA_LISTENERS: LISTENER_IN_DOCKER://kafka:29092, LISTENER_OUT_DOCKER://kafka:9092
+      #This is the metadata that’s passed back to clients
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_IN_DOCKER://kafka:29092, LISTENER_OUT_DOCKER://localhost:9092
+      #For the security protocol to use, per listener name.
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_IN_DOCKER:PLAINTEXT, LISTENER_OUT_DOCKER:PLAINTEXT
+      #To define which listener to use, specify KAFKA_INTER_BROKER_LISTENER_NAME.
+      #The host/IP used must be accessible from the broker machine to others.
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_IN_DOCKER
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -25,4 +34,3 @@ services:
     build: ./postgres
     ports:
       - "5432:5432"
-

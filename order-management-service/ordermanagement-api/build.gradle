@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.8.8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.microservices.ordermanagement'
+version = apiVersion
+
+jar {
+    archiveBaseName = "ordermanagement-api"
+}
+
+dependencies {
+    compile 'com.google.protobuf:protobuf-java:3.8.0'
+    compile 'javax.validation:validation-api:2.0.0.Final'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.9'
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+}
+
+protobuf {
+    generatedFilesBaseDir = "$projectDir/src"
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.8.0'
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir "$projectDir/src/main/java/com/microservices/ordermanagement/api/schema"
+            include '**/*.proto'
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
+    }
+}

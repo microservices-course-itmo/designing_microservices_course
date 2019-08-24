@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.8.8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.microservices.laundrymanagement'
+version = apiVersion
+
+jar {
+    archiveBaseName = "laundrymanagement-api"
+}
+
+dependencies {
+    compile 'com.google.protobuf:protobuf-java:3.8.0'
+}
+
+protobuf {
+    generatedFilesBaseDir = "$projectDir/src"
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.8.0'
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir "$projectDir/src/main/java/com/microservices/laundrymanagement/api/schema"
+            include '**/*.proto'
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
+    }
+}

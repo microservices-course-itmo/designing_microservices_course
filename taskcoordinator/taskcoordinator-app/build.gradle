@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+bootJar {
+    baseName = 'taskcoordinator-app'
+    version = applicationVersion
+    enabled = true
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${releaseTrainVersion}"
+    }
+}
+
+dependencies {
+    compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile "com.microservices.taskcoordinator:taskcoordinator-api:${applicationVersion}"
+    compile "com.microservices.laundrymanagement:laundrymanagement-api:${applicationVersion}"
+    compile "com.microservices.ordermanagement:ordermanagement-api:${applicationVersion}"
+    compile 'org.springframework.kafka:spring-kafka'
+    compile 'com.google.protobuf:protobuf-java:3.8.0'
+    compile 'org.flywaydb:flyway-core:5.2.4'
+    compile 'io.springfox:springfox-swagger2:2.8.0'
+    compile 'io.springfox:springfox-swagger-ui:2.8.0'
+    runtime 'org.postgresql:postgresql:42.2.5'
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'junit:junit:4.12'
+}

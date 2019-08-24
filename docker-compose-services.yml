@@ -1,0 +1,26 @@
+version: '3'
+services:
+  accounting:
+    build: ./accounting-service
+    ports:
+      - "8093:8093"
+  laundry-management:
+    build: ./laundry-management-service
+    ports:
+      - "8089:8089"
+  order-management:
+    build: ./order-management-service
+    ports:
+      - "8091:8091"
+  tariff-management:
+    build: ./tariff-management-service
+    ports:
+      - "8092:8092"
+  taskcoordinator:
+    build: ./taskcoordinator
+    ports:
+      - "8095:8095"
+  user-management:
+    build: ./user-management-service
+    ports:
+      - "8094:8094"
