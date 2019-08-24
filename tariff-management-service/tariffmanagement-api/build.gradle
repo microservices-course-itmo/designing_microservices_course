@@ -12,7 +12,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 
-group 'com.microservices.tariffmanagement.api'
+group 'com.microservices.tariffmanagement'
 version = apiVersion
 
 repositories {
