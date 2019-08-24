@@ -3,7 +3,6 @@ package com.microservices.tariffmanagement.api.feign;
 import com.microservices.tariffmanagement.api.dto.TariffDto;
 import com.microservices.tariffmanagement.api.service.TariffServiceApi;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
