@@ -9,7 +9,11 @@ eureka:
 
 zuul:
   routes:
-    users:
+    orders:
       path: /order/**
       serviceId: order-management-service
       strip-prefix: false
+    tariffs:
+        path: /tariffs/**
+        serviceId: tariff-management-service
+        strip-prefix: false
