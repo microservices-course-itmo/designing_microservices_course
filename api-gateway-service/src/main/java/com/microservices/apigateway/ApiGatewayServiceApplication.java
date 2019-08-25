@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-
 /**
  * Entry point for API Gateway application
  * <p>
