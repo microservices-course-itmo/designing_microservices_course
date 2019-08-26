@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.microservices.usermanagement.api:usermanagementapi:$userManagementApiVersion"
+    compile "com.microservices.usermanagement.api:usermanagementapi:${userManagementApiVersion}"
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.flywaydb:flyway-core:5.2.4'
