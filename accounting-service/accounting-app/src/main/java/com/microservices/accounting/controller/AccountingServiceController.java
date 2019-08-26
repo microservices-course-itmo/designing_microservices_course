@@ -1,7 +1,7 @@
 package com.microservices.accounting.controller;
 
-import com.microservices.accounting.dto.InvokePaymentDto;
-import com.microservices.accounting.dto.PaymentDetailsDto;
+import com.microservices.accounting.api.dto.InvokePaymentDto;
+import com.microservices.accounting.api.dto.PaymentDetailsDto;
 import com.microservices.accounting.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
