@@ -1,4 +1,4 @@
-package com.microservices.usermanagement.entity;
+package com.microservices.accounting.api.dto;
 
 public enum CardInfo {
     VALID,

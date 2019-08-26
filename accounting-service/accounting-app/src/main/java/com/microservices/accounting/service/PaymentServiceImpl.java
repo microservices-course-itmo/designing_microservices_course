@@ -1,9 +1,9 @@
 package com.microservices.accounting.service;
 
-import com.microservices.accounting.dto.CardInfo;
-import com.microservices.accounting.dto.InvokePaymentDto;
-import com.microservices.accounting.dto.PaymentDetailsDto;
-import com.microservices.accounting.dto.PaymentStatus;
+import com.microservices.accounting.api.dto.CardInfo;
+import com.microservices.accounting.api.dto.InvokePaymentDto;
+import com.microservices.accounting.api.dto.PaymentDetailsDto;
+import com.microservices.accounting.api.dto.PaymentStatus;
 import com.microservices.accounting.entity.PaymentEntity;
 import com.microservices.accounting.repository.PaymentRepository;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentEntity savedPayment = paymentRepository.save(new PaymentEntity(invokePaymentDto, paymentStatus));
         logger.info("Payment completed: {}", savedPayment);
-        return new PaymentDetailsDto(savedPayment);
+        return savedPayment.toPaymentDetailsDto();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PaymentServiceImpl implements PaymentService {
         switch (paymentToRevert.getPaymentStatus()) {
             case REVERTED:
                 logger.info("Payment with id {} is already reverted", paymentToRevert.getPaymentId());
-                return new PaymentDetailsDto(paymentToRevert);
+                return paymentToRevert.toPaymentDetailsDto();
             case DENIED:
                 logger.error("Payment with id {} cannot be reverted. Has a denied status", paymentToRevert.getPaymentId());
                 throw new IllegalArgumentException("Denied payment cannot be reverted");
@@ -61,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
                     paymentToRevert.setPaymentStatus(PaymentStatus.REVERTED);
                     PaymentEntity updatedPaymentEntity = paymentRepository.save(paymentToRevert);
                     logger.info("Payment with id {} is reverted");
-                    return new PaymentDetailsDto(updatedPaymentEntity);
+                    return updatedPaymentEntity.toPaymentDetailsDto();
                 } else {
                     logger.error("Payment reversion cannot be processed");
                     throw new IllegalStateException("Payment reversion cannot be processed now. Try later");

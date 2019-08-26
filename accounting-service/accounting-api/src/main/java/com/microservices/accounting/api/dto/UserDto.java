@@ -1,19 +1,19 @@
-package com.microservices.usermanagement.dto;
+package com.microservices.accounting.api.dto;
 
-import com.microservices.usermanagement.api.dto.CardInfo;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @ToString
-public class CreateUserDto {
+@NoArgsConstructor
+public class UserDto {
 
-    @NotBlank
+    @NotNull
     private String login;
 
     @NotNull

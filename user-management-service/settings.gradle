@@ -1,3 +1,4 @@
 rootProject.name = 'user-management-service'
 include 'usermanagement-app'
+include 'usermanagement-api'
 
