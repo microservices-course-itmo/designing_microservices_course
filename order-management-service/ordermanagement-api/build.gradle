@@ -21,6 +21,7 @@ version = apiVersion
 
 jar {
     archiveBaseName = "ordermanagement-api"
+    from sourceSets.main.allSource
 }
 
 dependencies {

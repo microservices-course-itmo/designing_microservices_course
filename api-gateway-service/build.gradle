@@ -34,11 +34,14 @@ dependencyManagement {
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
+    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile "com.microservices.laundrymanagement:laundrymanagement-api:${laundryManagementApiVersion}"
-    compile "com.microservices.ordermanagement:ordermanagement-api:${orderManagementApiVersion}"
+    compile "com.microservices.ordermanagement.api:ordermanagement-api:${orderManagementApiVersion}"
     compile "com.microservices.taskcoordinator:taskcoordinator-api:${taskcoordinatorApiVersion}"
+    compile "com.microservices.tariffmanagement:tariffmanagement-api:${tariffManagementApiVersion}"
     compile 'org.springframework.kafka:spring-kafka'
+    compile 'org.modelmapper:modelmapper:2.3.0'
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'io.springfox:springfox-swagger2:2.8.0'
     compile 'io.springfox:springfox-swagger-ui:2.8.0'

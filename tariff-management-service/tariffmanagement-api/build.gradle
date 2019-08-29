@@ -15,6 +15,11 @@ apply plugin: 'io.spring.dependency-management'
 group 'com.microservices.tariffmanagement'
 version = apiVersion
 
+jar {
+    archiveBaseName = "tariffmanagement-api"
+    from sourceSets.main.allSource
+}
+
 repositories {
     mavenLocal()
     mavenCentral()

@@ -43,7 +43,7 @@ public class OrderDetailEntity {
 
         this.setTariffId(Objects.requireNonNull(tariffDto.getId()));
         this.setPrice(Objects.requireNonNull(tariffDto.getPrice()));
-        this.setDuration(Objects.requireNonNull(tariffDto.getDuration()));
+        this.setDuration(Objects.requireNonNull(tariffDto.getWashingTime()));
     }
 
     boolean isTariffAssigned() {

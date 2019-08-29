@@ -17,6 +17,7 @@ version = apiVersion
 
 jar {
     archiveBaseName = "accounting-api"
+    from sourceSets.main.allSource
 }
 
 repositories {

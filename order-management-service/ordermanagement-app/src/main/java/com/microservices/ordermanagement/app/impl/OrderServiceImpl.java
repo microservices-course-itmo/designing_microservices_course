@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     private ModelMapper modelMapper;
 
     /**
-     * Javax calidator preconfigured by Spring Boot.
+     * Javax validator preconfigured by Spring Boot.
      */
     private Validator validator;
 

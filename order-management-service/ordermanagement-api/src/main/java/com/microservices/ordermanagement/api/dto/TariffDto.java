@@ -18,5 +18,5 @@ public class TariffDto {
     BigDecimal price;
 
     @NotNull
-    Long duration;
+    Long washingTime;
 }

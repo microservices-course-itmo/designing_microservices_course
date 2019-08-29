@@ -17,3 +17,14 @@ zuul:
         path: /tariffs/**
         serviceId: tariff-management-service
         strip-prefix: false
+  ignored-patterns: /order/*/detail/*/tariff/*
+
+tariff:
+  management:
+    service:
+      name: tariff-management-service
+
+order:
+  management:
+    service:
+      name: order-management-service
