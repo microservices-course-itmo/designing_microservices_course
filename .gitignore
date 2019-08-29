@@ -10,3 +10,4 @@
 #pattern for excluding generated proto files from git
 **/api/messages/
 **/api/events/
+artifactory/volume/
