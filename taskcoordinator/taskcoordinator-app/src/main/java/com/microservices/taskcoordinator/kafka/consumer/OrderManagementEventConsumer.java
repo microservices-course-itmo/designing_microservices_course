@@ -9,6 +9,8 @@ import com.microservices.ordermanagement.api.events.OrderCreatedEventWrapper.Ord
 import com.microservices.ordermanagement.api.events.OrderManagementEventWrapper.OrderManagementEvent;
 import com.microservices.taskcoordinator.dto.inbound.OrderCoordinationDto;
 import com.microservices.taskcoordinator.service.OrderService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class OrderManagementEventConsumer {
     private Tracing tracing;
 
     private OrderService orderService;
+
+    private Counter unsupportedEvents;
 
     @KafkaListener(
             topics = "${order.management.topic.name}",
@@ -58,7 +62,7 @@ public class OrderManagementEventConsumer {
                     break;
                 }
                 default: {
-                    // TODO Vlad : report this event to metric registry
+                    unsupportedEvents.increment();
                     logger.info("Received unsupported event type: {}", orderManagementEvent.getPayloadCase());
                 }
             }
@@ -99,4 +103,7 @@ public class OrderManagementEventConsumer {
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;
     }
+
+    @Autowired
+    public void setUnsupportedEvents(MeterRegistry meterRegistry){ unsupportedEvents = meterRegistry.counter("events.unsupported"); }
 }

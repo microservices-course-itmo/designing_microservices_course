@@ -71,7 +71,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         Objects.requireNonNull(orderSubmittedDTO);
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderSubmittedDTO.getLaundryState().getLaundryId())
-                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getOrderId() + "doesn't exist"));
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getLaundryState().getLaundryId() + "doesn't exist"));
         OrderDto order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
 
         if (order.getStatus() != OrderStatus.RESERVED) {
@@ -103,7 +103,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         Objects.requireNonNull(orderCompletedDTO);
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderCompletedDTO.getLaundryState().getLaundryId())
-                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderCompletedDTO.getOrderId() + "does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderCompletedDTO.getLaundryState().getLaundryId() + "does not exist"));
         OrderDto order = orderService.getOrderById(orderCompletedDTO.getOrderId());
         logger.info("Got laundryState to be updated with order-completed: {}", laundryStateEntity);
 

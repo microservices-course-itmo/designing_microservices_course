@@ -34,3 +34,34 @@ services:
     build: ./postgres
     ports:
       - "5432:5432"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    environment:
+      cluster.name: "docker-cluster"
+      # Disables memory swapping (preferable for elastic
+      bootstrap.memory_lock: "true"
+      # Jvm heap size limits
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      TAKE_FILE_OWNERSHIP: "true"
+      discovery.type: "single-node"
+    ulimits:
+      # Sets memory locks quantity unlimited
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      #Disables CORS
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  grafana:
+    build: ./grafana/docker-build
+    environment:
+        index.name: "metrics-*"
+        metrics_publish_rate: 10s
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
