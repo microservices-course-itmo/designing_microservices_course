@@ -1,7 +1,5 @@
 package com.microservices.laundrymanagement.entity;
 
-import com.microservices.laundrymanagement.dto.DetailSubmissionDto;
-import com.microservices.laundrymanagement.dto.OrderSubmissionDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,16 +26,4 @@ public class OrderEntity {
     private int laundryId;
 
     private int bucket;
-
-    public OrderEntity(OrderSubmissionDto orderSubmissionDto) {
-        this.id = orderSubmissionDto.getOrderId();
-        this.submittedTime = System.currentTimeMillis();
-        this.estimatedTime = orderSubmissionDto.getDetails().stream()
-                .map(DetailSubmissionDto::getDuration)
-                .reduce(0L, Long::sum);
-        this.status = OrderStatus.QUEUED;
-        this.laundryId = orderSubmissionDto.getLaundryId();
-        this.bucket = orderSubmissionDto.getBucket();
-    }
-
 }
