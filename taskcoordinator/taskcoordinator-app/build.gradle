@@ -35,9 +35,9 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile "com.microservices.taskcoordinator:taskcoordinator-api:${taskcoordinatorApiVersion}"
+    compile "com.microservices.ordermanagement.api:ordermanagement-api:${orderManagementApiVersion}"
     compile "com.microservices.laundrymanagement:laundrymanagement-api:${laundryManagementApiVersion}"
-    compile "com.microservices.ordermanagement:ordermanagement-api:${orderManagementApiVersion}"
+    compile "com.microservices.taskcoordinator:taskcoordinator-api:${taskcoordinatorApiVersion}"
     compile 'org.springframework.kafka:spring-kafka'
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'
