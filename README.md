@@ -60,7 +60,11 @@ TODO sukhoa: refactor following
     
     {host} is localhost by default.
     {port} is configured with `server.port` property
-1. Feign
+1. [Feign](https://github.com/OpenFeign/feign) - Netflix library for declarative REST-clients creation. 
+REST calls are performed in the same way as regular interface's methods calls. 
+Feign generates implementation for interfaces annotated with `@FeignClient` in a runtime.
+Using with Eureka allows to avoid hardcoded service's address, services' names are used instead.     
+Includes [Ribbon](https://github.com/Netflix/ribbon) (load balancer)
 1. Eureka Discovery service. [Setting up discovery service](eureka-service-discovery/README.md)
 1. Kafka [Setting up kafka](kafka/README.md)
 1. Protocol Buffers
