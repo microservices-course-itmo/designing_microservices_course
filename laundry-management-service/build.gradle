@@ -1,0 +1,53 @@
+/*buildscript {
+/*    repositories {
+        //mavenCentral()
+        maven {
+            url "http://artifactory:8081/artifactory/repo" // The Artifactory (preferably virtual) repository to resolve from
+            credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
+                username = "admin" // Artifactory user name
+                password = "password" // Password or API Key
+            }
+        }
+    }
+
+}*/
+
+plugins {
+    id 'java'
+    id "com.jfrog.artifactory" version "4.9.8"
+    id 'maven-publish'
+}
+
+allprojects {
+    repositories {
+        //mavenCentral()
+        maven {
+            url "http://artifactory:8081/artifactory/repo" // The Artifactory (preferably virtual) repository to resolve from
+            credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
+                username = "admin" // Artifactory user name
+                password = "password" // Password or API Key
+            }
+        }
+    }
+    apply plugin: "java"
+    dependencies {
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        implementation "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+    }
+    artifactoryPublish.skip = true
+    /*
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+            }
+        }
+    }*/
+    // apply plugin: "com.jfrog.artifactory"
+}
+
+configure(subprojects.findAll { it.name =~ /.*-api/ }) {
+    artifactoryPublish.skip = false
+    apply plugin: "maven-publish"
+    apply plugin: "com.jfrog.artifactory"
+}

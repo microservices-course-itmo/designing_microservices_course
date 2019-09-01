@@ -27,7 +27,7 @@ services:
     ports:
       - "9411:9411"
   eureka:
-    image: eureka-server
+    image: springcloud/eureka
     ports:
       - "8761:8761"
   postgres:

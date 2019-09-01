@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  artifactory:
+    build: ./artifactory
+    # Login user: admin, password: password
+    image: artifactory-oss
+    # entrypoint: /bin/bash -c 'while true; do sleep 1; done'
+    ports:
+      - "8081:8081"
+    volumes:
+      - "./artifactory/volume:/var/opt/jfrog/artifactory"
+  api-deployer:
+    build: ./api-deployer
+    image: api-deployer
+    #tty: true
+    working_dir: "/project"
+    volumes:
+      - ".:/project"

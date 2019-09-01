@@ -1,20 +1,14 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
-        classpath("com.google.protobuf:protobuf-gradle-plugin:0.8.8")
-    }
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.8.8'
+    id "com.jfrog.artifactory" version "4.9.8"
+    id "io.spring.dependency-management"
+    id 'maven-publish'
 }
 
-apply plugin: 'java'
-apply plugin: 'com.google.protobuf'
-apply plugin: 'io.spring.dependency-management'
-
-repositories {
+/*repositories {
     mavenCentral()
-}
+}*/
 
 group = 'com.microservices.ordermanagement'
 version = apiVersion
@@ -57,5 +51,41 @@ dependencyManagement {
 uploadArchives {
     repositories {
         mavenLocal()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId "${project.name}"
+            groupId = group
+            version = project.version
+            from components.java
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "http://artifactory:8081/artifactory"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'artifacts'
+            username = "admin"
+            password = "password"
+            maven = true
+        }
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'repo'
+            username = "admin"
+            password = "password"
+            maven = true
+            
+        }
     }
 }

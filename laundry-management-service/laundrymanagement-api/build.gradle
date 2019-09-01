@@ -1,10 +1,19 @@
 plugins {
-    id 'java'
+/*    id 'java' */
     id 'com.google.protobuf' version '0.8.8'
+/*    id "com.jfrog.artifactory" version "4.9.8" */
 }
 
 repositories {
-    mavenCentral()
+    maven {
+        url "http://artifactory:8081/artifactory/repo" // The Artifactory (preferably virtual) repository to resolve from
+        credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
+            username = "admin" // Artifactory user name
+            password = "password" // Password or API Key
+        }
+    }
+
+    // mavenCentral()
 }
 
 group = 'com.microservices.laundrymanagement'
@@ -37,5 +46,49 @@ sourceSets {
 uploadArchives {
     repositories {
         mavenLocal()
+    }
+}
+
+/* publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+*/
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId "${project.name}"
+            groupId = group
+            version = project.version
+            from components.java
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "http://artifactory:8081/artifactory"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'artifacts'
+            username = "admin"
+            password = "password"
+            maven = true
+        }
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'repo'
+            username = "admin"
+            password = "password"
+            maven = true
+            
+        }
     }
 }
