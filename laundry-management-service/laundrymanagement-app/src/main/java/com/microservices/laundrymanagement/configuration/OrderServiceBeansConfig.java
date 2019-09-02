@@ -17,6 +17,7 @@ public class OrderServiceBeansConfig {
     @Bean
     ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
+
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
