@@ -21,26 +21,31 @@ public class OrderMetricsServiceImpl implements OrderMetricsService {
 
     private MeterRegistry meterRegistry;
 
+    // Maps laundry id to it's current reserved time value
     private Map<Integer, Double> reservedQueue = new HashMap<>();
 
+    // Maps laundry id to it's current queue waiting time value
     private Map<Integer, Double> actualQueue = new HashMap<>();
 
+    // Holds information about prediction accuracy (mean, max)
     private DistributionSummary predictionAccuracy;
 
+    // Holds information about prediction error (mean, max)
     private DistributionSummary predictionError;
 
+    // Counter for submitted but not completed orders
     private AtomicInteger submittedOrders = new AtomicInteger(0);
 
     OrderMetricsServiceImpl(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        predictionAccuracy = meterRegistry.summary("prediction.accuracy");
-        predictionError = meterRegistry.summary("prediction.error");
+        this.predictionAccuracy = meterRegistry.summary("prediction.accuracy");
+        this.predictionError = meterRegistry.summary("prediction.error");
         meterRegistry.gauge("orders.submitted", submittedOrders);
     }
 
     @Override
     public void reportQueueChanged(LaundryStateEntity laundryStateEntity) {
-        if(!actualQueue.containsKey(laundryStateEntity.getId()))
+        if (!actualQueue.containsKey(laundryStateEntity.getId()))
             registerQueuesGauges(laundryStateEntity.getId());
 
         actualQueue.put(laundryStateEntity.getId(), (double) laundryStateEntity.getQueueWaitingTime());
@@ -60,11 +65,11 @@ public class OrderMetricsServiceImpl implements OrderMetricsService {
         logger.info("Prediction accuracy: {}", 1 - error / order.getEstimatedTime());
     }
 
-    public void reportOrderSubmitted(){
+    public void reportOrderSubmitted() {
         submittedOrders.incrementAndGet();
     }
 
-    public void reportOrderCompleted(){
+    public void reportOrderCompleted() {
         submittedOrders.decrementAndGet();
     }
 

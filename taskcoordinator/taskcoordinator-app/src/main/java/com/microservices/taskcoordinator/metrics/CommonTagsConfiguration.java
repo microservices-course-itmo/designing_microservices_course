@@ -12,6 +12,7 @@ public class CommonTagsConfiguration {
     @Value("${grafana.instance.name}")
     private String instanceName;
 
+    // Adds a tag that will be included in every metric (instance name in this case)
     @Bean
     MeterRegistryCustomizer<ElasticMeterRegistry> commonTags() {
         return registry -> registry.config().commonTags("instance", instanceName);

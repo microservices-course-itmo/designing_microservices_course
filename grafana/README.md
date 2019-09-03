@@ -1,6 +1,6 @@
 # Grafana
 Grafana is a tool for analytics and monitoring. It works with various data storages such as Graphite, Elasticsearch etc.
-# Grafana concepts
+## Grafana concepts
 Grafana uses panels to visualize the data by querying the data source. A panel can be a graph, table, gauge, single stat etc.
 Panels can be placed in rows to organize them in a dashboard. A dashboard contains rows, panels, variables and options 
 (basically, it's a web page where you can see all your graphs, tables and other visualizations). 
@@ -16,8 +16,14 @@ Users may have a role - Admin, Editor or Viewer. Admin can add, edit and delete 
 Editor is able only to add, edit and delete dashboards, while viewer is limited to watching dashboards (but it can be hidden
 from viewers)
 
+## Provisioning
 Dashboards and datasources can be externalized by provisioning. Grafana updates them on startup via config files
-(dashboard providers and datasource files) and dashboard json models.
+(dashboard providers and datasource files) and dashboard json model files.
+
+Provisioned dashboard cannot be changed and saved via GUI because grafana doesn't track the file that contains dashboard model
+But you can make changes in GUI, click save button (or share button and then export option) and you'll be prompted with dialogue suggesting copying the json model to clipboard
+or downloading a file with it. Then you should update the file that contains the model. It is also possible to create a dashboard copy
+by importing it from json model (but uuid change is needed) for a more convenient way of making subsequent changes.  
 
 # Mounting volume with provisioned dashboards
 On systems where docker is not supported natively (where virtualbox is used) only some directories can be mounted (users 
