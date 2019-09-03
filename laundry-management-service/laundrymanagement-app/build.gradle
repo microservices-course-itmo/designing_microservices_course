@@ -50,4 +50,5 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.8.9'
 }

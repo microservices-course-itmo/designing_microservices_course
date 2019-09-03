@@ -24,7 +24,9 @@ public class MapperConfig {
     @Bean
     public Mapper<OrderEntity, OrderSubmissionDto> orderMapper(ModelMapper modelMapper) {
         Converter<List<DetailSubmissionDto>, Long> toOrderEntityPostConverter = context ->
-                context.getSource().stream()
+                context.getSource() == null
+                        ? null
+                        : context.getSource().stream()
                         .map(DetailSubmissionDto::getDuration)
                         .reduce(0L, Long::sum);
 
