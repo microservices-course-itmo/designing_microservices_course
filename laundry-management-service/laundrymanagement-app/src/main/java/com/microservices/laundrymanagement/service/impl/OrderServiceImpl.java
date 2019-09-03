@@ -8,7 +8,7 @@ import com.microservices.laundrymanagement.repository.LaundryStateRepository;
 import com.microservices.laundrymanagement.repository.OrderRepository;
 import com.microservices.laundrymanagement.service.LaundryEventPublishingService;
 import com.microservices.laundrymanagement.service.OrderService;
-import org.modelmapper.ModelMapper;
+import com.microservices.laundrymanagement.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +31,17 @@ public class OrderServiceImpl implements OrderService {
 
     private LaundryEventPublishingService eventPublishingService;
 
-    private ModelMapper modelMapper;
+    private Mapper<OrderEntity, OrderSubmissionDto> orderMapper;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             LaundryStateRepository laundryStateRepository,
                             LaundryEventPublishingService eventPublishingService,
-                            ModelMapper modelMapper) {
+                            Mapper<OrderEntity, OrderSubmissionDto> orderMapper) {
         this.orderRepository = orderRepository;
         this.laundryStateRepository = laundryStateRepository;
         this.eventPublishingService = eventPublishingService;
-        this.modelMapper = modelMapper;
+        this.orderMapper = orderMapper;
     }
 
     @Transactional
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         logger.info("Submitting order: {}", orderSubmissionDto);
-        OrderEntity orderEntity = modelMapper.map(orderSubmissionDto, OrderEntity.class);
+        OrderEntity orderEntity = orderMapper.mapToEntity(orderSubmissionDto);
         orderRepository.save(orderEntity);
 
         LaundryStateEntity laundryStateEntity = updateQueueInfo(orderEntity, RequestType.SUBMIT);
