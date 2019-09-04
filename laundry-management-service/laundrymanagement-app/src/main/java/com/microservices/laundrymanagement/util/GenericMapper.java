@@ -8,6 +8,9 @@ import lombok.Setter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 /**
  * Basic implementation of {@link Mapper} interface. All "real" mappers, that
  * are will be used in application, are have to constructed inside Spring's config class
@@ -26,6 +29,8 @@ public class GenericMapper<E, D> implements Mapper<E, D> {
 
     private Class<E> entityClass;
     private Class<D> dtoClass;
+    private Type entityListType;
+    private Type dtoListType;
     private ModelMapper modelMapper;
 
     /**
@@ -42,5 +47,21 @@ public class GenericMapper<E, D> implements Mapper<E, D> {
     @Override
     public D mapToDto(E inputEntity) {
         return modelMapper.map(inputEntity, dtoClass);
+    }
+
+    /**
+     * @see Mapper#mapToEntityList(List)
+     */
+    @Override
+    public List<E> mapToEntityList(List<D> inputDtoList) {
+        return modelMapper.map(inputDtoList, entityListType);
+    }
+
+    /**
+     * @see Mapper#mapToDtoList(List)
+     */
+    @Override
+    public List<D> mapToDtoList(List<E> inputEntityList) {
+        return modelMapper.map(inputEntityList, dtoListType);
     }
 }

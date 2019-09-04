@@ -1,6 +1,8 @@
 package com.microservices.laundrymanagement.util;
 
 
+import java.util.List;
+
 /**
  * Basic interface for mappers
  *
@@ -18,4 +20,14 @@ public interface Mapper<E, D> {
      * Maps entity to dto
      */
     D mapToDto(E inputEntity);
+
+    /**
+     * Maps list of dtos to list of entities
+     */
+    List<E> mapToEntityList(List<D> inputDtoList);
+
+    /**
+     * Maps list of entites to list of dtos
+     */
+    List<D> mapToDtoList(List<E> inputEntityList);
 }
