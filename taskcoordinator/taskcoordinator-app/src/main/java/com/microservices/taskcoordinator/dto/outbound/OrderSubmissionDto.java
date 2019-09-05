@@ -1,7 +1,6 @@
 package com.microservices.taskcoordinator.dto.outbound;
 
 import com.microservices.taskcoordinator.dto.OrderDetailDto;
-import com.microservices.taskcoordinator.entity.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,8 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

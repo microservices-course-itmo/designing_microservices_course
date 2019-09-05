@@ -1,9 +1,6 @@
 package com.microservices.taskcoordinator.dto;
 
-import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import lombok.*;
-
-import java.util.Objects;
 
 @Getter
 @Setter
