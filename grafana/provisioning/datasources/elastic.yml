@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: Elasticsearch
+    type: elasticsearch
+    # Direct access from browser
+    access: direct
+    # Index name
+    database: ${index.name}
+    url: http://localhost:9200
+    jsonData:
+      # Field used as time
+      timeField: "@timestamp"
+      # Elasticsearch version (as number, without dot)
+      esVersion: 70

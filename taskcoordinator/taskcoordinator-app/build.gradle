@@ -38,6 +38,9 @@ dependencies {
     compile "com.microservices.taskcoordinator:taskcoordinator-api:${taskcoordinatorApiVersion}"
     compile "com.microservices.laundrymanagement:laundrymanagement-api:${laundryManagementApiVersion}"
     compile "com.microservices.ordermanagement:ordermanagement-api:${orderManagementApiVersion}"
+    compile 'io.micrometer:micrometer-registry-elastic:1.1.5'
+    compile 'io.micrometer:micrometer-core:1.1.5'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.kafka:spring-kafka'
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'
