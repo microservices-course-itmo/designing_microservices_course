@@ -20,15 +20,4 @@ public class LaundryStateDto {
     private Long reservedTime;
 
     private Integer version;
-
-    public LaundryStateDto(LaundryStateEntity laundryStateEntity) {
-        Objects.requireNonNull(laundryStateEntity);
-
-        this.id = laundryStateEntity.getId();
-        this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
-        this.reservedTime = laundryStateEntity.getReservedTime();
-        this.version = laundryStateEntity.getVersion();
-    }
-
-
 }

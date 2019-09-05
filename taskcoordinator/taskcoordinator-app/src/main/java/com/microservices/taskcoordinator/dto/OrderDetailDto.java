@@ -33,13 +33,4 @@ public class OrderDetailDto {
 
     @NotNull
     private Integer orderId;
-
-    public OrderDetailDto(OrderDetailEntity orderDetailEntity) {
-        Objects.requireNonNull(orderDetailEntity);
-
-        this.id = orderDetailEntity.getId();
-        this.weight = orderDetailEntity.getWeight();
-        this.duration = orderDetailEntity.getDuration();
-        this.orderId = orderDetailEntity.getOrderId();
-    }
 }

@@ -28,17 +28,4 @@ public class OrderSubmissionDto {
     private Integer bucket;
 
     private List<OrderDetailDto> details;
-
-    public OrderSubmissionDto(OrderEntity orderEntity) {
-        Objects.requireNonNull(orderEntity);
-
-        this.orderId = orderEntity.getId();
-        this.laundryId = orderEntity.getLaundryId();
-        this.bucket = orderEntity.getBucket();
-        this.details = orderEntity.getDetails() == null
-                ? null
-                : orderEntity.getDetails().stream()
-                    .map(OrderDetailDto::new)
-                    .collect(Collectors.toList());
-    }
 }

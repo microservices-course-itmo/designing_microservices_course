@@ -125,10 +125,12 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Override
     @Transactional
     public LaundryStateDto getLeastLoadedLaundry() {
-        return new LaundryStateDto(laundryStateRepository.getLeastLoadedLaundries()
+        LaundryStateEntity foundStateEntity = laundryStateRepository.getLeastLoadedLaundries()
                 .stream()
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("there are no laundries to process the order")));
+                .orElseThrow(() -> new IllegalArgumentException("there are no laundries to process the order"));
+
+        return modelMapper.map(foundStateEntity, LaundryStateDto.class);
     }
 
     @Override
