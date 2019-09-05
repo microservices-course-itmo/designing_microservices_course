@@ -73,5 +73,10 @@ Includes [Ribbon](https://cloud.spring.io/spring-cloud-netflix/reference/html/#s
 to localhost:9411. You can configure the location of the service using `spring.zipkin.baseUrl` property. Zipkin can be
 run in separate container by performing `docker run -d -p 9411:9411 openzipkin/zipkin` command. Also can be ran as part of
 our infrastructure services by invoking `docker-compose up` from the project root directory.
-
+1. [Mircometer](https://micrometer.io/) - Vendor-neutral application metrics facade (just like slf4j for loggers). It
+supports many different backends. To enable metrics pushing for a certain backend set property management.metrics.export.<backend-name>.enabled to true
+or just set any property (e.g. management.metrics.export.<backend name>.step, which is metrics pushing frequency). To gather metrics 
+you'll need to create some meter (Counter, Timer etc) and bind it to meter registry (spring boot auto configures one for 
+each enabled backend and also creates a composite registry which meters will be pushed to all backends) 
+1. Grafana [Grafana info](grafana/README.md) 
 

@@ -6,6 +6,7 @@ import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.dto.outbound.OrderSubmissionDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("orders")
+@Timed("CoordinatorController")
 public class CoordinatorController {
 
     private final Logger logger = LoggerFactory.getLogger(CoordinatorController.class);
