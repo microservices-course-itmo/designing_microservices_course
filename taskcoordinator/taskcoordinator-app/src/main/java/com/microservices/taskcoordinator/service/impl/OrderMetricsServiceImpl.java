@@ -21,19 +21,29 @@ public class OrderMetricsServiceImpl implements OrderMetricsService {
 
     private MeterRegistry meterRegistry;
 
-    // Maps laundry id to it's current reserved time value
+    /**
+     *  Maps laundry id to it's current reserved time value
+     */
     private Map<Integer, Double> reservedQueue = new HashMap<>();
 
-    // Maps laundry id to it's current queue waiting time value
+    /**
+     *  Maps laundry id to it's current queue waiting time value
+     */
     private Map<Integer, Double> actualQueue = new HashMap<>();
 
-    // Holds information about prediction accuracy (mean, max)
+    /**
+     * Holds information about prediction accuracy (mean, max)
+     */
     private DistributionSummary predictionAccuracy;
 
-    // Holds information about prediction error (mean, max)
+    /**
+     *  Holds information about prediction error (mean, max)
+     */
     private DistributionSummary predictionError;
 
-    // Counter for submitted but not completed orders
+    /**
+     *  Counter for submitted but not completed orders
+     */
     private AtomicInteger submittedOrders = new AtomicInteger(0);
 
     OrderMetricsServiceImpl(MeterRegistry meterRegistry) {

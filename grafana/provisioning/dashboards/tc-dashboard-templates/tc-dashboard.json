@@ -333,7 +333,7 @@
               "type": "sum"
             }
           ],
-          "query": "name:jvm_gc_memory_* AND instance:$instance",
+          "query": "name:jvm_gc_memory_* AND instance.keyword:$instance",
           "refId": "A",
           "timeField": "@timestamp"
         }
