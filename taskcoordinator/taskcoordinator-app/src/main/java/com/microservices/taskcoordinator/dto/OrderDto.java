@@ -37,22 +37,4 @@ public class OrderDto {
     private Long completionTime;
 
     private List<OrderDetailDto> details;
-
-    public OrderDto(OrderEntity orderEntity) {
-        Objects.requireNonNull(orderEntity);
-
-        this.id = orderEntity.getId();
-        this.laundryId = orderEntity.getLaundryId();
-        this.bucket = orderEntity.getBucket();
-        this.duration = orderEntity.getDuration();
-        this.status = orderEntity.getStatus();
-        this.estimatedTime = orderEntity.getEstimatedTime();
-        this.completionTime = orderEntity.getCompletionTime();
-
-        this.details = orderEntity.getDetails() == null
-                ? null
-                : orderEntity.getDetails().stream()
-                    .map(OrderDetailDto::new)
-                    .collect(Collectors.toList());
-    }
 }
