@@ -10,6 +10,7 @@ import com.microservices.taskcoordinator.repository.OrderRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
 import com.microservices.taskcoordinator.service.TaskCoordinatorEventPublishingService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
 
     private TaskCoordinatorEventPublishingService taskCoordinatorEventPublishingService;
 
+    private ModelMapper modelMapper;
+
     @Override
     @Transactional
     public OrderDto updateOrder(OrderDto orderDTO) {
@@ -48,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 
         logger.info("Order has been successfully updated: {}", orderSaved);
 
-        return new OrderDto(orderSaved);
+        return modelMapper.map(orderSaved, OrderDto.class);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntityFound = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order with such id = " + id + " was not found"));
 
-        return new OrderDto(orderEntityFound);
+        return modelMapper.map(orderEntityFound, OrderDto.class);
     }
 
     @Override
@@ -82,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
         logger.info("New order has been successfully coordinated: {}", savedOrder);
 
-        OrderSubmissionDto orderSubmissionDto = new OrderSubmissionDto(orderEntity);
+        OrderSubmissionDto orderSubmissionDto = modelMapper.map(orderEntity, OrderSubmissionDto.class);
         taskCoordinatorEventPublishingService.buildAndPublishOrderSubmissionEvent(orderSubmissionDto);
 
         return orderSubmissionDto;
@@ -101,5 +104,10 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     public void setTaskCoordinatorEventPublishingService(TaskCoordinatorEventPublishingService taskCoordinatorEventPublishingService) {
         this.taskCoordinatorEventPublishingService = taskCoordinatorEventPublishingService;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 }

@@ -10,6 +10,7 @@ import com.microservices.taskcoordinator.entity.OrderStatus;
 import com.microservices.taskcoordinator.repository.LaundryStateRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
 import com.microservices.taskcoordinator.service.OrderService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
     private OrderService orderService;
 
+    private ModelMapper modelMapper;
+
     @Override
     public LaundryStateDto getLaundryStateById(int laundryId) {
         if (laundryId < 0) {
@@ -36,7 +39,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(laundryId)
                 .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + laundryId + "doesn't exist"));
 
-        LaundryStateDto laundryStateDto = new LaundryStateDto(laundryStateEntity);
+        LaundryStateDto laundryStateDto = modelMapper.map(laundryStateEntity, LaundryStateDto.class);
         logger.info("Found laundryState: {}", laundryStateDto);
 
         return laundryStateDto;
@@ -56,7 +59,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
         laundryStateRepository.save(laundryStateEntity);
 
-        LaundryStateDto laundryStateDto = new LaundryStateDto(laundryStateEntity);
+        LaundryStateDto laundryStateDto = modelMapper.map(laundryStateEntity, LaundryStateDto.class);
         logger.info("Updated laundry state: {}", laundryStateDto);
 
         return laundryStateDto;
@@ -85,7 +88,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         OrderDto orderDto = orderService.updateOrder(order);
         laundryStateRepository.save(laundryStateEntity);
 
-        LaundryStateDto laundryStateDto = new LaundryStateDto(laundryStateEntity);
+        LaundryStateDto laundryStateDto = modelMapper.map(laundryStateEntity, LaundryStateDto.class);
         logger.info("Updated laundryState and order after order-submitted: {}, {}", laundryStateDto, orderDto);
 
         return laundryStateDto;
@@ -113,7 +116,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         OrderDto orderDto = orderService.updateOrder(order);
         laundryStateRepository.save(laundryStateEntity);
 
-        LaundryStateDto laundryStateDto = new LaundryStateDto(laundryStateEntity);
+        LaundryStateDto laundryStateDto = modelMapper.map(laundryStateEntity, LaundryStateDto.class);
         logger.info("Updated laundryState and order after order-completed: {}, {}", laundryStateDto, orderDto);
 
         return laundryStateDto;
@@ -148,5 +151,10 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Autowired
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 }

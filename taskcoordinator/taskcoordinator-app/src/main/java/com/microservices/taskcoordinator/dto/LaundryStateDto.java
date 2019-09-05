@@ -1,16 +1,13 @@
 package com.microservices.taskcoordinator.dto;
 
 import com.microservices.taskcoordinator.entity.LaundryStateEntity;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
