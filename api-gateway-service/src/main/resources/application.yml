@@ -1,19 +1,6 @@
 spring:
   application:
     name: api-gateway-service
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
-zuul:
-  routes:
-    orders:
-      path: /order/**
-      serviceId: order-management-service
-      strip-prefix: false
-    tariffs:
-        path: /tariffs/**
-        serviceId: tariff-management-service
-        strip-prefix: false
+  cloud:
+    config:
+      uri: http://localhost:8888
