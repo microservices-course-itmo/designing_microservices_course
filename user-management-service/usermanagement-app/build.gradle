@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+    compile 'org.springframework.cloud:spring-cloud-starter-config'
     compile "com.microservices.usermanagement.api:usermanagementapi:${userManagementApiVersion}"
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -36,4 +37,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
     testCompile 'junit:junit:4.12'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${releaseTrainVersion}"
+    }
 }
