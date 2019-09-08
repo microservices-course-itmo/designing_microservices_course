@@ -32,7 +32,15 @@ dependencies {
     compile 'org.flywaydb:flyway-core:5.2.4'
     compile 'io.springfox:springfox-swagger2:2.8.0'
     compile 'io.springfox:springfox-swagger-ui:2.8.0'
+    compile 'org.springframework.cloud:spring-cloud-starter-config'
     runtime 'org.postgresql:postgresql:42.2.5'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
+}
+
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${releaseTrainVersion}"
+    }
 }
