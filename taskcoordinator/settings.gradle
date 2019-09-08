@@ -1,5 +1,3 @@
 rootProject.name = 'task-coordinator-service'
 include 'taskcoordinator-app'
 include 'taskcoordinator-api'
-
-
