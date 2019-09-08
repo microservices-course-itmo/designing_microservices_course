@@ -1,6 +1,7 @@
 spring:
   application:
     name: api-gateway-service
+  # An address of configuration service that stores other properties
   cloud:
     config:
       uri: http://localhost:8888
