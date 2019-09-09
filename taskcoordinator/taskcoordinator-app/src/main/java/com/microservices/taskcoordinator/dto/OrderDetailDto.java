@@ -1,16 +1,9 @@
 package com.microservices.taskcoordinator.dto;
 
-import com.microservices.taskcoordinator.entity.OrderDetailEntity;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,13 +26,4 @@ public class OrderDetailDto {
 
     @NotNull
     private Integer orderId;
-
-    public OrderDetailDto(OrderDetailEntity orderDetailEntity) {
-        Objects.requireNonNull(orderDetailEntity);
-
-        this.id = orderDetailEntity.getId();
-        this.weight = orderDetailEntity.getWeight();
-        this.duration = orderDetailEntity.getDuration();
-        this.orderId = orderDetailEntity.getOrderId();
-    }
 }

@@ -1,16 +1,10 @@
 package com.microservices.taskcoordinator.dto;
 
-import com.microservices.taskcoordinator.entity.LaundryStateEntity;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-import java.util.Objects;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
@@ -23,15 +17,4 @@ public class LaundryStateDto {
     private Long reservedTime;
 
     private Integer version;
-
-    public LaundryStateDto(LaundryStateEntity laundryStateEntity) {
-        Objects.requireNonNull(laundryStateEntity);
-
-        this.id = laundryStateEntity.getId();
-        this.queueWaitingTime = laundryStateEntity.getQueueWaitingTime();
-        this.reservedTime = laundryStateEntity.getReservedTime();
-        this.version = laundryStateEntity.getVersion();
-    }
-
-
 }
