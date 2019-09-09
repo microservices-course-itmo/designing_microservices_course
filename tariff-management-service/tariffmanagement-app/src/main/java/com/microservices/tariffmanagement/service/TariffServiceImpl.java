@@ -51,4 +51,16 @@ public class TariffServiceImpl implements TariffService {
                         new IllegalArgumentException("No tariff with id " + tariffId + " found"));
         return tariffEntity.toTariffDto();
     }
+
+    @Override
+    public void deleteTariffById(int tariffId) {
+        TariffEntity foundTariff = tariffRepository.findById(tariffId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("No tariff with id " + tariffId + " deleted, because not found"));
+
+        logger.info("Deleting tariff with id: {}...", tariffId);
+        tariffRepository.deleteById(tariffId);
+        TariffDto deletedTariff = foundTariff.toTariffDto();
+        logger.info("Deleted tariff: {}...", deletedTariff);
+    }
 }

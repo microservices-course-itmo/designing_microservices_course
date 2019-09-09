@@ -11,4 +11,6 @@ public interface TariffService {
     List<TariffDto> getAllTariffs();
 
     TariffDto getTariffById(int tariffId);
+
+    void deleteTariffById(int tariffId);
 }
