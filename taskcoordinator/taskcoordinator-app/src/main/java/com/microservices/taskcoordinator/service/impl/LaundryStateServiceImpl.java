@@ -9,6 +9,7 @@ import com.microservices.taskcoordinator.entity.LaundryStateEntity;
 import com.microservices.taskcoordinator.entity.OrderStatus;
 import com.microservices.taskcoordinator.repository.LaundryStateRepository;
 import com.microservices.taskcoordinator.service.LaundryStateService;
+import com.microservices.taskcoordinator.service.OrderMetricsService;
 import com.microservices.taskcoordinator.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     private LaundryStateRepository laundryStateRepository;
 
     private OrderService orderService;
+
+    private OrderMetricsService orderMetricsService;
 
     @Override
     public LaundryStateDto getLaundryStateById(int laundryId) {
@@ -68,7 +71,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         Objects.requireNonNull(orderSubmittedDTO);
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderSubmittedDTO.getLaundryState().getLaundryId())
-                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getOrderId() + "doesn't exist"));
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderSubmittedDTO.getLaundryState().getLaundryId() + "doesn't exist"));
         OrderDto order = orderService.getOrderById(orderSubmittedDTO.getOrderId());
 
         if (order.getStatus() != OrderStatus.RESERVED) {
@@ -88,6 +91,9 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         LaundryStateDto laundryStateDto = new LaundryStateDto(laundryStateEntity);
         logger.info("Updated laundryState and order after order-submitted: {}, {}", laundryStateDto, orderDto);
 
+        orderMetricsService.reportQueueChanged(laundryStateEntity);
+        orderMetricsService.reportOrderSubmitted();
+
         return laundryStateDto;
     }
 
@@ -97,7 +103,7 @@ public class LaundryStateServiceImpl implements LaundryStateService {
         Objects.requireNonNull(orderCompletedDTO);
 
         LaundryStateEntity laundryStateEntity = laundryStateRepository.findById(orderCompletedDTO.getLaundryState().getLaundryId())
-                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderCompletedDTO.getOrderId() + "does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("LaundryState with id " + orderCompletedDTO.getLaundryState().getLaundryId() + "does not exist"));
         OrderDto order = orderService.getOrderById(orderCompletedDTO.getOrderId());
         logger.info("Got laundryState to be updated with order-completed: {}", laundryStateEntity);
 
@@ -115,6 +121,9 @@ public class LaundryStateServiceImpl implements LaundryStateService {
 
         LaundryStateDto laundryStateDto = new LaundryStateDto(laundryStateEntity);
         logger.info("Updated laundryState and order after order-completed: {}, {}", laundryStateDto, orderDto);
+
+        orderMetricsService.reportPredictionErrorAndAccuracy(order);
+        orderMetricsService.reportOrderCompleted();
 
         return laundryStateDto;
     }
@@ -148,5 +157,10 @@ public class LaundryStateServiceImpl implements LaundryStateService {
     @Autowired
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @Autowired
+    public  void setOrderMetricsService(OrderMetricsService orderMetricsService){
+        this.orderMetricsService = orderMetricsService;
     }
 }

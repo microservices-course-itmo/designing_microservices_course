@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 }
 
-group = 'com.microservices.ordermanagement.api'
+group = 'com.microservices.ordermanagement'
 version = apiVersion
 
 jar {

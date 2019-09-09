@@ -11,6 +11,8 @@ import com.microservices.laundrymanagement.api.messages.OrderSubmittedEventWrapp
 import com.microservices.taskcoordinator.dto.inbound.OrderCompletedDto;
 import com.microservices.taskcoordinator.dto.inbound.OrderSubmittedDto;
 import com.microservices.taskcoordinator.service.LaundryStateService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class LaundryManagementEventConsumer {
     private Tracing tracing;
 
     private LaundryStateService laundryStateService;
+
+    private Counter unsupportedEvents;
 
     @KafkaListener(
             topics = "${laundry.management.topic.name}",
@@ -75,7 +79,7 @@ public class LaundryManagementEventConsumer {
                     break;
                 }
                 default: {
-                    // TODO Vlad : report this event to metric registry
+                    unsupportedEvents.increment();
                     logger.info("Received unsupported event type: {}", laundryManagementEvent.getPayloadCase());
                 }
             }
@@ -117,4 +121,7 @@ public class LaundryManagementEventConsumer {
     public void setLaundryStateService(LaundryStateService laundryStateService) {
         this.laundryStateService = laundryStateService;
     }
+
+    @Autowired
+    public void setUnsupportedEvents(MeterRegistry meterRegistry){ unsupportedEvents = meterRegistry.counter("events.unsupported"); }
 }
