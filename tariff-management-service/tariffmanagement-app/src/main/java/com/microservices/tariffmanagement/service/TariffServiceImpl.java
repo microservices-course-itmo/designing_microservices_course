@@ -29,6 +29,11 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public TariffDto createTariff(CreationTariffDto tariff) {
         Objects.requireNonNull(tariff);
+
+        if (tariffRepository.findByName(tariff.getName()).isPresent()) {
+            throw new IllegalArgumentException("Tariff not created, tariff with name " + tariff.getName() + " already exists");
+        }
+
         if (tariff.getPrice().compareTo(BigDecimal.ZERO) < 0 || tariff.getWashingTime() < 0) {
             throw new IllegalArgumentException("Tariff not created, price and washing time should be a non negative");
         }
