@@ -1,24 +1,23 @@
-buildscript {
+/*buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
     }
-}
+}*/
 
 
-apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 
 group 'com.microservices.tariffmanagement'
 version = apiVersion
 
-repositories {
+/*repositories {
     mavenLocal()
     mavenCentral()
-}
+}*/
 
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-openfeign-core'
@@ -35,5 +34,41 @@ dependencyManagement {
 uploadArchives {
     repositories {
         mavenLocal()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId "${project.name}"
+            groupId = group
+            version = project.version
+            from components.java
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "http://artifactory:8081/artifactory"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'artifacts'
+            username = "admin"
+            password = "password"
+            maven = true
+        }
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'repo'
+            username = "admin"
+            password = "password"
+            maven = true
+            
+        }
     }
 }

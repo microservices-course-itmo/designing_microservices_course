@@ -7,6 +7,7 @@ API_PROJECTS="
     laundry-management-service/laundrymanagement-api
     order-management-service/ordermanagement-api
     taskcoordinator/taskcoordinator-api
+    tariff-management-service/api
 "
 
 WORKDIR="${PWD}"

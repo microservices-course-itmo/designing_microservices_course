@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "2.1.4.RELEASE"
+}
+
+allprojects {
+    repositories {
+        //mavenCentral()
+        maven {
+            url "${artifactoryRepo}" // The Artifactory (preferably virtual) repository to resolve from
+            credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
+                username = "${artifactoryUser}" // Artifactory user name
+                password = "${artifactoryPassword}" // Password or API Key
+            }
+        }
+    }
+    apply plugin: "java"
+    dependencies {
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        implementation "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+    }
+}
