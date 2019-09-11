@@ -11,7 +11,7 @@ with logging and without duplicates. However it cannot be considered as a source
 
 ## Course materials
 ### Presentations
-1. [Introduction and decomposing system into services](https://yadi.sk/i/E10phVAhLZ08_Q)
+1. [Introduction and decomposing system into services](https://yadi.sk/i/VusX9IGOR_cBYg)
 ### Practical classes
 1. [Specification](https://docs.google.com/document/d/1FKO65Ga0rRVPVArQERqO__3fkOeCWFGgSKRb6_tCX9U/edit) - please don't hesitate to leave comments and suggestions
 
