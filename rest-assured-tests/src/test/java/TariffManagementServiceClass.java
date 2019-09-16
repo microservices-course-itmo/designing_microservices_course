@@ -1,9 +1,12 @@
 import io.restassured.response.Response;
 
+import java.util.logging.Logger;
+
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.assertEquals;
 
 public class TariffManagementServiceClass {
+    private static Logger logger = Logger.getLogger(Logger.class.getName());
 
     static Tariff[] getTariffsList() {
         Response response = get("/tariffs");
@@ -27,13 +30,13 @@ public class TariffManagementServiceClass {
                 .contentType("application/json;charset=UTF-8")
                 .post("/tariffs");
         assertEquals(statusCode, response.getStatusCode());
-        System.out.println("LOG: Response status code corresponds to the expected: " + statusCode);
+        logger.info("Response status code corresponds to the expected: " + statusCode);
         return response;
     }
 
     static Tariff createTariffByPost(String name, float price, int washingTime) {
         Response response = createTariffByPost(name, price, washingTime, 201);
-        System.out.println("LOG: New tariff has been successfully created");
+        logger.info("New tariff has been successfully created");
         return Tariff.jsonToTariff(response);
     }
 }
