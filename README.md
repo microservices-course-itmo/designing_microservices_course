@@ -9,6 +9,12 @@ microservices patterns. Some business logic parts were simplified because this i
 the services or business logic are just a mocks. We aimed to create a decent example with somewhat clear, tested code 
 with logging and without duplicates. However it cannot be considered as a source of coding best practices.
 
+## Course materials
+### Presentations
+1. [Introduction and decomposing system into services](https://yadi.sk/i/VusX9IGOR_cBYg)
+### Practical classes
+1. [Specification](https://docs.google.com/document/d/1FKO65Ga0rRVPVArQERqO__3fkOeCWFGgSKRb6_tCX9U/edit) - please don't hesitate to leave comments and suggestions
+
 ## Overview
 
 TODO sukhoa : here should be description of the system.
