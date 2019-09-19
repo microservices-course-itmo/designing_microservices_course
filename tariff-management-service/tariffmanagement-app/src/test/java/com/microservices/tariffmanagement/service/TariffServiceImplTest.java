@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,13 +31,6 @@ public class TariffServiceImplTest {
     private static final String UNIQUE_NAME = "unique";
 
     private static final String NON_UNIQUE_NAME = "non-unique";
-
-    private static final String EXCEPTION_MESSAGE_FOR_NEGATIVE_VALUES = "Tariff not created, price and washing time" +
-            " should be a non negative";
-
-    private static final String EXCEPTION_MASSAGE_FOR_NON_UNIQUE_NAME = "Tariff not created, tariff with name " +
-            NON_UNIQUE_NAME +
-            " already exists";
 
     @Mock
     private TariffRepository tariffRepository;
@@ -60,10 +52,9 @@ public class TariffServiceImplTest {
 
         TariffDto savedTariffDto = tariffService.createTariff(creationTariffDto);
 
-        assertEquals(savedTariffDto.getId(), savedTariffEntity.toTariffDto().getId());
-        assertEquals(savedTariffDto.getName(), savedTariffEntity.toTariffDto().getName());
-        assertEquals(savedTariffDto.getPrice(), savedTariffEntity.toTariffDto().getPrice());
-        assertEquals(savedTariffDto.getWashingTime(), savedTariffEntity.toTariffDto().getWashingTime());
+        assertEquals(savedTariffDto.getName(), creationTariffDto.getName());
+        assertEquals(savedTariffDto.getPrice(), creationTariffDto.getPrice());
+        assertEquals(savedTariffDto.getWashingTime(), (long) creationTariffDto.getWashingTime());
     }
 
     @Test
@@ -79,56 +70,40 @@ public class TariffServiceImplTest {
 
         TariffDto savedTariffDto = tariffService.createTariff(creationTariffDto);
 
-        assertEquals(savedTariffDto.getId(), savedTariffEntity.toTariffDto().getId());
-        assertEquals(savedTariffDto.getName(), savedTariffEntity.toTariffDto().getName());
-        assertEquals(savedTariffDto.getPrice(), savedTariffEntity.toTariffDto().getPrice());
-        assertEquals(savedTariffDto.getWashingTime(), savedTariffEntity.toTariffDto().getWashingTime());
+        assertEquals(savedTariffDto.getName(), creationTariffDto.getName());
+        assertEquals(savedTariffDto.getPrice(), creationTariffDto.getPrice());
+        assertEquals(savedTariffDto.getWashingTime(), (long) creationTariffDto.getWashingTime());
     }
 
-    @Test
-    public void testTariffService_priceIsNegative() throws IllegalArgumentException {
+    @Test(expected = IllegalArgumentException.class)
+    public void testTariffService_priceIsNegative() {
         CreationTariffDto creationTariffDto = new CreationTariffDto();
         creationTariffDto.setName(UNIQUE_NAME);
         creationTariffDto.setPrice(BigDecimal.valueOf(NEGATIVE_PRICE));
         creationTariffDto.setWashingTime(CORRECT_WASHING_TIME);
-        try {
-            tariffService.createTariff(creationTariffDto);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException thrown) {
-            assertEquals(thrown.getMessage(), EXCEPTION_MESSAGE_FOR_NEGATIVE_VALUES);
-        }
+        tariffService.createTariff(creationTariffDto);
     }
 
-    @Test
-    public void testTariffService_washingTimeIsNegative() throws IllegalArgumentException {
+    @Test(expected = IllegalArgumentException.class)
+    public void testTariffService_washingTimeIsNegative() {
         CreationTariffDto creationTariffDto = new CreationTariffDto();
         creationTariffDto.setName(UNIQUE_NAME);
         creationTariffDto.setPrice(BigDecimal.valueOf(CORRECT_PRICE));
         creationTariffDto.setWashingTime(NEGATIVE_WASHING_TIME);
-        try {
-            tariffService.createTariff(creationTariffDto);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException thrown) {
-            assertEquals(thrown.getMessage(), EXCEPTION_MESSAGE_FOR_NEGATIVE_VALUES);
-        }
+        tariffService.createTariff(creationTariffDto);
     }
 
-    @Test
-    public void testTariffService_priceAndWashingTimeIsNegative() throws IllegalArgumentException {
+    @Test(expected = IllegalArgumentException.class)
+    public void testTariffService_priceAndWashingTimeIsNegative() {
         CreationTariffDto creationTariffDto = new CreationTariffDto();
         creationTariffDto.setName(UNIQUE_NAME);
         creationTariffDto.setPrice(BigDecimal.valueOf(NEGATIVE_PRICE));
         creationTariffDto.setWashingTime(NEGATIVE_WASHING_TIME);
-        try {
-            tariffService.createTariff(creationTariffDto);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException thrown) {
-            assertEquals(thrown.getMessage(), EXCEPTION_MESSAGE_FOR_NEGATIVE_VALUES);
-        }
+        tariffService.createTariff(creationTariffDto);
     }
 
-    @Test
-    public void testTariffService_nameIsNonUnique() throws IllegalArgumentException {
+    @Test(expected = IllegalArgumentException.class)
+    public void testTariffService_nameIsNonUnique() {
         CreationTariffDto creationTariffDto = new CreationTariffDto();
         creationTariffDto.setName(NON_UNIQUE_NAME);
         creationTariffDto.setPrice(BigDecimal.valueOf(CORRECT_PRICE));
@@ -137,11 +112,6 @@ public class TariffServiceImplTest {
         when(tariffRepository.findByName(NON_UNIQUE_NAME))
                 .thenReturn(Optional.of(new TariffEntity(creationTariffDto)));
 
-        try {
-            tariffService.createTariff(creationTariffDto);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException thrown) {
-            assertEquals(thrown.getMessage(), EXCEPTION_MASSAGE_FOR_NON_UNIQUE_NAME);
-        }
+        tariffService.createTariff(creationTariffDto);
     }
 }
