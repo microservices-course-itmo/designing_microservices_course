@@ -16,7 +16,7 @@ with logging and without duplicates. However it cannot be considered as a source
 1. [Specification](https://docs.google.com/document/d/1FKO65Ga0rRVPVArQERqO__3fkOeCWFGgSKRb6_tCX9U/edit) - please don't hesitate to leave comments and suggestions
 
 ## Overview
-
+![High level system architecture](course-materials/git-images/toplevel-arch.png)
 TODO sukhoa : here should be description of the system.
 ### Business process description
 Project consists of several services communicating to ensure proper execution of some business processes. 
