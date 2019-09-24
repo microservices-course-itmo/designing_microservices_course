@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,14 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public TariffDto createTariff(CreationTariffDto tariff) {
         Objects.requireNonNull(tariff);
+
+        if (tariffRepository.findByName(tariff.getName()).isPresent()) {
+            throw new IllegalArgumentException("Tariff not created, tariff with name " + tariff.getName() + " already exists");
+        }
+
+        if (tariff.getPrice().compareTo(BigDecimal.ZERO) < 0 || tariff.getWashingTime() < 0) {
+            throw new IllegalArgumentException("Tariff not created, price and washing time should be a non negative");
+        }
 
         logger.info("Creating tariff: {}...", tariff);
         TariffEntity savedTariff = tariffRepository.save(new TariffEntity(tariff));
@@ -50,5 +59,17 @@ public class TariffServiceImpl implements TariffService {
                 .orElseThrow(() ->
                         new IllegalArgumentException("No tariff with id " + tariffId + " found"));
         return tariffEntity.toTariffDto();
+    }
+
+    @Override
+    public void deleteTariffById(int tariffId) {
+        TariffEntity foundTariff = tariffRepository.findById(tariffId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("No tariff with id " + tariffId + " deleted, because not found"));
+
+        logger.info("Deleting tariff with id: {}...", tariffId);
+        tariffRepository.deleteById(tariffId);
+        TariffDto deletedTariff = foundTariff.toTariffDto();
+        logger.info("Deleted tariff: {}...", deletedTariff);
     }
 }
