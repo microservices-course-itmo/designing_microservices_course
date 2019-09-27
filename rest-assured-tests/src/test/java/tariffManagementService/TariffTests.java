@@ -31,7 +31,7 @@ public class TariffTests {
     public static void configureRestAssured() {
         port = 8092;
         for (TariffObject tariff : getTariffsList())
-            tariffsListToBeSaved.add(tariff.id);
+            tariffsListToBeSaved.add(tariff.getId());
     }
 
     @Before
@@ -50,12 +50,12 @@ public class TariffTests {
     public void testNewTariffSuccessfulCreation() {
         TariffObject newTestTariff = createTariffByPost(VALID_TARIFF_NAME, VALID_TARIFF_PRICE, VALID_TARIFF_WASHING_TIME);
         assertEquals(tariffsNumber + 1, getTariffsList().length);
-        TariffObject newTestTariffById = getTariffById(newTestTariff.id);
+        TariffObject newTestTariffById = getTariffById(newTestTariff.getId());
 
-        assertEquals(newTestTariff.id, newTestTariffById.id);
-        assertEquals(newTestTariff.name, newTestTariffById.name);
-        assertEquals(newTestTariff.price, newTestTariffById.price, DELTA);
-        assertEquals(newTestTariff.washingTime, newTestTariffById.washingTime);
+        assertEquals(newTestTariff.getId(), newTestTariffById.getId());
+        assertEquals(newTestTariff.getName(), newTestTariffById.getName());
+        assertEquals(newTestTariff.getPrice(), newTestTariffById.getPrice(), DELTA);
+        assertEquals(newTestTariff.getWashingTime(), newTestTariffById.getWashingTime());
     }
 
     /**
@@ -68,9 +68,9 @@ public class TariffTests {
     @Category({TariffTests.class, AllTests.class})
     public void testNewTariffSuccessfulDeletion() {
         TariffObject newTestTariff = createTariffByPost(TARIFF_NAME_TO_DELETE, VALID_TARIFF_PRICE, VALID_TARIFF_WASHING_TIME);
-        deleteTariffById(newTestTariff.id);
-        FailedResponse failedResponse = getTariffByIdWithError(newTestTariff.id);
-        assertEquals(String.format(NO_TARIFF_MESSAGE, newTestTariff.id), failedResponse.message);
+        deleteTariffById(newTestTariff.getId());
+        FailedResponse failedResponse = getTariffByIdWithError(newTestTariff.getId());
+        assertEquals(String.format(NO_TARIFF_MESSAGE, newTestTariff.getId()), failedResponse.getMessage());
         assertEquals(tariffsNumber, getTariffsList().length);
     }
 
@@ -82,7 +82,7 @@ public class TariffTests {
     @Category({TariffTests.class, AllTests.class})
     public void testNewTariffCreationWithInvalidPrice() {
         FailedResponse failedResponse = createTariffByPostWithError(INVALID_TARIFF_NAME, INVALID_TARIFF_PRICE, VALID_TARIFF_WASHING_TIME);
-        assertEquals(INVALID_PARAMETER_MESSAGE, failedResponse.message);
+        assertEquals(INVALID_PARAMETER_MESSAGE, failedResponse.getMessage());
         assertEquals(tariffsNumber, getTariffsList().length);
     }
 
@@ -94,7 +94,7 @@ public class TariffTests {
     @Category({TariffTests.class, AllTests.class})
     public void testNewTariffCreationWithInvalidWashingTime() {
         FailedResponse failedResponse = createTariffByPostWithError(INVALID_TARIFF_NAME, VALID_TARIFF_PRICE, INVALID_TARIFF_WASHING_TIME);
-        assertEquals(INVALID_PARAMETER_MESSAGE, failedResponse.message);
+        assertEquals(INVALID_PARAMETER_MESSAGE, failedResponse.getMessage());
         assertEquals(tariffsNumber, getTariffsList().length);
     }
 
@@ -108,14 +108,14 @@ public class TariffTests {
     public void testNewTariffCreationWithNonUniqueName() {
         createTariffByPost(TARIFF_NAME_TO_DUPLICATE, VALID_TARIFF_PRICE, VALID_TARIFF_WASHING_TIME);
         FailedResponse failedResponse = createTariffByPostWithError(TARIFF_NAME_TO_DUPLICATE, VALID_TARIFF_PRICE, VALID_TARIFF_WASHING_TIME);
-        assertEquals(NON_UNIQUE_NAME_MESSAGE, failedResponse.message);
+        assertEquals(NON_UNIQUE_NAME_MESSAGE, failedResponse.getMessage());
         assertEquals(tariffsNumber + 1, getTariffsList().length);
     }
 
     @AfterClass
     public static void resetTestData() {
         for (TariffObject tariff : getTariffsList())
-            if (!tariffsListToBeSaved.contains(tariff.id))
-                deleteTariffById(tariff.id);
+            if (!tariffsListToBeSaved.contains(tariff.getId()))
+                deleteTariffById(tariff.getId());
     }
 }
