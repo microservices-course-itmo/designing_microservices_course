@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    testCompile 'org.projectlombok:lombok:1.18.4'
     testCompile 'io.rest-assured:rest-assured:4.1.0'
     testCompile 'junit:junit:4.12'
     testCompile 'com.google.code.gson:gson:2.8.5'

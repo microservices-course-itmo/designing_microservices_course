@@ -2,28 +2,13 @@ package tariffManagementService;
 
 import com.google.gson.Gson;
 import io.restassured.response.Response;
+import lombok.Getter;
 
 public class TariffObject {
-    private int id;
-    private String name;
-    private float price;
-    private int washingTime;
-
-    public String getName() {
-        return name;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public int getWashingTime() {
-        return washingTime;
-    }
-
-    public int getId() {
-        return id;
-    }
+    private @Getter int id;
+    private @Getter String name;
+    private @Getter float price;
+    private @Getter int washingTime;
 
     static TariffObject jsonToTariff(Response response) {
         return new Gson().fromJson(response.asString(), TariffObject.class);
