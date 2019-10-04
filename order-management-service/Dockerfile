@@ -13,7 +13,7 @@ WORKDIR /project
 
 COPY . /project
 
-RUN gradle :ordermanagement-app:build
+RUN gradle -Dorg.gradle.daemon=false :ordermanagement-app:build
 
 FROM openjdk:8-jre-alpine
 COPY --from=builder /project/ordermanagement-app/build/libs/order-management-service-app-0.1-SNAPSHOT.jar /order-management-service-app-0.1-SNAPSHOT.jar
