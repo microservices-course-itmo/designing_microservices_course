@@ -9,5 +9,7 @@ RUN \
   && apt-get -y install gettext-base \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+
+RUN chmod a+x /entrypoint.sh
   
 ENTRYPOINT [ "/entrypoint.sh" ]
