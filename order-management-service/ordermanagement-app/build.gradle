@@ -17,10 +17,10 @@ bootJar {
 
 sourceCompatibility = 1.8
 
-repositories {
+/*repositories {
     mavenCentral()
     mavenLocal()
-}
+}*/
 
 dependencyManagement {
     imports {
@@ -33,7 +33,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
-    compile "com.microservices.ordermanagement.api:ordermanagement-api:${orderManagementApiVersion}"
+    compile "com.microservices.ordermanagement:ordermanagement-api:${orderManagementApiVersion}"
     compile "com.microservices.laundrymanagement:laundrymanagement-api:${laundryManagementApiVersion}"
     compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'org.flywaydb:flyway-core:5.2.4'    

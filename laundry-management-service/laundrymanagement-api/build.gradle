@@ -1,19 +1,7 @@
 plugins {
-/*    id 'java' */
     id 'com.google.protobuf' version '0.8.8'
-/*    id "com.jfrog.artifactory" version "4.9.8" */
-}
-
-repositories {
-    maven {
-        url "http://artifactory:8081/artifactory/repo" // The Artifactory (preferably virtual) repository to resolve from
-        credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
-            username = "admin" // Artifactory user name
-            password = "password" // Password or API Key
-        }
-    }
-
-    // mavenCentral()
+    id "com.jfrog.artifactory" version "4.9.8"
+    id 'maven-publish'
 }
 
 group = 'com.microservices.laundrymanagement'

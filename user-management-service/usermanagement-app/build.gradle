@@ -1,11 +1,11 @@
-buildscript {
+/*buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE'
     }
-}
+}*/
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -13,20 +13,20 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'usermanagement-app'
+    baseName = 'usermanagement-service-app'
     version = applicationVersion
     enabled = true
 }
 
 sourceCompatibility = 1.8
 
-repositories {
+/*repositories {
     mavenLocal()
     mavenCentral()
-}
+}*/
 
 dependencies {
-    compile "com.microservices.usermanagement.api:usermanagementapi:${userManagementApiVersion}"
+    compile "com.microservices.usermanagement:usermanagement-api:${userManagementApiVersion}"
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.flywaydb:flyway-core:5.2.4'

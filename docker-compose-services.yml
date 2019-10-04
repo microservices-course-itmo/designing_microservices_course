@@ -35,10 +35,16 @@ services:
     ports:
       - "8092:8092"
   taskcoordinator:
-    build: ./taskcoordinator
+    build:
+      context: ./taskcoordinator
+      args:
+        <<: *artifactory-args
     ports:
       - "8095:8095"
   user-management:
-    build: ./user-management-service
+    build:
+      context: ./user-management-service
+      args:
+        <<: *artifactory-args
     ports:
       - "8094:8094"
