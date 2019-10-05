@@ -3,6 +3,7 @@ services:
 
 before_install:
   - docker-compose -f docker-compose-storage.yml up -d
+  - docker-compose -f docker-compose-storage.yml run --rm api-deployer bash -c 'while ! curl ${ORG_GRADLE_PROJECT_artifactoryUrl}; do sleep 1; done'
   - docker-compose -f docker-compose-storage.yml run --rm api-deployer /setup.sh
 
 script:
