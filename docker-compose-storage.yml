@@ -19,8 +19,8 @@ services:
     volumes:
       - ".:/project"
     environment:
-      ORG_GRADLE_PROJECT_artifactoryUrl: "https://artifactory:8081/artifactory"
+      ORG_GRADLE_PROJECT_artifactoryUrl: "http://artifactory:8081/artifactory"
       ORG_GRADLE_PROJECT_artifactoryUser: admin
       ORG_GRADLE_PROJECT_artifactoryPassword: password
       # TODO: Replace after refactoring with repo name
-      ORG_GRADLE_PROJECT_artifactoryRepo: "https://artifactory:8081/artifactory/repo"
+      ORG_GRADLE_PROJECT_artifactoryRepo: "http://artifactory:8081/artifactory/repo"
