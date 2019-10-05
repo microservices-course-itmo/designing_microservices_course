@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-artifactory-args: &artifactory-args
-  ARTIFACTORY_URL: http://172.24.0.1:8081/artifactory
+  ARTIFACTORY_URL: "http://${ARTIFACTORY_IP:-172.24.0.1}:8081/artifactory"
   ARTIFACTORY_USER: "admin"
   ARTIFACTORY_PASSWORD: "password"
   ARTIFACTORY_REPO: "repo"

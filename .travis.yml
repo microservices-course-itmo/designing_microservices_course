@@ -1,6 +1,9 @@
 services:
   - docker
 
+env:
+  - ARTIFACTORY_IP=172.17.0.1
+
 before_install:
   - docker-compose -f docker-compose-storage.yml up -d
   - docker-compose -f docker-compose-storage.yml run --rm api-deployer bash -c 'while ! /setup.sh | grep successfully; do echo "Still waiting..."; sleep 1; done'
