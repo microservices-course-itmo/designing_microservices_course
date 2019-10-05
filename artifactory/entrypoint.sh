@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# XXX: Fix up permissions on volume in Windows(Hyper-V)
-chown -R artifact:artifact /var/opt/jfrog/artifactory
+# XXX: Fix up permissions on volume in Windows(Hyper-V) and Linux
+chown -R artifactory:artifactory /var/opt/jfrog/artifactory
 
-exec /entrypoint-artifactory.sh
+# Return from root under expected user
+exec su artifactory /entrypoint-artifactory.sh
