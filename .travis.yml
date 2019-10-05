@@ -4,6 +4,8 @@ services:
 before_install:
   - docker-compose -f docker-compose-storage.yml up -d
   - docker-compose -f docker-compose-storage.yml run --rm api-deployer bash -c 'while ! /setup.sh | grep successfully; do echo "Still waiting..."; sleep 1; done'
+  # Some debugging
+  - docker-compose -f docker-compose-storage.yml run --rm --entrypoint=/bin/sh --user=root artifactory -c 'ip r'
 
 script:
   - docker-compose -f docker-compose.yml -f docker-compose-services.yml pull
