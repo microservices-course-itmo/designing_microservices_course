@@ -1,0 +1,354 @@
+﻿
+localRepositories: 
+    "artifactory-build-info":
+        type: buildinfo
+        description: "Build Info repository"
+        includesPattern: "**/*"
+        repoLayout: "simple-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: true
+        propertySets:
+        archiveBrowsingEnabled: false
+        snapshotVersionBehavior: unique
+        checksumPolicyType: "client-checksums"
+        calculateYumMetadata: false
+        yumRootDepth: 0
+        debianTrivialLayout: false
+        enableFileListsIndexing: false
+
+    artifacts:
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: true
+        propertySets:
+        archiveBrowsingEnabled: false
+        snapshotVersionBehavior: unique
+        checksumPolicyType: "client-checksums"
+        calculateYumMetadata: false
+        yumRootDepth: 0
+        debianTrivialLayout: false
+        enableFileListsIndexing: false
+
+    "gradle-dev-local":
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: true
+        propertySets:
+        archiveBrowsingEnabled: false
+        snapshotVersionBehavior: unique
+        checksumPolicyType: "client-checksums"
+        calculateYumMetadata: false
+        yumRootDepth: 0
+        debianTrivialLayout: false
+        enableFileListsIndexing: false
+
+    "gradle-release-local":
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: true
+        propertySets:
+        archiveBrowsingEnabled: false
+        snapshotVersionBehavior: unique
+        checksumPolicyType: "client-checksums"
+        calculateYumMetadata: false
+        yumRootDepth: 0
+        debianTrivialLayout: false
+        enableFileListsIndexing: false
+
+    "libs-release-local":
+        type: maven
+        includesPattern: "**/*"
+        repoLayout: "maven-2-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: false
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: false
+        propertySets:
+        archiveBrowsingEnabled: false
+        snapshotVersionBehavior: unique
+        checksumPolicyType: "client-checksums"
+        calculateYumMetadata: false
+        yumRootDepth: 0
+        debianTrivialLayout: false
+        enableFileListsIndexing: false
+
+    "libs-snapshot-local":
+        type: maven
+        includesPattern: "**/*"
+        repoLayout: "maven-2-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: false
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: false
+        propertySets:
+        archiveBrowsingEnabled: false
+        snapshotVersionBehavior: unique
+        checksumPolicyType: "client-checksums"
+        calculateYumMetadata: false
+        yumRootDepth: 0
+        debianTrivialLayout: false
+        enableFileListsIndexing: false
+
+remoteRepositories:
+    "gradle-plugins":
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: true
+        propertySets:
+        archiveBrowsingEnabled: false
+        url: "https://plugins.gradle.org/m2/"
+        offline: false
+        hardFail: false
+        storeArtifactsLocally: true
+        fetchJarsEagerly: false
+        fetchSourcesEagerly: false
+        retrievalCachePeriodSecs: 600
+        assumedOfflinePeriodSecs: 300
+        missedRetrievalCachePeriodSecs: 1800
+        remoteRepoChecksumPolicyType: "generate-if-absent"
+        unusedArtifactsCleanupPeriodHours: 0
+        shareConfiguration: false
+        synchronizeProperties: false
+        listRemoteFolderItems: true
+        rejectInvalidJars: false
+        p2OriginalUrl: "https://plugins.gradle.org/m2/"
+        contentSynchronisation:
+            enabled: false
+        blockMismatchingMimeTypes: true
+        mismatchingMimeTypesOverrideList: ""
+        bypassHeadRequests: false
+        allowAnyHostAuth: false
+        socketTimeoutMillis: 15000
+        enableCookieManagement: false
+        enableTokenAuthentication: false
+        propagateQueryParams: false
+
+    jcenter:
+        type: maven
+        includesPattern: "**/*"
+        repoLayout: "maven-2-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: false
+        propertySets:
+        archiveBrowsingEnabled: false
+        url: "https://jcenter.bintray.com"
+        offline: false
+        hardFail: false
+        storeArtifactsLocally: true
+        fetchJarsEagerly: false
+        fetchSourcesEagerly: false
+        retrievalCachePeriodSecs: 600
+        assumedOfflinePeriodSecs: 300
+        missedRetrievalCachePeriodSecs: 1800
+        remoteRepoChecksumPolicyType: "generate-if-absent"
+        unusedArtifactsCleanupPeriodHours: 0
+        shareConfiguration: false
+        synchronizeProperties: false
+        listRemoteFolderItems: true
+        rejectInvalidJars: false
+        p2OriginalUrl: "https://jcenter.bintray.com"
+        contentSynchronisation:
+            enabled: false
+        blockMismatchingMimeTypes: true
+        mismatchingMimeTypesOverrideList: ""
+        bypassHeadRequests: false
+        allowAnyHostAuth: false
+        socketTimeoutMillis: 15000
+        enableCookieManagement: false
+        enableTokenAuthentication: false
+        propagateQueryParams: false
+
+    "maven-central":
+        type: maven
+        includesPattern: "**/*"
+        repoLayout: "maven-2-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        blackedOut: false
+        handleReleases: true
+        handleSnapshots: true
+        maxUniqueSnapshots: 0
+        maxUniqueTags: 0
+        suppressPomConsistencyChecks: false
+        propertySets:
+        archiveBrowsingEnabled: false
+        url: "https://repo1.maven.org/maven2/"
+        offline: false
+        hardFail: false
+        storeArtifactsLocally: true
+        fetchJarsEagerly: false
+        fetchSourcesEagerly: false
+        retrievalCachePeriodSecs: 600
+        assumedOfflinePeriodSecs: 300
+        missedRetrievalCachePeriodSecs: 1800
+        remoteRepoChecksumPolicyType: "generate-if-absent"
+        unusedArtifactsCleanupPeriodHours: 0
+        shareConfiguration: false
+        synchronizeProperties: false
+        listRemoteFolderItems: true
+        rejectInvalidJars: false
+        p2OriginalUrl: "https://repo1.maven.org/maven2/"
+        contentSynchronisation:
+            enabled: false
+        blockMismatchingMimeTypes: true
+        mismatchingMimeTypesOverrideList: ""
+        bypassHeadRequests: false
+        allowAnyHostAuth: false
+        socketTimeoutMillis: 15000
+        enableCookieManagement: false
+        enableTokenAuthentication: false
+        propagateQueryParams: false
+
+virtualRepositories:
+    "gradle-dev":
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        artifactoryRequestsCanRetrieveRemoteArtifacts: false
+        resolveDockerTagsByTimestamp: false
+        repositories:
+            - "gradle-dev-local"
+            - jcenter
+        pomRepositoryReferencesCleanupPolicy: discard_active_reference
+        defaultDeploymentRepo: "gradle-dev-local"
+        virtualCacheConfig:
+            virtualRetrievalCachePeriodSecs: 600
+        forceMavenAuthentication: false
+        debianDefaultArchitectures: "i386,amd64"
+
+    "gradle-release":
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        artifactoryRequestsCanRetrieveRemoteArtifacts: false
+        resolveDockerTagsByTimestamp: false
+        repositories:
+            - "gradle-release-local"
+            - jcenter
+        pomRepositoryReferencesCleanupPolicy: discard_active_reference
+        defaultDeploymentRepo: "gradle-release-local"
+        virtualCacheConfig:
+            virtualRetrievalCachePeriodSecs: 600
+        forceMavenAuthentication: false
+        debianDefaultArchitectures: "i386,amd64"
+
+    "libs-release":
+        type: maven
+        includesPattern: "**/*"
+        repoLayout: "maven-2-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        artifactoryRequestsCanRetrieveRemoteArtifacts: false
+        resolveDockerTagsByTimestamp: false
+        repositories:
+            - "libs-release-local"
+            - jcenter
+        pomRepositoryReferencesCleanupPolicy: discard_active_reference
+        defaultDeploymentRepo: "libs-release-local"
+        virtualCacheConfig:
+            virtualRetrievalCachePeriodSecs: 600
+        forceMavenAuthentication: false
+        debianDefaultArchitectures: "i386,amd64"
+
+    "libs-snapshot":
+        type: maven
+        includesPattern: "**/*"
+        repoLayout: "maven-2-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        artifactoryRequestsCanRetrieveRemoteArtifacts: false
+        resolveDockerTagsByTimestamp: false
+        repositories:
+            - "libs-snapshot-local"
+            - jcenter
+        pomRepositoryReferencesCleanupPolicy: discard_active_reference
+        defaultDeploymentRepo: "libs-snapshot-local"
+        virtualCacheConfig:
+            virtualRetrievalCachePeriodSecs: 600
+        forceMavenAuthentication: false
+        debianDefaultArchitectures: "i386,amd64"
+
+    repo:
+        type: gradle
+        includesPattern: "**/*"
+        repoLayout: "gradle-default"
+        dockerApiVersion: V2
+        forceNugetAuthentication: false
+        artifactoryRequestsCanRetrieveRemoteArtifacts: false
+        resolveDockerTagsByTimestamp: false
+        repositories:
+            - artifacts
+            - "gradle-dev-local"
+            - "gradle-release-local"
+            - "libs-release-local"
+            - "libs-snapshot-local"
+            - "gradle-plugins"
+            - jcenter
+            - "maven-central"
+            - "gradle-dev"
+            - "gradle-release"
+            - "libs-release"
+            - "libs-snapshot"
+        pomRepositoryReferencesCleanupPolicy: discard_active_reference
+        defaultDeploymentRepo: artifacts
+        virtualCacheConfig:
+            virtualRetrievalCachePeriodSecs: 600
+        forceMavenAuthentication: false
+        debianDefaultArchitectures: "i386,amd64"
+

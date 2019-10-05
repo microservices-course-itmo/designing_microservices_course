@@ -10,6 +10,7 @@ services:
       - "8081:8081"
     volumes:
       - "./artifactory/volume:/var/opt/jfrog/artifactory"
+
   api-deployer:
     build: ./api-deployer
     image: api-deployer
@@ -17,3 +18,9 @@ services:
     working_dir: "/project"
     volumes:
       - ".:/project"
+    environment:
+      ORG_GRADLE_PROJECT_artifactoryUrl: "https://artifactory:8081/artifactory"
+      ORG_GRADLE_PROJECT_artifactoryUser: admin
+      ORG_GRADLE_PROJECT_artifactoryPassword: password
+      # TODO: Replace after refactoring with repo name
+      ORG_GRADLE_PROJECT_artifactoryRepo: "https://artifactory:8081/artifactory/repo"
