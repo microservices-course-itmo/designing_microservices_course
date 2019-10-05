@@ -6,10 +6,6 @@ plugins {
     id 'maven-publish'
 }
 
-/*repositories {
-    mavenCentral()
-}*/
-
 group = 'com.microservices.ordermanagement'
 version = apiVersion
 

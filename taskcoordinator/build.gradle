@@ -5,7 +5,6 @@ plugins {
 
 allprojects {
     repositories {
-        //mavenCentral()
         maven {
             url "${artifactoryUrl}/${artifactoryRepo}" // The Artifactory (preferably virtual) repository to resolve from
             credentials {               // Optional resolver credentials (leave out to use anonymous resolution)

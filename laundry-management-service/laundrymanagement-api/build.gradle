@@ -37,14 +37,6 @@ uploadArchives {
     }
 }
 
-/* publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
-*/
 publishing {
     publications {
         mavenJava(MavenPublication) {

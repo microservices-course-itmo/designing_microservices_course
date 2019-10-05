@@ -1,18 +1,3 @@
-/*buildscript {
-    repositories {
-        mavenCentral()
-    }
-    
-    dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE'
-    }
-}
-*/
-
-/*plugins {
-    id "org.springframework.boot" version "2.1.4.RELEASE"
-}*/
-//apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -24,12 +9,6 @@ bootJar {
 }
 
 sourceCompatibility = 1.8
-
-/*repositories {
-    mavenLocal()
-    mavenCentral()
-}
-*/
 
 dependencies {
     compile "com.microservices.accounting.api:accounting-api:${accountingApiVersion}"

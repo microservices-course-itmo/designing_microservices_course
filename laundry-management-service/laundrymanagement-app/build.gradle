@@ -1,15 +1,6 @@
-// buildscript {
-    // these repositories and dependencies are used by Gradle itself
-// }
-//
-//dependencies {
-//    classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE'
-//}
-
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-/* apply plugin: "com.jfrog.artifactory" */
 
 bootJar {
     baseName = 'laundry-management-service-app'
@@ -18,13 +9,6 @@ bootJar {
 }
 
 sourceCompatibility = 1.8
-
-// these repositories are used in project
-/* repositories {
-    mavenCentral()
-    mavenLocal()
-}
-*/
 
 dependencyManagement {
     imports {
