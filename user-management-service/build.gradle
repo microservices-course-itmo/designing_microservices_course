@@ -7,7 +7,7 @@ allprojects {
     repositories {
         //mavenCentral()
         maven {
-            url "${artifactoryRepo}" // The Artifactory (preferably virtual) repository to resolve from
+            url "${artifactoryUrl}/${artifactoryRepo}" // The Artifactory (preferably virtual) repository to resolve from
             credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
                 username = "${artifactoryUser}" // Artifactory user name
                 password = "${artifactoryPassword}" // Password or API Key

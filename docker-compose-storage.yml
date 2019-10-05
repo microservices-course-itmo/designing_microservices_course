@@ -14,7 +14,6 @@ services:
   api-deployer:
     build: ./api-deployer
     image: api-deployer
-    #tty: true
     working_dir: "/project"
     volumes:
       - ".:/project"
@@ -22,5 +21,4 @@ services:
       ORG_GRADLE_PROJECT_artifactoryUrl: "http://artifactory:8081/artifactory"
       ORG_GRADLE_PROJECT_artifactoryUser: admin
       ORG_GRADLE_PROJECT_artifactoryPassword: password
-      # TODO: Replace after refactoring with repo name
-      ORG_GRADLE_PROJECT_artifactoryRepo: "http://artifactory:8081/artifactory/repo"
+      ORG_GRADLE_PROJECT_artifactoryRepo: "repo"
