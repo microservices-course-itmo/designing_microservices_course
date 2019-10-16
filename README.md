@@ -13,6 +13,7 @@ with logging and without duplicates. However it cannot be considered as a source
 ### Presentations
 1. [Introduction and decomposing system into services](https://yadi.sk/i/VusX9IGOR_cBYg)
 1. [Interprocess communication. Part 1](https://yadi.sk/i/8RnIL4AV511R7A) - Communication styles overview. Defining and evolving of an API. Encoding and message formats (Protocol buffers example). RPC pattern (Feign declarative REST client example). REST, HATEOAS and maturity model overview.
+1. [Interprocess communication. Part 2. Draft](https://yadi.sk/i/pS3bkHVVK_1u4w) - Synchronous communication - designing robust proxies, fault tolerance approaches, service discovery. Asynchronous messaging overview - types of messages in a microservice architecture, message channels, message broker vs brokerless architecture.
 ### Practical classes
 1. [Specification](https://docs.google.com/document/d/1FKO65Ga0rRVPVArQERqO__3fkOeCWFGgSKRb6_tCX9U/edit) - please don't hesitate to leave comments and suggestions
 
