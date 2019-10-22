@@ -10,10 +10,12 @@ the services or business logic are just a mocks. We aimed to create a decent exa
 with logging and without duplicates. However it cannot be considered as a source of coding best practices.
 
 ## Course materials
-### Presentations
+### Lectures slides
 1. [Introduction and decomposing system into services](https://yadi.sk/i/VusX9IGOR_cBYg)
 1. [Interprocess communication. Part 1](https://yadi.sk/i/8RnIL4AV511R7A) - Communication styles overview. Defining and evolving of an API. Encoding and message formats (Protocol buffers example). RPC pattern (Feign declarative REST client example). REST, HATEOAS and maturity model overview.
-1. [Interprocess communication. Part 2. Draft](https://yadi.sk/i/pS3bkHVVK_1u4w) - Synchronous communication - designing robust proxies, fault tolerance approaches, service discovery. Asynchronous messaging overview - types of messages in a microservice architecture, message channels, message broker vs brokerless architecture.
+1. [Interprocess communication. Part 2.](https://drive.google.com/open?id=1QOdmb2kQt13nnpPxKM-3GYf2-oSQtznJ) - Synchronous communication - designing robust proxies, fault tolerance approaches, service discovery. Asynchronous messaging overview - types of messages in a microservice architecture, message channels, message broker vs brokerless architecture.
+1. [Interprocess communication. Part 3. Draft](https://drive.google.com/open?id=1X4qBvEfQEXGp_OpqfakS4V_KVJcuujrX) - Message brokers overview - RabbitMQ, Kafka. Organizing channels (direct/publish-subscribe) in RabbitMQ and Kafka.
+1. [Transactions](https://drive.google.com/open?id=1ZSrdGDDDSw6wW3568RJDnrbWPy-Mw9Xt) - Why do we need them? ACID. Weak isolation levels. Data races.
 ### Practical classes
 1. [Specification](https://docs.google.com/document/d/1FKO65Ga0rRVPVArQERqO__3fkOeCWFGgSKRb6_tCX9U/edit) - please don't hesitate to leave comments and suggestions
 
