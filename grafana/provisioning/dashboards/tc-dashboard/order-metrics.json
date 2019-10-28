@@ -742,8 +742,8 @@
     "list": [
       {
         "current": {
-          "text": "20s",
-          "value": "20s"
+          "text": "10s",
+          "value": "10s"
         },
         "hide": 2,
         "label": null,
@@ -751,11 +751,11 @@
         "options": [
           {
             "selected": true,
-            "text": "20s",
-            "value": "20s"
+            "text": "10s",
+            "value": "10s"
           }
         ],
-        "query": "20s",
+        "query": "10s",
         "skipUrlSync": false,
         "type": "constant"
       },

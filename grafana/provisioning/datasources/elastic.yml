@@ -7,7 +7,7 @@ datasources:
     access: direct
     # Index name
     database: ${index.name}
-    url: http://localhost:9200
+    url: http://elasticsearch:9200
     jsonData:
       # Field used as time
       timeField: "@timestamp"

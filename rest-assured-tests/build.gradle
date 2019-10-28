@@ -7,10 +7,6 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testCompile 'org.projectlombok:lombok:1.18.4'
     testCompile 'io.rest-assured:rest-assured:4.1.0'

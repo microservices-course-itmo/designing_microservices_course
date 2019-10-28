@@ -1,6 +1,8 @@
+.gradle
 */.gradle
 */build/
 */!gradle/wrapper/gradle-wrapper.jar
+*.class
 	
 .idea
 *.iws
@@ -10,3 +12,15 @@
 #pattern for excluding generated proto files from git
 **/api/messages/
 **/api/events/
+
+# Docker volumes
+artifactory/volume/
+
+# Auto-generated
+.project
+.classpath
+org.eclipse.buildship.core.prefs
+
+# Other
+api-gateway-service/bin/main/application.yml
+eureka-service-discovery/bin/main/application.yml

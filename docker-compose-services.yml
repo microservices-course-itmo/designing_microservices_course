@@ -1,26 +1,51 @@
-version: '3'
+version: '3.4'
+
+x-artifactory-args: &artifactory-args
+  ARTIFACTORY_URL: "http://${ARTIFACTORY_IP:-172.24.0.1}:8081/artifactory"
+  ARTIFACTORY_USER: "admin"
+  ARTIFACTORY_PASSWORD: "password"
+  ARTIFACTORY_REPO: "repo"
+
 services:
   accounting:
-    build: ./accounting-service
+    build:
+      context: ./accounting-service
+      args:
+        <<: *artifactory-args
     ports:
       - "8093:8093"
   laundry-management:
-    build: ./laundry-management-service
+    build:
+      context: ./laundry-management-service
+      args:
+        <<: *artifactory-args
     ports:
       - "8089:8089"
   order-management:
-    build: ./order-management-service
+    build:
+      context: ./order-management-service
+      args:
+        <<: *artifactory-args
     ports:
       - "8091:8091"
   tariff-management:
-    build: ./tariff-management-service
+    build:
+      context: ./tariff-management-service
+      args:
+        <<: *artifactory-args
     ports:
       - "8092:8092"
   taskcoordinator:
-    build: ./taskcoordinator
+    build:
+      context: ./taskcoordinator
+      args:
+        <<: *artifactory-args
     ports:
       - "8095:8095"
   user-management:
-    build: ./user-management-service
+    build:
+      context: ./user-management-service
+      args:
+        <<: *artifactory-args
     ports:
       - "8094:8094"

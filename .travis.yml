@@ -1,0 +1,16 @@
+services:
+  - docker
+
+env:
+  # Update if building docker-compose-services.yml breaks
+  - ARTIFACTORY_IP=172.17.0.1
+
+before_install:
+  - docker-compose -f docker-compose-storage.yml up -d
+  # Deploy expected configuration to Artifactory
+  - docker-compose -f docker-compose-storage.yml run --rm api-deployer bash -c 'while ! /setup.sh | grep successfully; do echo "Still waiting..."; sleep 1; done'
+
+script:
+  - docker-compose -f docker-compose.yml -f docker-compose-services.yml pull
+  - docker-compose -f docker-compose-storage.yml run --rm api-deployer /api-deployer.sh
+  - docker-compose -f docker-compose.yml -f docker-compose-services.yml build

@@ -10,10 +10,6 @@ group = 'com.microservices'
 version = applicationVersion
 sourceCompatibility = '1.8'
 
-repositories {
-    mavenCentral()
-}
-
 ext {
     set('springCloudVersion', "Greenwich.SR2")
 }
